@@ -1,0 +1,83 @@
+https://bugs.gentoo.org/666580
+
+--- a/security/sandbox/linux/moz.build
++++ b/security/sandbox/linux/moz.build
+@@ -101,7 +101,7 @@ if CONFIG['CC_TYPE'] in ('clang', 'gcc'):
+ # forcing there to be only one partition.
+ for f in CONFIG['OS_CXXFLAGS']:
+     if f.startswith('-flto') and CONFIG['CC_TYPE'] != 'clang':
+-        LDFLAGS += ['--param lto-partitions=1']
++        LDFLAGS += ['--param', 'lto-partitions=1']
+ 
+ DEFINES['NS_NO_XPCOM'] = True
+ DisableStlWrapping()
+https://bugzilla.mozilla.org/show_bug.cgi?id=1516081
+
+--- a/build/moz.configure/toolchain.configure
++++ b/build/moz.configure/toolchain.configure
+@@ -1364,7 +1364,7 @@ def pgo_flags(compiler, build_env, target):
+ 
+     if compiler.type == 'gcc':
+         return namespace(
+-            gen_cflags=['-fprofile-generate'],
++            gen_cflags=['-fprofile-generate', '-DMOZ_PROFILE_INSTRUMENTATION'],
+             gen_ldflags=['-fprofile-generate'],
+             use_cflags=['-fprofile-use', '-fprofile-correction',
+                         '-Wcoverage-mismatch'],
+@@ -1385,7 +1385,8 @@ def pgo_flags(compiler, build_env, target):
+ 
+         if gen_ldflags:
+             return namespace(
+-                gen_cflags=['-fprofile-instr-generate'],
++                gen_cflags=['-fprofile-instr-generate',
++			    '-DMOZ_PROFILE_INSTRUMENTATION'],
+                 gen_ldflags=gen_ldflags,
+                 use_cflags=['-fprofile-instr-use=%s' % profdata,
+                             '-Wno-error=profile-instr-out-of-date',
+--- a/toolkit/components/terminator/nsTerminator.cpp
++++ b/toolkit/components/terminator/nsTerminator.cpp
+@@ -401,6 +401,13 @@ void nsTerminator::StartWatchdog() {
+     crashAfterMS += ADDITIONAL_WAIT_BEFORE_CRASH_MS;
+   }
+ 
++  // Disable watchdog for PGO train builds - writting profile information at
++  // exit may take time and it is better to make build hang rather than
++  // silently produce poorly performing binary.
++#ifdef MOZ_PROFILE_INSTRUMENTATION
++  crashAfterMS = INT32_MAX;
++#endif
++
+ #ifdef MOZ_VALGRIND
+   // If we're running on Valgrind, we'll be making forward progress at a
+   // rate of somewhere between 1/25th and 1/50th of normal.  This can cause
+--- a/build/unix/mozconfig.unix
++++ b/build/unix/mozconfig.unix
+@@ -6,6 +6,15 @@ if [ -n "$FORCE_GCC" ]; then
+     CC="$TOOLTOOL_DIR/gcc/bin/gcc"
+     CXX="$TOOLTOOL_DIR/gcc/bin/g++"
+ 
++    if [ -n "$MOZ_PGO" ]; then
++        if [ -z "$USE_ARTIFACT" ]; then
++            ac_add_options --enable-lto
++        fi
++        export AR="$topsrcdir/gcc/bin/gcc-ar"
++        export NM="$topsrcdir/gcc/bin/gcc-nm"
++        export RANLIB="$topsrcdir/gcc/bin/gcc-ranlib"
++    fi
++
+     # We want to make sure we use binutils and other binaries in the tooltool
+     # package.
+     mk_add_options "export PATH=$TOOLTOOL_DIR/gcc/bin:$PATH"
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88561
+
+--- a/extensions/spellcheck/src/moz.build
++++ b/extensions/spellcheck/src/moz.build
+@@ -28,3 +28,8 @@ EXPORTS.mozilla += [
+ 
+ if CONFIG['CC_TYPE'] in ('clang', 'gcc'):
+     CXXFLAGS += ['-Wno-error=shadow']
++
++# spell checker triggers bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88561
++# in gcc 7 and 8. It will be fixed in GCC 7.5 and 8.3
++if CONFIG['CC_TYPE'] in ('gcc'):
++    CXXFLAGS += ['-fno-devirtualize']
