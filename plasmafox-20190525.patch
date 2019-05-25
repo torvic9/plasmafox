@@ -1,0 +1,485 @@
+--- a/browser/branding/unofficial/configure.sh	2019-05-17 02:33:15.000000000 +0200
++++ b/browser/branding/unofficial/configure.sh	2019-05-22 19:50:41.253784229 +0200
+@@ -2,4 +2,5 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-MOZ_APP_DISPLAYNAME=Nightly
++MOZ_APP_DISPLAYNAME=plasmafox
++MOZ_APP_PROFILE=plasmafox
+--- a/browser/branding/unofficial/pref/firefox-branding.js	2019-05-17 02:33:15.000000000 +0200
++++ b/browser/branding/unofficial/pref/firefox-branding.js	2019-05-22 19:52:07.779197689 +0200
+@@ -11,10 +11,10 @@
+ pref("app.update.promptWaitTime", 86400);
+ // URL user can browse to manually if for some reason all update installation
+ // attempts fail.
+-pref("app.update.url.manual", "https://nightly.mozilla.org");
++pref("app.update.url.manual", "");
+ // A default value for the "More information about this update" link
+ // supplied in the "An update is available" page of the update wizard.
+-pref("app.update.url.details", "https://nightly.mozilla.org");
++pref("app.update.url.details", "");
+ 
+ // The number of days a binary is permitted to be old
+ // without checking for an update.  This assumes that
+--- a/browser/base/content/overrides/app-license.html	2019-05-17 02:33:14.000000000 +0200
++++ b/browser/base/content/overrides/app-license.html	2019-05-24 15:48:44.718916525 +0200
+@@ -2,5 +2,5 @@
+    - License, v. 2.0. If a copy of the MPL was not distributed with this
+    - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+     <p><b>Binaries</b> of this product have been made available to you by the
+-    <a href="http://www.mozilla.org/">Mozilla Project</a> under the Mozilla
++    <a href="http://github.com/torvic9/plasmafox">Plasmafox Project</a> under the Mozilla
+     Public License 2.0 (MPL). <a href="about:rights">Know your rights</a>.</p>
+
+--- a/browser/base/content/aboutDialog.xul	2019-05-17 02:33:13.000000000 +0200
++++ b/browser/base/content/aboutDialog.xul	2019-05-24 17:23:38.504728883 +0200
+@@ -133,12 +133,12 @@
+             </description>
+           </vbox>
+           <description class="text-blurb" id="communityDesc" data-l10n-id="community-2">
+-            <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-mozillaLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-mozillaLink"></label>
+             <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-creditsLink"></label>
+           </description>
+           <description class="text-blurb" id="contributeDesc" data-l10n-id="helpus">
+-            <label is="text-link" href="https://donate.mozilla.org/?utm_source=firefox&#38;utm_medium=referral&#38;utm_campaign=firefox_about&#38;utm_content=firefox_about" data-l10n-name="helpus-donateLink"></label>
+-            <label is="text-link" href="http://www.mozilla.org/contribute/" data-l10n-name="helpus-getInvolvedLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-donateLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-getInvolvedLink"></label>
+           </description>
+         </vbox>
+       </vbox>
+--- a/browser/locales/en-US/browser/aboutDialog.ftl	2019-05-17 02:33:18.000000000 +0200
++++ b/browser/locales/en-US/browser/aboutDialog.ftl	2019-05-24 17:18:41.000000000 +0200
+@@ -39,7 +39,7 @@
+ 
+ community-exp = <label data-l10n-name="community-exp-mozillaLink">{ -vendor-short-name }</label> is a <label data-l10n-name="community-exp-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
+ 
+-community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, a <label data-l10n-name="community-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
++community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, to be used with Manjaro KDE.
+ 
+ helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
+ 
+--- a/browser/installer/package-manifest.in	2019-05-17 02:33:18.000000000 +0200
++++ b/browser/installer/package-manifest.in	2019-05-24 17:57:01.733426808 +0200
+@@ -242,10 +242,13 @@
+ @RESPATH@/chrome/recording/*
+ #ifdef MOZ_GTK
+ @RESPATH@/browser/chrome/icons/default/default16.png
++@RESPATH@/browser/chrome/icons/default/default22.png
++@RESPATH@/browser/chrome/icons/default/default24.png
+ @RESPATH@/browser/chrome/icons/default/default32.png
+ @RESPATH@/browser/chrome/icons/default/default48.png
+ @RESPATH@/browser/chrome/icons/default/default64.png
+ @RESPATH@/browser/chrome/icons/default/default128.png
++@RESPATH@/browser/chrome/icons/default/default256.png
+ #endif
+ @RESPATH@/browser/features/*
+ 
+--- a/browser/branding/branding-common.mozbuild	2019-05-17 02:33:15.000000000 +0200
++++ b/browser/branding/branding-common.mozbuild	2019-05-24 17:55:58.879724433 +0200
+@@ -27,6 +27,9 @@
+         FINAL_TARGET_FILES.chrome.icons.default += [
+             'default128.png',
+             'default16.png',
++            'default22.png',
++            'default24.png',
++            'default256.png',
+             'default32.png',
+             'default48.png',
+             'default64.png',
+--- a/browser/branding/unofficial/locales/en-US/brand.dtd	2019-05-17 02:33:15.000000000 +0200
++++ b/browser/branding/unofficial/locales/en-US/brand.dtd	2019-05-22 23:17:10.176572173 +0200
+@@ -2,12 +2,12 @@
+    - License, v. 2.0. If a copy of the MPL was not distributed with this
+    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+ 
+-<!ENTITY  brandShorterName      "Nightly">
+-<!ENTITY  brandShortName        "Nightly">
+-<!ENTITY  brandFullName         "Nightly">
++<!ENTITY  brandShorterName      "Plasmafox">
++<!ENTITY  brandShortName        "Plasmafox">
++<!ENTITY  brandFullName         "Plasmafox">
+ <!-- LOCALIZATION NOTE (brandProductName):
+    This brand name can be used in messages where the product name needs to
+    remain unchanged across different versions (Nightly, Beta, etc.). -->
+-<!ENTITY  brandProductName      "Firefox">
+-<!ENTITY  vendorShortName       "Mozilla">
+-<!ENTITY  trademarkInfo.part1   " ">
++<!ENTITY  brandProductName      "Plasmafox">
++<!ENTITY  vendorShortName       "Plasmafox">
++<!ENTITY  trademarkInfo.part1   "Plasmafox is not associated with Mozilla">
+--- a/browser/branding/unofficial/locales/en-US/brand.ftl	2019-05-17 02:33:14.000000000 +0200
++++ b/browser/branding/unofficial/locales/en-US/brand.ftl	2019-05-22 23:17:39.947484171 +0200
+@@ -12,11 +12,11 @@
+ ##
+ ## Reference: https://www.mozilla.org/styleguide/communications/translation/
+ 
+--brand-shorter-name = Nightly
+--brand-short-name = Nightly
+--brand-full-name = Nightly
++-brand-shorter-name = Plasmafox
++-brand-short-name = Plasmafox
++-brand-full-name = Plasmafox
+ # This brand name can be used in messages where the product name needs to
+ # remain unchanged across different versions (Nightly, Beta, etc.).
+--brand-product-name = Firefox
+--vendor-short-name = Mozilla
+-trademarkInfo = { " " }
++-brand-product-name = Plasmafox
++-vendor-short-name = Plasmafox
++trademarkInfo = { "Plasmafox is not associated with Mozilla" }
+--- a/browser/branding/unofficial/locales/en-US/brand.properties	2019-05-17 02:33:15.000000000 +0200
++++ b/browser/branding/unofficial/locales/en-US/brand.properties	2019-05-22 23:16:16.441536433 +0200
+@@ -2,13 +2,13 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-brandShorterName=Nightly
+-brandShortName=Nightly
+-brandFullName=Nightly
++brandShorterName=Plasmafox
++brandShortName=Plasmafox
++brandFullName=Plasmafox
+ # LOCALIZATION NOTE(brandProductName):
+ # This brand name can be used in messages where the product name needs to
+ # remain unchanged across different versions (Nightly, Beta, etc.).
+-brandProductName=Firefox
+-vendorShortName=Mozilla
++brandProductName=Plasmafox
++vendorShortName=Plasmafox
+ 
+ syncBrandShortName=Sync
+--- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css	2019-05-17 02:33:19.000000000 +0200
++++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css	2019-05-24 21:57:51.438173329 +0200
+@@ -124,7 +124,7 @@
+ }
+ 
+ .wordmark {
+-  background: url("resource://activity-stream/data/content/assets/firefox-wordmark.svg") no-repeat center center;
++  background: url("resource://activity-stream/data/content/assets/plasmafox-wordmark.svg") no-repeat center center;
+   background-size: 175px;
+   -moz-context-properties: fill;
+   display: inline-block;
+--- a/browser/app/profile/firefox.js	2019-05-17 02:33:14.000000000 +0200
++++ b/browser/app/profile/firefox.js	2019-05-25 14:06:54.520801185 +0200
+@@ -41,7 +41,7 @@
+ pref("extensions.getAddons.get.url", "https://services.addons.mozilla.org/api/v3/addons/search/?guid=%IDS%&lang=%LOCALE%");
+ pref("extensions.getAddons.compatOverides.url", "https://services.addons.mozilla.org/api/v3/addons/compat-override/?guid=%IDS%&lang=%LOCALE%");
+ pref("extensions.getAddons.search.browseURL", "https://addons.mozilla.org/%LOCALE%/firefox/search?q=%TERMS%&platform=%OS%&appver=%VERSION%");
+-pref("extensions.webservice.discoverURL", "https://discovery.addons.mozilla.org/%LOCALE%/firefox/discovery/pane/%VERSION%/%OS%/%COMPATIBILITY_MODE%");
++pref("extensions.webservice.discoverURL", "");
+ pref("extensions.getAddons.link.url", "https://addons.mozilla.org/%LOCALE%/firefox/");
+ pref("extensions.getAddons.langpacks.url", "https://services.addons.mozilla.org/api/v3/addons/language-tools/?app=firefox&type=language&appversion=%VERSION%");
+ 
+@@ -49,7 +49,7 @@
+ 
+ // Check AUS for system add-on updates.
+ pref("extensions.systemAddon.update.url", "https://aus5.mozilla.org/update/3/SystemAddons/%VERSION%/%BUILD_ID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml");
+-pref("extensions.systemAddon.update.enabled", true);
++pref("extensions.systemAddon.update.enabled", false);
+ 
+ // Disable add-ons that are not installed by the user in all scopes by default.
+ // See the SCOPE constants in AddonManager.jsm for values to use here.
+@@ -150,7 +150,7 @@
+ 
+ // If set to true, the Update Service will apply updates in the background
+ // when it finishes downloading them.
+-pref("app.update.staging.enabled", true);
++pref("app.update.staging.enabled", false);
+ 
+ // Update service URL:
+ pref("app.update.url", "https://aus5.mozilla.org/update/6/%PRODUCT%/%VERSION%/%BUILD_ID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%SYSTEM_CAPABILITIES%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml");
+@@ -165,7 +165,7 @@
+ 
+ // Whether or not to attempt using the service for updates.
+ #ifdef MOZ_MAINTENANCE_SERVICE
+-pref("app.update.service.enabled", true);
++pref("app.update.service.enabled", false);
+ #endif
+ 
+ // Symmetric (can be overridden by individual extensions) update preferences.
+@@ -193,7 +193,7 @@
+ #endif
+ 
+ // UI tour experience.
+-pref("browser.uitour.enabled", true);
++pref("browser.uitour.enabled", false);
+ pref("browser.uitour.loglevel", "Error");
+ pref("browser.uitour.requireSecure", true);
+ pref("browser.uitour.themeOrigin", "https://addons.mozilla.org/%LOCALE%/firefox/themes/");
+@@ -256,7 +256,7 @@
+ // This url, if changed, MUST continue to point to an https url. Pulling arbitrary content to inject into
+ // this page over http opens us up to a man-in-the-middle attack that we'd rather not face. If you are a downstream
+ // repackager of this code using an alternate snippet url, please keep your users safe
+-pref("browser.aboutHomeSnippets.updateUrl", "https://snippets.cdn.mozilla.net/%STARTPAGE_VERSION%/%NAME%/%VERSION%/%APPBUILDID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/");
++pref("browser.aboutHomeSnippets.updateUrl", "");
+ 
+ pref("browser.enable_automatic_image_resizing", true);
+ pref("browser.chrome.site_icons", true);
+@@ -376,8 +376,8 @@
+ pref("browser.search.searchEnginesURL",      "https://addons.mozilla.org/%LOCALE%/firefox/search-engines/");
+ 
+ // Market-specific search defaults
+-pref("browser.search.geoSpecificDefaults", true);
+-pref("browser.search.geoSpecificDefaults.url", "https://search.services.mozilla.com/1/%APP%/%VERSION%/%CHANNEL%/%LOCALE%/%REGION%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%");
++pref("browser.search.geoSpecificDefaults", false);
++pref("browser.search.geoSpecificDefaults.url", "");
+ 
+ // search bar results always open in a new tab
+ pref("browser.search.openintab", false);
+@@ -950,7 +950,7 @@
+ pref("browser.zoom.updateBackgroundTabs", true);
+ 
+ // The breakpad report server to link to in about:crashes
+-pref("breakpad.reportURL", "https://crash-stats.mozilla.org/report/index/");
++pref("breakpad.reportURL", "");
+ 
+ // URL for "Learn More" for DataCollection
+ pref("toolkit.datacollection.infoURL",
+@@ -958,7 +958,7 @@
+ 
+ // URL for "Learn More" for Crash Reporter
+ pref("toolkit.crashreporter.infoURL",
+-     "https://www.mozilla.org/legal/privacy/firefox.html#crash-reporter");
++     "");
+ 
+ // base URL for web-based support pages
+ pref("app.support.baseURL", "https://support.mozilla.org/1/firefox/%VERSION%/%OS%/%LOCALE%/");
+@@ -971,7 +971,7 @@
+ #endif
+ 
+ // base URL for web-based marketing pages
+-pref("app.productInfo.baseURL", "https://www.mozilla.org/firefox/features/");
++pref("app.productInfo.baseURL", "https://github.com/torvic9/plasmafox");
+ 
+ // Name of alternate about: page for certificate errors (when undefined, defaults to about:neterror)
+ pref("security.alternate_certificate_error_page", "certerror");
+@@ -1301,7 +1301,7 @@
+ pref("browser.newtab.preload", true);
+ 
+ // Indicates if about:newtab shows content (enabled) or just blank
+-pref("browser.newtabpage.enabled", true);
++pref("browser.newtabpage.enabled", false);
+ 
+ // Activity Stream prefs that control to which page to redirect
+ pref("browser.newtabpage.activity-stream.prerender", true);
+@@ -1312,10 +1312,10 @@
+ pref("browser.library.activity-stream.enabled", true);
+ 
+ // The remote FxA root content URL for the Activity Stream firstrun page.
+-pref("browser.newtabpage.activity-stream.fxaccounts.endpoint", "https://accounts.firefox.com/");
++pref("browser.newtabpage.activity-stream.fxaccounts.endpoint", "");
+ 
+ // The pref that controls if the search shortcuts experiment is on
+-pref("browser.newtabpage.activity-stream.improvesearch.topSiteSearchShortcuts", true);
++pref("browser.newtabpage.activity-stream.improvesearch.topSiteSearchShortcuts", false);
+ 
+ // ASRouter provider configuration
+ pref("browser.newtabpage.activity-stream.asrouter.providers.cfr", "{\"id\":\"cfr\",\"enabled\":true,\"type\":\"local\",\"localProvider\":\"CFRMessageProvider\",\"frequency\":{\"custom\":[{\"period\":\"daily\",\"cap\":1}]},\"categories\":[\"cfrAddons\",\"cfrFeatures\"]}");
+@@ -1397,10 +1397,10 @@
+ // All the Geolocation preferences are here.
+ //
+ #ifndef EARLY_BETA_OR_EARLIER
+-pref("geo.wifi.uri", "https://www.googleapis.com/geolocation/v1/geolocate?key=%GOOGLE_LOCATION_SERVICE_API_KEY%");
++pref("geo.wifi.uri", "");
+ #else
+ // Use MLS on Nightly and early Beta.
+-pref("geo.wifi.uri", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
++pref("geo.wifi.uri", "");
+ #endif
+ 
+ #ifdef XP_MACOSX
+@@ -1424,7 +1424,7 @@
+ 
+ // If set to false, FxAccounts and Sync will be unavailable.
+ // A restart is mandatory after flipping that preference.
+-pref("identity.fxaccounts.enabled", true);
++pref("identity.fxaccounts.enabled", false);
+ 
+ // The remote FxA root content URL. Must use HTTPS.
+ pref("identity.fxaccounts.remote.root", "https://accounts.firefox.com/");
+@@ -1455,8 +1455,8 @@
+ 
+ // URLs for promo links to mobile browsers. Note that consumers are expected to
+ // append a value for utm_campaign.
+-pref("identity.mobilepromo.android", "https://www.mozilla.org/firefox/android/?utm_source=firefox-browser&utm_medium=firefox-browser&utm_campaign=");
+-pref("identity.mobilepromo.ios", "https://www.mozilla.org/firefox/ios/?utm_source=firefox-browser&utm_medium=firefox-browser&utm_campaign=");
++pref("identity.mobilepromo.android", "");
++pref("identity.mobilepromo.ios", "");
+ 
+ // Migrate any existing Firefox Account data from the default profile to the
+ // Developer Edition profile.
+@@ -1467,7 +1467,7 @@
+ #endif
+ 
+ // If activated, send tab will use the new FxA commands backend.
+-pref("identity.fxaccounts.commands.enabled", true);
++pref("identity.fxaccounts.commands.enabled", false);
+ // How often should we try to fetch missed FxA commands on sync (in seconds).
+ // Default is 24 hours.
+ pref("identity.fxaccounts.commands.missed.fetch_interval", 86400);
+@@ -1514,7 +1514,7 @@
+ // Block WebAudio from playing automatically.
+ pref("media.autoplay.block-webaudio", true);
+ #else
+-pref("media.autoplay.block-webaudio", false);
++pref("media.autoplay.block-webaudio", true);
+ #endif
+ 
+ #ifdef NIGHTLY_BUILD
+@@ -1537,22 +1537,22 @@
+ // Determines if Telemetry pings can be archived locally.
+ pref("toolkit.telemetry.archive.enabled", true);
+ // Enables sending the shutdown ping when Firefox shuts down.
+-pref("toolkit.telemetry.shutdownPingSender.enabled", true);
++pref("toolkit.telemetry.shutdownPingSender.enabled", false);
+ // Enables sending the shutdown ping using the pingsender from the first session.
+ pref("toolkit.telemetry.shutdownPingSender.enabledFirstSession", false);
+ // Enables sending a duplicate of the first shutdown ping from the first session.
+-pref("toolkit.telemetry.firstShutdownPing.enabled", true);
++pref("toolkit.telemetry.firstShutdownPing.enabled", false);
+ // Enables sending the 'new-profile' ping on new profiles.
+-pref("toolkit.telemetry.newProfilePing.enabled", true);
++pref("toolkit.telemetry.newProfilePing.enabled", false);
+ // Enables sending 'update' pings on Firefox updates.
+-pref("toolkit.telemetry.updatePing.enabled", true);
++pref("toolkit.telemetry.updatePing.enabled", false);
+ // Enables sending 'bhr' pings when the browser hangs.
+-pref("toolkit.telemetry.bhrPing.enabled", true);
++pref("toolkit.telemetry.bhrPing.enabled", false);
+ // Enables using Hybrid Content Telemetry from Mozilla privileged pages.
+-pref("toolkit.telemetry.hybridContent.enabled", true);
++pref("toolkit.telemetry.hybridContent.enabled", false);
+ 
+ // Ping Centre Telemetry settings.
+-pref("browser.ping-centre.telemetry", true);
++pref("browser.ping-centre.telemetry", false);
+ pref("browser.ping-centre.log", false);
+ pref("browser.ping-centre.staging.endpoint", "https://onyx_tiles.stage.mozaws.net/v3/links/ping-centre");
+ pref("browser.ping-centre.production.endpoint", "https://tiles.services.mozilla.com/v3/links/ping-centre");
+@@ -1585,7 +1585,7 @@
+ 
+ // Enable the Report Breakage UI on Nightly and Beta but not on Release yet.
+ #ifdef EARLY_BETA_OR_EARLIER
+-pref("browser.contentblocking.reportBreakage.enabled", true);
++pref("browser.contentblocking.reportBreakage.enabled", false);
+ #else
+ pref("browser.contentblocking.reportBreakage.enabled", false);
+ #endif
+@@ -1607,19 +1607,12 @@
+ // Always enable newtab segregation using containers
+ pref("privacy.usercontext.about_newtab_segregation.enabled", true);
+ // Enable Contextual Identity Containers
+-#ifdef NIGHTLY_BUILD
+ pref("privacy.userContext.enabled", true);
+ pref("privacy.userContext.ui.enabled", true);
+ 
+ // 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is shown after X milliseconds.
+ pref("privacy.userContext.longPressBehavior", 2);
+-#else
+-pref("privacy.userContext.enabled", false);
+-pref("privacy.userContext.ui.enabled", false);
+ 
+-// 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is shown after X milliseconds.
+-pref("privacy.userContext.longPressBehavior", 0);
+-#endif
+ pref("privacy.userContext.extension", "");
+ 
+ // Start the browser in e10s mode
+@@ -1638,7 +1631,7 @@
+ pref("browser.tabs.remote.warmup.unloadDelayMs", 2000);
+ 
+ // For the about:tabcrashed page
+-pref("browser.tabs.crashReporting.sendReport", true);
++pref("browser.tabs.crashReporting.sendReport", false);
+ pref("browser.tabs.crashReporting.includeURL", false);
+ pref("browser.tabs.crashReporting.requestEmail", false);
+ pref("browser.tabs.crashReporting.emailMe", false);
+@@ -1667,7 +1660,7 @@
+ // debugger is attached.
+ pref("dom.ipc.reportProcessHangs", false);
+ #else
+-pref("dom.ipc.reportProcessHangs", true);
++pref("dom.ipc.reportProcessHangs", false);
+ #endif
+ 
+ // Don't limit how many nodes we care about on desktop:
+@@ -1677,7 +1670,7 @@
+ // and because (normally) these errors are not persisted anywhere.
+ pref("reader.errors.includeURLs", true);
+ 
+-pref("dom.serviceWorkers.enabled", true);
++pref("dom.serviceWorkers.enabled", false);
+ 
+ // Enable Push API.
+ pref("dom.push.enabled", true);
+@@ -1705,8 +1698,8 @@
+ pref("dom.mozBrowserFramesEnabled", true);
+ 
+ pref("extensions.pocket.api", "api.getpocket.com");
+-pref("extensions.pocket.enabled", true);
+-pref("extensions.pocket.oAuthConsumerKey", "40249-e88c401e1b1f2242d9e441c4");
++pref("extensions.pocket.enabled", false);
++pref("extensions.pocket.oAuthConsumerKey", "");
+ pref("extensions.pocket.site", "getpocket.com");
+ 
+ pref("signon.schemeUpgrades", true);
+@@ -1791,14 +1784,14 @@
+ // Normandy client preferences
+ pref("app.normandy.api_url", "https://normandy.cdn.mozilla.net/api/v1");
+ pref("app.normandy.dev_mode", false);
+-pref("app.normandy.enabled", true);
++pref("app.normandy.enabled", false);
+ pref("app.normandy.first_run", true);
+ pref("app.normandy.logging.level", 50); // Warn
+ pref("app.normandy.run_interval_seconds", 21600); // 6 hours
+ pref("app.normandy.shieldLearnMoreUrl", "https://support.mozilla.org/1/firefox/%VERSION%/%OS%/%LOCALE%/shield");
+ pref("features.normandy-remote-settings.enabled", false);
+ #ifdef MOZ_DATA_REPORTING
+-pref("app.shield.optoutstudies.enabled", true);
++pref("app.shield.optoutstudies.enabled", false);
+ #else
+ pref("app.shield.optoutstudies.enabled", false);
+ #endif
+@@ -1840,8 +1833,8 @@
+ #endif
+ 
+ // Discovery prefs
+-pref("browser.discovery.enabled", true);
+-pref("browser.discovery.containers.enabled", true);
++pref("browser.discovery.enabled", false);
++pref("browser.discovery.containers.enabled", false);
+ pref("browser.discovery.sites", "addons.mozilla.org");
+ 
+ pref("browser.engagement.recent_visited_origins.expiry", 86400); // 24 * 60 * 60 (24 hours in seconds)
+@@ -1854,5 +1847,14 @@
+ // This pref will surface existing Firefox Account information
+ // as a button next to the hamburger menu. It allows
+ // quick access to sign-in and manage your Firefox Account.
+-pref("identity.fxaccounts.toolbar.enabled", true);
++pref("identity.fxaccounts.toolbar.enabled", false);
+ pref("identity.fxaccounts.toolbar.accessed", false);
++
++// Overrides
++pref("devtools.onboarding.telemetry.logged", false);
++pref("toolkit.telemetry.unified", false);
++pref("toolkit.telemetry.enabled", false);
++pref("toolkit.telemetry.server", "");
++pref("datareporting.healthreport.infoURL", "");
++pref("datareporting.healthreport.uploadEnabled", false);
++pref("dom.ipc.processCount", 4);
+--- a/browser/moz.configure	2019-05-25 16:55:30.212506933 +0200
++++ b/browser/moz.configure	2019-05-25 16:55:44.482959893 +0200
+@@ -4,8 +4,8 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-imply_option('MOZ_PLACES', True)
+-imply_option('MOZ_SERVICES_HEALTHREPORT', True)
++imply_option('MOZ_PLACES', False)
++imply_option('MOZ_SERVICES_HEALTHREPORT', False)
+ imply_option('MOZ_SERVICES_SYNC', True)
+ imply_option('MOZ_DEDICATED_PROFILES', True)
+ imply_option('MOZ_BLOCK_PROFILE_DOWNGRADE', True)

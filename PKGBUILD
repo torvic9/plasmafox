@@ -37,7 +37,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde' 'firefox-appmenu')
 _patchrev=9c008b241362
-_pfdate=20190524
+_pfdate=20190525
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -70,12 +70,12 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/67.0/source/$_pkgname-$pkgv
 )
 sha512sums=('a1000d6ca8146a9a3c74a3f69041b755c0c5014c8a608298d9c4cbe39577939d43139a7ad742983697ae90b635d3f5d8f9a008fcc2b3778adaadc25acc49ca29'
             'SKIP'
-            'da7ed9d1f130c9199af12bc1f1db243fabe199e0e73a977162d3426e9002ca41a2f5ee0225ee65523be733de54ff145a4706c5a85d080f01a226f3d635d1d814'
+            '7a805ffd8ddbce7a169cba9ff5c4a66e92650231cffd77542bce6912fc8a794dbbfc9b9f34e0d72331e36501e958aecdd524463656937bea828a1d63a73cd011'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
             '54803473813683a3c295e205b0fe964592d63c8654094eeb4acfcfa844e30d82e782fcb993a9dc06a6a5767424656578b343ee273aac836f8033d9bfcad44bad'
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
             'ad84bc853cfd863e7111846d5ce8e4b7566d7078365691663a10552252a022578ad445d647e2889dd367dd0bbd0206a0fa588dfc80fa0fc3f72a0957bff17799'
-            'ab04d461f306150e7f91623ee45018e09b11662aaac73b6cec476a58407003ff49175a732da90190118e8d0c05c97d6b21a1464a4e76e4027b1bc111d9fe2032'
+            '3c5f478af522eb96f991ee457aa6448aa870927fac6a77392e4f3e1f96173da0a97c305eba581e72f1ab46792dc136094eca81ee619ee7001401cc8797602d08'
             '139bdcc4d08dd31a27a380ac88a19b682de2932e4da9695cff3379e244b2b5396c2f7d5e9a782e6f344fd910387ab02219534d286d3abd896bcaf3a0d54ae170'
             'ebe56e6ae11c3f290cc56086c85a4ec138acfa67aa76f242e13e8eb37ebff1241603ee03854ebbefc650528d0bccfa966c68254aeafc7124de94acb24b4a67eb'
             '6369a1ac082841f0b79ecd2e69550f3576a3f3eec497881be1ba7960024b5a1aa471ddc2fa7835e574e004684950f33c3c84dee8ae42036d298dd11736eec7de'
@@ -129,7 +129,6 @@ prepare() {
   
   patch -Np1 -i "$srcdir/0001-bz-1468911.patch"
   
-
   msg "Patching for KDE"
   patch -Np1 -i "$srcdir/mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "$srcdir/mozilla-kde-$_patchrev.patch"
@@ -140,7 +139,7 @@ prepare() {
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i "$srcdir/pgo_fix_missing_kdejs.patch"
-
+  
   patch -Np1 -i "$srcdir/2000_system_harfbuzz_support.patch"
   patch -Np1 -i "$srcdir/2001_system_graphite2_support.patch"
 
@@ -179,7 +178,7 @@ build() {
   fi
   
   xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
-#  ./mach build
+  #./mach build
   ./mach buildsymbols
 }
 
