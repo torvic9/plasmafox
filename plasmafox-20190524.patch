@@ -451,3 +451,14 @@
 +vendorShortName=Plasmafox
  
  syncBrandShortName=Sync
+--- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css	2019-05-17 02:33:19.000000000 +0200
++++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css	2019-05-24 21:57:51.438173329 +0200
+@@ -124,7 +124,7 @@
+ }
+ 
+ .wordmark {
+-  background: url("resource://activity-stream/data/content/assets/firefox-wordmark.svg") no-repeat center center;
++  background: url("resource://activity-stream/data/content/assets/plasmafox-wordmark.svg") no-repeat center center;
+   background-size: 175px;
+   -moz-context-properties: fill;
+   display: inline-block;
