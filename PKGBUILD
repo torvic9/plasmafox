@@ -1,6 +1,5 @@
-# Maintainer: Thaodan <theodorstormgrade@gmail.com>
-# Contributor: Weng Xuetian <wengxt@gmail.com>
-# small changes by torvic9
+# Maintainer: torvic9 AT mailbox DOT org
+# based on ideas by Waterfox and firefox-kde-opensuse
 
 # enable gcc build
 _usegcc=1
@@ -16,8 +15,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=67.0
-pkgrel=0.5
+pkgver=67.0.1
+pkgrel=0.6
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -42,7 +41,7 @@ _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
-source=(https://ftp.mozilla.org/pub/firefox/releases/67.0/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
+source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
 		#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
         mozconfig
         plasmafox.desktop
@@ -68,7 +67,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/67.0/source/$_pkgname-$pkgv
         about.png
         default{16,22,24,32,48,64,128,256}.png
 )
-sha512sums=('a1000d6ca8146a9a3c74a3f69041b755c0c5014c8a608298d9c4cbe39577939d43139a7ad742983697ae90b635d3f5d8f9a008fcc2b3778adaadc25acc49ca29'
+sha512sums=('eeb3d64980db062a23cb86a319441194044e1e7a8500c0084c1e7fb811da4639fea075b0c20014a9cb9443bc8b5af0b0109d49b000298e18c38b40b46f51b858'
             'SKIP'
             '7a805ffd8ddbce7a169cba9ff5c4a66e92650231cffd77542bce6912fc8a794dbbfc9b9f34e0d72331e36501e958aecdd524463656937bea828a1d63a73cd011'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
@@ -84,18 +83,18 @@ sha512sums=('a1000d6ca8146a9a3c74a3f69041b755c0c5014c8a608298d9c4cbe39577939d431
             'f85100925fcfc63a2c2a14eae8e8956e872a98d8e8aa56cb11a9cb486b361b5baa5af43dd2c9deb4e0bd9821128e175e30aa458aa82bc7b4807223fc212cbe9b'
             'd83ac09fa85377536d881da212efec0d4bf8bf30f26b5d080fee45772ad35192db9696a09844dd29396ffa0c3344f6961e4d203a5d032e0d138d601a373c3246'
             '29cdeb1bcee1cc7b86916f21cf5b974926e0cca771bd154010eba0ff43511c5e19eb9f88c102aa88e457936a7bc4816b4c3b4dbd752141035f918f0a073ab88b'
-            '6b09a74ef24391f50204e61453cee4b3960b78a17db84efd2c09d46899acc4434e53b3d42cd1b8d72f3165c17804ef1c8a0648a738874cd7c50681a29a9a7fa6'
+            '5f21b061931fa1224d59cd7b66cb16bc3d7d6d743d63c5a657d21b4aff463c5292fa8f880a572094bae235931c5623f2ec19ed7ffe79ed4bf29683f42bbd22cd'
             '52dfa1d6908b026b59c23f580d9264a11cf8f125e6b5a30dffd9104f324b225ddbd0266e6aaf482e8d283977897084506f86d18519e1b1c086b0fa63809160e8'
             'dcfd039c05b1a713b8b28cc248ecfc0fd2b04cdc072b7920001db5edcc125baece0ebaaaa17d3a980ded8779c886567039ec06e9b9210d7a0925d5d56a93cfbf'
             '6481c18cdce5c086bdaf3cdb1d1e43a2b10d1b11e23c827efbfd476ee7ed37f6fc34279f3a363157c35fb6b10bddd413b59cf00abc88a7da9653333260b778e1'
-            '7bfadd5a66b426ebc653222879bf1719070a37673b8952571e1e8a5d27a5d12f6a2245650f8063fee058b8e10b1e0db21edb9e303c7b71cfaa55b7201ef6aa2c'
-            '7c3ef5029d1f8e5f1dd84073b8d5cc6fbe664cfffb23f4c4a100e5e9d2c073fa06acdee10ca5cd1674a8090c387db1dd3d9d00d90fede11d53e8b7e223603022'
-            'cd60443976dabe537ff90ff6e6e8d9d5623363ed35d97e593ab0339cf5feb95cbe51f60a7060ea8f9695c2323eebdb884fd1a00d231b517c1214d15f3cee9f95'
-            '8ca515af1b0446e5319685729da1d5d31b4afb4d0ba00261395a29894c3988492520dd29dfad8c9f03e62299bab3b129fd697391e57d6907e7f9b0ff4f9faefc'
-            '72136402206646903e6ffb5de4728a79138eddfd566a3cec8040b622e91e589da2a104f1735a6a5308a31e2f64893758c0c87de2f10400881eeb0e192d6ce3c1'
-            '69df633b441ac66cc8bec073dba1ebe839ba99ae7268acd906bc73041357def9589ae5abd02dfa9c95b8cda42e7c4dfe27481cb65c06a69f552343d5180e233f'
-            '657399a1d7d1c8f0b192857395381d86583fbdad864783ca9d890ead8bebe4f379ba7d5ea1cd19e0a9dfe3cadd6c118f96a5f03f8b5f358d1a4010ad516ded15'
-            'b923ee0c960a2135ec5b687bf4be1f32a54aca9f266cfec97b953efa282a42f7a543ee26b216d78919b01438cf6f0f42f79d4b134a78bd7841417689f3fac8bf'
+            '0ab62ae15019c500e515bde76d645aa3401c2a41d2edf76631c89dd62487cd6bff674077bcf5993ab353f575dcb2370a3476a758281d72403fc18f707561b4c3'
+            '1f90e2c7d75000044b8adecfe62d9343ed1aa7a7c6d7c6e1272440317bf28e30783c4f8736a3d5b5a5637b4f4af27efb1674ac59b91b31c6d9972cf66bc66865'
+            '9d4da818da9968d62096184dea1da8020a3c5b8258d43529d0a76150da92fb323b88d6afec78b5cd9de76a14387d8f20a1facad3e1bff4ce91553240abcf486a'
+            'dbe2d582b9994ac87540a8c10c98e77494ee33b5962cf5cd6e1a65b67509e244adb365c5a34506d912e61bf2e03c719e2ee8b2f84080960b8dadf460012c2096'
+            '155bd780d470892b73f5e2d2404b38299b87642d4741cc31e8b6d716201e92a18c118bd824ed24a1e7b324631ce1dc6fb2d2050b7eaf049c648e5e4a8331621d'
+            'f7795078111c6f117df2de504fb0e66dda93cfc5e0f26bccfad6ed6a6c2fb0a24a36451bc6097b3310ea2b636be196e48873473826f80e5ab1d017774fb9ba41'
+            '83c305b7af85d40652d358518db4794e7b182ce0c9f81bc1c6106814f5bfa0f9800d972fb6a40466cf7dd3b3fec0f6b2f49da8df52ce9c227b8ba9b35b9b35c9'
+            '0c1b1aa9b6e12cf3c3a5bcac9d1cb95e3c89a58ea54eaebb5bb7c678e26c41b8a611b48f20c130db2ef0bd826975f9961ae5f0f4b924588dab7d6329224c080b'
 )
 
 validpgpkeys=(BBBEBDBB24C6F355
@@ -198,7 +197,7 @@ package() {
   install -Dm644 /dev/stdin "$_distini" <<END
 [Global]
 id=plasmafox
-version=0.5
+version=0.6
 about=Plasmafox for Manjaro
 
 [Preferences]
