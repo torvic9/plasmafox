@@ -7,21 +7,6 @@
 -MOZ_APP_DISPLAYNAME=Nightly
 +MOZ_APP_DISPLAYNAME=plasmafox
 +MOZ_APP_PROFILE=plasmafox
---- a/browser/branding/unofficial/pref/firefox-branding.js	2019-05-17 02:33:15.000000000 +0200
-+++ b/browser/branding/unofficial/pref/firefox-branding.js	2019-05-22 19:52:07.779197689 +0200
-@@ -11,10 +11,10 @@
- pref("app.update.promptWaitTime", 86400);
- // URL user can browse to manually if for some reason all update installation
- // attempts fail.
--pref("app.update.url.manual", "https://nightly.mozilla.org");
-+pref("app.update.url.manual", "");
- // A default value for the "More information about this update" link
- // supplied in the "An update is available" page of the update wizard.
--pref("app.update.url.details", "https://nightly.mozilla.org");
-+pref("app.update.url.details", "");
- 
- // The number of days a binary is permitted to be old
- // without checking for an update.  This assumes that
 --- a/browser/base/content/overrides/app-license.html	2019-05-17 02:33:14.000000000 +0200
 +++ b/browser/base/content/overrides/app-license.html	2019-05-24 15:48:44.718916525 +0200
 @@ -2,5 +2,5 @@
@@ -469,17 +454,211 @@
 +pref("toolkit.telemetry.server", "");
 +pref("datareporting.healthreport.infoURL", "");
 +pref("datareporting.healthreport.uploadEnabled", false);
-+pref("dom.ipc.processCount", 4);
---- a/browser/moz.configure	2019-05-25 16:55:30.212506933 +0200
-+++ b/browser/moz.configure	2019-05-25 16:55:44.482959893 +0200
-@@ -4,8 +4,8 @@
- # License, v. 2.0. If a copy of the MPL was not distributed with this
++
+--- a/browser/branding/unofficial/pref/firefox-branding.js	2019-05-29 17:38:45.000000000 +0200
++++ b/browser/branding/unofficial/pref/firefox-branding.js	2019-06-07 20:48:04.084846667 +0200
+@@ -2,8 +2,8 @@
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+-pref("startup.homepage_override_url", "");
+-pref("startup.homepage_welcome_url", "");
++pref("startup.homepage_override_url", "https://github.com/torvic9/plasmafox");
++pref("startup.homepage_welcome_url", "https://github.com/torvic9/plasmafox");
+ pref("startup.homepage_welcome_url.additional", "");
+ // The time interval between checks for a new version (in seconds)
+ pref("app.update.interval", 86400); // 24 hours
+@@ -11,10 +11,10 @@
+ pref("app.update.promptWaitTime", 86400);
+ // URL user can browse to manually if for some reason all update installation
+ // attempts fail.
+-pref("app.update.url.manual", "https://nightly.mozilla.org");
++pref("app.update.url.manual", "https://github.com/torvic9/plasmafox");
+ // A default value for the "More information about this update" link
+ // supplied in the "An update is available" page of the update wizard.
+-pref("app.update.url.details", "https://nightly.mozilla.org");
++pref("app.update.url.details", "https://github.com/torvic9/plasmafox");
+ 
+ // The number of days a binary is permitted to be old
+ // without checking for an update.  This assumes that
+--- a/browser/app/profile/firefox.js	2019-05-29 17:38:45.000000000 +0200
++++ b/browser/app/profile/firefox.js	2019-06-07 20:54:16.736578935 +0200
+@@ -391,6 +391,10 @@
+ // Mirrors whether the search-container widget is in the navigation toolbar.
+ pref("browser.search.widget.inNavBar", false);
+ 
++// Search defaults
++pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
++pref("browser.search.defaultenginename", "DuckDuckGo");
++pref("browser.search.suggest.enabled", false);
+ #ifndef RELEASE_OR_BETA
+ pref("browser.search.reset.enabled", true);
+ #endif
+@@ -1777,7 +1781,7 @@
+ pref("browser.suppress_first_window_animation", true);
+ 
+ // Preference that allows individual users to disable Screenshots.
+-pref("extensions.screenshots.disabled", false);
++//pref("extensions.screenshots.disabled", false);
+ // Preference that allows individual users to leave Screenshots enabled, but
+ // disable uploading to the server.
+ pref("extensions.screenshots.upload-disabled", false);
+--- a/browser/locales/en-US/chrome/browser-region/region.properties	2019-05-29 17:38:45.000000000 +0200
++++ b/browser/locales/en-US/chrome/browser-region/region.properties	2019-06-07 20:52:50.251726354 +0200
+@@ -22,3 +22,7 @@
+ # The default set of protocol handlers for ircs:
+ gecko.handlerService.schemes.ircs.0.name=Mibbit
+ gecko.handlerService.schemes.ircs.0.uriTemplate=https://www.mibbit.com/?url=%s
++
++# Search
++browser.search.defaultenginename=DuckDuckGo
++browser.search.order.1=DuckDuckGo
+--- a/netwerk/protocol/http/nsHttpHandler.cpp	2019-05-29 17:39:53.000000000 +0200
++++ b/netwerk/protocol/http/nsHttpHandler.cpp	2019-06-07 21:14:43.057174032 +0200
+@@ -485,9 +485,9 @@
+       PREF_CHANGE_METHOD(nsHttpHandler::PrefsChanged), gCallbackPrefs, this);
+   PrefsChanged(nullptr);
+ 
+-  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
++  mMisc.AssignLiteral("rv:" MOZ_APP_UA_VERSION);
+ 
+-  mCompatFirefox.AssignLiteral("Firefox/" MOZILLA_UAVERSION);
++  mCompatFirefox.AssignLiteral("Plasmafox/" MOZ_APP_UA_VERSION);
+ 
+   nsCOMPtr<nsIXULAppInfo> appInfo =
+       do_GetService("@mozilla.org/xre/app-info;1");
+@@ -939,18 +939,14 @@
+   mUserAgent += '/';
+   mUserAgent += mProductSub;
+ 
+-  bool isFirefox = mAppName.EqualsLiteral("Firefox");
+-  if (isFirefox || mCompatFirefoxEnabled) {
+-    // "Firefox/x.y" (compatibility) app token
+-    mUserAgent += ' ';
+-    mUserAgent += mCompatFirefox;
+-  }
+-  if (!isFirefox) {
+-    // App portion
+-    mUserAgent += ' ';
+-    mUserAgent += mAppName;
+-    mUserAgent += '/';
+-    mUserAgent += mAppVersion;
++  // App portion
++  mUserAgent += ' ';
++  mUserAgent += "Firefox";
++  mUserAgent += '/';
++  mUserAgent += mAppVersion;
++  if (mCompatFirefoxEnabled) {
++       mUserAgent += ' ';
++		mUserAgent += mCompatFirefox;
+   }
+ }
+ 
+--- a/browser/extensions/moz.build	2019-05-29 17:38:45.000000000 +0200
++++ b/browser/extensions/moz.build	2019-06-08 08:01:48.271294119 +0200
+@@ -8,7 +8,6 @@
+     'formautofill',
+     'fxmonitor',
+     'pdfjs',
+-    'screenshots',
+     'webcompat',
+     'webcompat-reporter'
+ ]
+--- a/browser/moz.configure	2019-05-29 17:38:45.000000000 +0200
++++ b/browser/moz.configure	2019-06-07 21:35:18.363555713 +0200
+@@ -5,7 +5,7 @@
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
  
--imply_option('MOZ_PLACES', True)
+ imply_option('MOZ_PLACES', True)
 -imply_option('MOZ_SERVICES_HEALTHREPORT', True)
-+imply_option('MOZ_PLACES', False)
 +imply_option('MOZ_SERVICES_HEALTHREPORT', False)
  imply_option('MOZ_SERVICES_SYNC', True)
  imply_option('MOZ_DEDICATED_PROFILES', True)
  imply_option('MOZ_BLOCK_PROFILE_DOWNGRADE', True)
+ 
+--- a/modules/libpref/init/all.js	2019-05-29 17:39:35.000000000 +0200
++++ b/modules/libpref/init/all.js	2019-06-08 14:27:59.109555227 +0200
+@@ -16,6 +16,7 @@
+ 
+ pref("keyword.enabled", false);
+ pref("general.useragent.compatMode.firefox", false);
++pref("general.useragent.override.addons.mozilla.org", "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0");
+ 
+ // This pref exists only for testing purposes. In order to disable all
+ // overrides by default, don't initialize UserAgentOverrides.jsm.
+@@ -191,7 +192,7 @@
+ pref("dom.pointer-lock.enabled", true);
+ 
+ // Whether the Gamepad API is enabled
+-pref("dom.gamepad.enabled", true);
++pref("dom.gamepad.enabled", false);
+ pref("dom.gamepad.test.enabled", false);
+ #ifdef RELEASE_OR_BETA
+ pref("dom.gamepad.non_standard_events.enabled", false);
+@@ -598,10 +599,10 @@
+ 
+ // Whether to autostart a media element with an |autoplay| attribute.
+ // ALLOWED=0, BLOCKED=1, defined in dom/media/Autoplay.idl
+-pref("media.autoplay.default", 0);
++pref("media.autoplay.default", 1);
+ 
+ // By default, don't block WebAudio from playing automatically.
+-pref("media.autoplay.block-webaudio", false);
++pref("media.autoplay.block-webaudio", true);
+ 
+ // By default, don't block muted media from playing automatically.
+ pref("media.autoplay.allow-muted", true);
+@@ -1431,7 +1432,7 @@
+ // Enforce tracking protection in Private Browsing mode
+ pref("privacy.trackingprotection.pbmode.enabled",  true);
+ // First Party Isolation (double keying), disabled by default
+-pref("privacy.firstparty.isolate",                        false);
++pref("privacy.firstparty.isolate",                        true);
+ // If false, two windows in the same domain with different first party domains
+ // (top level URLs) can access resources through window.opener.
+ // This pref is effective only when "privacy.firstparty.isolate" is true.
+@@ -1453,6 +1454,8 @@
+ pref("privacy.resistFingerprinting.reduceTimerPrecision.microseconds", 1000);
+ // Enable jittering the clock one precision value forward
+ pref("privacy.resistFingerprinting.reduceTimerPrecision.jitter", true);
++// enable resist by default
++pref("privacy.resistFingerprinting", true);
+ 
+ pref("dom.event.contextmenu.enabled",       true);
+ pref("dom.event.coalesce_mouse_move",       true);
+@@ -2200,7 +2203,7 @@
+ pref("network.dnsCacheExpirationGracePeriod", 60);
+ 
+ // This preference can be used to turn off DNS prefetch.
+-pref("network.dns.disablePrefetch", false);
++pref("network.dns.disablePrefetch", true);
+ 
+ // This preference controls whether .onion hostnames are
+ // rejected before being given to DNS. RFC 7686
+@@ -2233,7 +2236,7 @@
+ 
+ // enables the prefetch service (i.e., prefetching of <link rel="next"> and
+ // <link rel="prefetch"> URLs).
+-pref("network.prefetch-next", true);
++pref("network.prefetch-next", false);
+ // enables the preloading (i.e., preloading of <link rel="preload"> URLs).
+ pref("network.preload", false);
+ 
+@@ -5172,7 +5175,7 @@
+ pref("geo.wifi.xhr.timeout", 60000);
+ 
+ // Enable/Disable the various sensor APIs for content
+-pref("device.sensors.enabled", true);
++pref("device.sensors.enabled", false);
+ pref("device.sensors.orientation.enabled", true);
+ pref("device.sensors.motion.enabled", true);
+ pref("device.sensors.proximity.enabled", false);
+@@ -5759,7 +5762,7 @@
+ // The URL of the Firefox Accounts auth server backend
+ pref("identity.fxaccounts.auth.uri", "https://api.accounts.firefox.com/v1");
+ 
+-pref("beacon.enabled", true);
++pref("beacon.enabled", false);
+ 
+ // UDPSocket API
+ pref("dom.udpsocket.enabled", false);

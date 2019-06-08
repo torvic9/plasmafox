@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=67.0.1
-pkgrel=0.6
+pkgrel=0.7
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -28,7 +28,7 @@ depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
 
 makedepends=('unzip' 'zip' 'diffutils' 'python' 'yasm' 'mesa' 'imake'
              'xorg-server-xvfb' 'libpulse' 'inetutils' 'autoconf2.13' 'rust'
-             'cargo' 'mercurial' 'llvm' 'clang' 'ccache'
+             'cargo' 'mercurial' 'llvm' 'clang' 'sccache'
              'gtk2' 'nodejs' 'cbindgen' 'nasm')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
@@ -36,7 +36,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde' 'firefox-appmenu')
 _patchrev=9c008b241362
-_pfdate=20190525
+_pfdate=20190608
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -47,7 +47,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         plasmafox.desktop
         vendor.js
         kde.js
-		0001-bz-1468911.patch
+		0001-bz-1521249.patch
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -73,8 +73,8 @@ sha512sums=('eeb3d64980db062a23cb86a319441194044e1e7a8500c0084c1e7fb811da4639fea
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
             '54803473813683a3c295e205b0fe964592d63c8654094eeb4acfcfa844e30d82e782fcb993a9dc06a6a5767424656578b343ee273aac836f8033d9bfcad44bad'
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
-            'ad84bc853cfd863e7111846d5ce8e4b7566d7078365691663a10552252a022578ad445d647e2889dd367dd0bbd0206a0fa588dfc80fa0fc3f72a0957bff17799'
-            '3c5f478af522eb96f991ee457aa6448aa870927fac6a77392e4f3e1f96173da0a97c305eba581e72f1ab46792dc136094eca81ee619ee7001401cc8797602d08'
+            '0e7f996447a26f470c4996b1115bf8bd80a1869bc1fe014c4ea1380fe8685f0bc344decc61be4b161b40db3c1e418138544f9216513feb5f026b335ec8f7207b'
+            'ab8ab32afe1365d7d9b72eea9691cb79804845acbaaad940114804ed8913b544cf49eba2407b7ad75fc771cfb8759545ccbea2011ba7b59569ce1a7f3702886f'
             '139bdcc4d08dd31a27a380ac88a19b682de2932e4da9695cff3379e244b2b5396c2f7d5e9a782e6f344fd910387ab02219534d286d3abd896bcaf3a0d54ae170'
             'ebe56e6ae11c3f290cc56086c85a4ec138acfa67aa76f242e13e8eb37ebff1241603ee03854ebbefc650528d0bccfa966c68254aeafc7124de94acb24b4a67eb'
             '6369a1ac082841f0b79ecd2e69550f3576a3f3eec497881be1ba7960024b5a1aa471ddc2fa7835e574e004684950f33c3c84dee8ae42036d298dd11736eec7de'
@@ -97,8 +97,7 @@ sha512sums=('eeb3d64980db062a23cb86a319441194044e1e7a8500c0084c1e7fb811da4639fea
             '0c1b1aa9b6e12cf3c3a5bcac9d1cb95e3c89a58ea54eaebb5bb7c678e26c41b8a611b48f20c130db2ef0bd826975f9961ae5f0f4b924588dab7d6329224c080b'
 )
 
-validpgpkeys=(BBBEBDBB24C6F355
-			14F26682D0916CDD81E37B6D61B7B526D98F0353)
+validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 if [[ $_usegcc == 1 ]] ; then
   source+=('pgo+lto-with-gcc.patch')
@@ -118,7 +117,7 @@ prepare() {
 
   if [[ $_usegcc == 1 ]] ; then
     if in_array ccache ${BUILDENV[*]} ; then
-      echo "ac_add_options --with-ccache" >> .mozconfig
+      echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
     fi
     echo "ac_add_options --disable-elf-hack" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
@@ -126,7 +125,7 @@ prepare() {
 
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
   
-  patch -Np1 -i "$srcdir/0001-bz-1468911.patch"
+  patch -Np1 -i "$srcdir/0001-bz-1521249.patch"
   
   msg "Patching for KDE"
   patch -Np1 -i "$srcdir/mozilla-nongnome-proxies-$_patchrev.patch"
@@ -197,7 +196,7 @@ package() {
   install -Dm644 /dev/stdin "$_distini" <<END
 [Global]
 id=plasmafox
-version=0.6
+version=0.7
 about=Plasmafox for Manjaro
 
 [Preferences]
