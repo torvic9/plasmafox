@@ -15,8 +15,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=67.0.1
-pkgrel=0.7
+pkgver=67.0.2
+pkgrel=0.8
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -67,7 +67,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         about.png
         default{16,22,24,32,48,64,128,256}.png
 )
-sha512sums=('eeb3d64980db062a23cb86a319441194044e1e7a8500c0084c1e7fb811da4639fea075b0c20014a9cb9443bc8b5af0b0109d49b000298e18c38b40b46f51b858'
+sha512sums=('14da0aa23571c83dfd4cf1b33027434425c99c4b8838d335cfbd93ef60ad936cd7e7f60ad84be688f434371c9b49142e1020df63ac3e65f78b6595f5a8c19590'
             'SKIP'
             '7a805ffd8ddbce7a169cba9ff5c4a66e92650231cffd77542bce6912fc8a794dbbfc9b9f34e0d72331e36501e958aecdd524463656937bea828a1d63a73cd011'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
@@ -178,6 +178,7 @@ build() {
   xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
   #./mach build
   ./mach buildsymbols
+  ./mach resource-usage
 }
 
 package() {
@@ -196,7 +197,7 @@ package() {
   install -Dm644 /dev/stdin "$_distini" <<END
 [Global]
 id=plasmafox
-version=0.7
+version=0.8
 about=Plasmafox for Manjaro
 
 [Preferences]
