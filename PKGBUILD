@@ -178,7 +178,7 @@ build() {
   xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
   #./mach build
   ./mach buildsymbols
-  ./mach resource-usage
+  #./mach resource-usage
 }
 
 package() {
