@@ -15,7 +15,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=67.0.2
+pkgver=67.0.3
 pkgrel=0.8
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -67,7 +67,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         about.png
         default{16,22,24,32,48,64,128,256}.png
 )
-sha512sums=('14da0aa23571c83dfd4cf1b33027434425c99c4b8838d335cfbd93ef60ad936cd7e7f60ad84be688f434371c9b49142e1020df63ac3e65f78b6595f5a8c19590'
+sha512sums=('c75075a48d950decdac295c879d0d9d75a17fdc5d32d1fd4b0ec9141f09f97603e2c5c1266257a21f7ccc53b919869f09e5829ab742811d040b4ecad29998682'
             'SKIP'
             '7a805ffd8ddbce7a169cba9ff5c4a66e92650231cffd77542bce6912fc8a794dbbfc9b9f34e0d72331e36501e958aecdd524463656937bea828a1d63a73cd011'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
