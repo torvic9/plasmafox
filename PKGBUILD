@@ -15,8 +15,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=67.0.3
-pkgrel=0.8
+pkgver=67.0.4
+pkgrel=0.9
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -24,11 +24,11 @@ url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'hicolor-icon-theme'
 	 'libvpx' 'icu'  'libevent' 'nss>=3.28.3' 'nspr>=4.10.6' 'hunspell' 'hunspell-en_US'
-	 'sqlite' 'libnotify' 'kplasmafoxhelper' 'ffmpeg' 'gtk3')
+	 'sqlite' 'libnotify' 'ffmpeg' 'gtk3')
 
 makedepends=('unzip' 'zip' 'diffutils' 'python' 'yasm' 'mesa' 'imake'
              'xorg-server-xvfb' 'libpulse' 'inetutils' 'autoconf2.13' 'rust'
-             'cargo' 'mercurial' 'llvm' 'clang' 'sccache'
+             'cargo' 'mercurial' 'llvm' 'clang' 'ccache'
              'gtk2' 'nodejs' 'cbindgen' 'nasm')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
@@ -59,6 +59,10 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         pgo_fix_missing_kdejs.patch
         2001_system_graphite2_support.patch
         2000_system_harfbuzz_support.patch
+		# https://bugzilla.mozilla.org/show_bug.cgi?id=1542958
+        # note: fixes compile errrors when using elf migration
+        2014_spectre_variant2_bug1542958.patch
+        2015_spectre_variant2_bug1542958.patch
         # artwork
         about-background.png
         about-logo.png
@@ -67,7 +71,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         about.png
         default{16,22,24,32,48,64,128,256}.png
 )
-sha512sums=('c75075a48d950decdac295c879d0d9d75a17fdc5d32d1fd4b0ec9141f09f97603e2c5c1266257a21f7ccc53b919869f09e5829ab742811d040b4ecad29998682'
+sha512sums=('42abc837b5808a55e68273db6aa45fa73f8fe1df3c9072c94d8d049b6803ce8758745cc0a68af64c4ce9f86e5dd3b3619824ba67fabddce428204605894d9ee7'
             'SKIP'
             '7a805ffd8ddbce7a169cba9ff5c4a66e92650231cffd77542bce6912fc8a794dbbfc9b9f34e0d72331e36501e958aecdd524463656937bea828a1d63a73cd011'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
@@ -82,6 +86,8 @@ sha512sums=('c75075a48d950decdac295c879d0d9d75a17fdc5d32d1fd4b0ec9141f09f97603e2
             'd5c1f57aa54d7a0b4a68cd50eb19e66b2b54663c3cbfe4f9ed6ef19796df73cdf83a450ab13079c7f4e1e9d9510f900596724395ba0bcd17a4817790c8a2af91'
             'f85100925fcfc63a2c2a14eae8e8956e872a98d8e8aa56cb11a9cb486b361b5baa5af43dd2c9deb4e0bd9821128e175e30aa458aa82bc7b4807223fc212cbe9b'
             'd83ac09fa85377536d881da212efec0d4bf8bf30f26b5d080fee45772ad35192db9696a09844dd29396ffa0c3344f6961e4d203a5d032e0d138d601a373c3246'
+            'fe88766e447ea8e295d01413c5116d832729d41127d701ca96b54c778c4b22185818e2d1be288d32886cc5a96bdec2a766d689d88dc6fecb9ad8455948a1911a'
+            '33ec8050944581f27a41f3f5143739e1a188898dc5c4055ecbc4e9f3b21c65abc543c7b2139572c71d91bd3e0e16ad601938d77fba0660efd896dd46e6213e2c'
             '29cdeb1bcee1cc7b86916f21cf5b974926e0cca771bd154010eba0ff43511c5e19eb9f88c102aa88e457936a7bc4816b4c3b4dbd752141035f918f0a073ab88b'
             '5f21b061931fa1224d59cd7b66cb16bc3d7d6d743d63c5a657d21b4aff463c5292fa8f880a572094bae235931c5623f2ec19ed7ffe79ed4bf29683f42bbd22cd'
             '52dfa1d6908b026b59c23f580d9264a11cf8f125e6b5a30dffd9104f324b225ddbd0266e6aaf482e8d283977897084506f86d18519e1b1c086b0fa63809160e8'
@@ -117,7 +123,7 @@ prepare() {
 
   if [[ $_usegcc == 1 ]] ; then
     if in_array ccache ${BUILDENV[*]} ; then
-      echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
+      echo "ac_add_options --with-ccache=/usr/bin/ccache" >> .mozconfig
     fi
     echo "ac_add_options --disable-elf-hack" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
@@ -140,6 +146,10 @@ prepare() {
   
   patch -Np1 -i "$srcdir/2000_system_harfbuzz_support.patch"
   patch -Np1 -i "$srcdir/2001_system_graphite2_support.patch"
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1542958
+  # note: fixes compile errrors when using elf migrartion
+  patch -Np1 -i  "$srcdir/2014_spectre_variant2_bug1542958.patch"
+  patch -Np1 -i  "$srcdir/2015_spectre_variant2_bug1542958.patch"
 
   patch -Np1 -i "$srcdir/plasmafox-${_pfdate}.patch"
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
@@ -197,7 +207,7 @@ package() {
   install -Dm644 /dev/stdin "$_distini" <<END
 [Global]
 id=plasmafox
-version=0.8
+version=0.9
 about=Plasmafox for Manjaro
 
 [Preferences]
