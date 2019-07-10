@@ -15,8 +15,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=67.0.4
-pkgrel=0.9
+pkgver=68.0
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -28,15 +28,15 @@ depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
 
 makedepends=('unzip' 'zip' 'diffutils' 'python' 'yasm' 'mesa' 'imake'
              'xorg-server-xvfb' 'libpulse' 'inetutils' 'autoconf2.13' 'rust'
-             'cargo' 'mercurial' 'llvm' 'clang' 'ccache'
+             'cargo' 'mercurial' 'llvm' 'clang'
              'gtk2' 'nodejs' 'cbindgen' 'nasm')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde' 'firefox-appmenu')
-_patchrev=9c008b241362
-_pfdate=20190608
+_patchrev=840132a4a9b3
+_pfdate=20190710
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -47,7 +47,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         plasmafox.desktop
         vendor.js
         kde.js
-		0001-bz-1521249.patch
+		#0001-bz-1521249.patch
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -55,14 +55,10 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         # Gecko/toolkit patchset
         mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-        unity-menubar-r2254.patch
+        unity-menubar-r2258.patch
         pgo_fix_missing_kdejs.patch
         2001_system_graphite2_support.patch
         2000_system_harfbuzz_support.patch
-		# https://bugzilla.mozilla.org/show_bug.cgi?id=1542958
-        # note: fixes compile errrors when using elf migration
-        2014_spectre_variant2_bug1542958.patch
-        2015_spectre_variant2_bug1542958.patch
         # artwork
         about-background.png
         about-logo.png
@@ -71,23 +67,20 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         about.png
         default{16,22,24,32,48,64,128,256}.png
 )
-sha512sums=('42abc837b5808a55e68273db6aa45fa73f8fe1df3c9072c94d8d049b6803ce8758745cc0a68af64c4ce9f86e5dd3b3619824ba67fabddce428204605894d9ee7'
+sha512sums=('fcb6f6dd8069ca43b0b75cba4566f81c94535e66ddeb80fbdd4f47eaac2efc82d6e6bd36bf7cbebdc260a74886ba3f007a321d88fdf30731d3b669a38273f42e'
             'SKIP'
-            '7a805ffd8ddbce7a169cba9ff5c4a66e92650231cffd77542bce6912fc8a794dbbfc9b9f34e0d72331e36501e958aecdd524463656937bea828a1d63a73cd011'
+            '84288e003d49a43545dacaca19cbd06b1d0bce12e51c193f1d4e7e024caee581cf7ffe60c87fab0e37041ff6a083487f77ce6ad31a0d392237c9c1ffec9f7bbc'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
             '54803473813683a3c295e205b0fe964592d63c8654094eeb4acfcfa844e30d82e782fcb993a9dc06a6a5767424656578b343ee273aac836f8033d9bfcad44bad'
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
-            '0e7f996447a26f470c4996b1115bf8bd80a1869bc1fe014c4ea1380fe8685f0bc344decc61be4b161b40db3c1e418138544f9216513feb5f026b335ec8f7207b'
-            'ab8ab32afe1365d7d9b72eea9691cb79804845acbaaad940114804ed8913b544cf49eba2407b7ad75fc771cfb8759545ccbea2011ba7b59569ce1a7f3702886f'
-            '139bdcc4d08dd31a27a380ac88a19b682de2932e4da9695cff3379e244b2b5396c2f7d5e9a782e6f344fd910387ab02219534d286d3abd896bcaf3a0d54ae170'
-            'ebe56e6ae11c3f290cc56086c85a4ec138acfa67aa76f242e13e8eb37ebff1241603ee03854ebbefc650528d0bccfa966c68254aeafc7124de94acb24b4a67eb'
-            '6369a1ac082841f0b79ecd2e69550f3576a3f3eec497881be1ba7960024b5a1aa471ddc2fa7835e574e004684950f33c3c84dee8ae42036d298dd11736eec7de'
-            '776135cf593c06ba86e86787df561e0f8a9f192ce1b61a7a504c05ddc80ce74770a5a66385f72254d62022c2961cf3d6ee625986248de52d266b085265ee9d44'
+            'd9e324d7cb67fb1a4412abda926a2bfc7e362134a473088d9bbe9941d8649dcc83433efc036bee6446cc37641ddfeb769c6b46217b6734e20edab89eb67aa29f'
+            '477f35750230a5913a5a955a4b2e7e74e600111c1d358849bc222b442dd7e17448fd618d1ea04051b6cf0756949c6c6310055e1644315f96fc9db6fc8d771415'
+            '3de5ac11ad66e3819bb81d5dd784340bcb6d9334275f0918d8e8a3f59ffcf1ddf2649ea6168c0db4d9caed5555dd7d55e3d338cbf4a30d72802183765e8a4a98'
+            'fae7ac214cc021adfcb8a66bde9efd90c65e87e5b991a6f4eb3d34b711a9b3234463afbd7cf0ab08596a4a16365d5ae44d343c9b5918bdab78437eb0d8d75bff'
+            '354e477574bdf89afe9a7099aea88a1c99b5d4ab9a12277442ec983458374f228d404b2e51f7f790c72016313b152d6967fd545eef47778ca1cab66d4059b9e5'
             'd5c1f57aa54d7a0b4a68cd50eb19e66b2b54663c3cbfe4f9ed6ef19796df73cdf83a450ab13079c7f4e1e9d9510f900596724395ba0bcd17a4817790c8a2af91'
-            'f85100925fcfc63a2c2a14eae8e8956e872a98d8e8aa56cb11a9cb486b361b5baa5af43dd2c9deb4e0bd9821128e175e30aa458aa82bc7b4807223fc212cbe9b'
-            'd83ac09fa85377536d881da212efec0d4bf8bf30f26b5d080fee45772ad35192db9696a09844dd29396ffa0c3344f6961e4d203a5d032e0d138d601a373c3246'
-            'fe88766e447ea8e295d01413c5116d832729d41127d701ca96b54c778c4b22185818e2d1be288d32886cc5a96bdec2a766d689d88dc6fecb9ad8455948a1911a'
-            '33ec8050944581f27a41f3f5143739e1a188898dc5c4055ecbc4e9f3b21c65abc543c7b2139572c71d91bd3e0e16ad601938d77fba0660efd896dd46e6213e2c'
+            '4bead297d21cb68798be6f7fe347518cfc126b8d5cc59e4683bc01997171ba84b3292c95abbd8459318b08009942e1ef160de7c3c290744113145d77cfb89c84'
+            'b2eda9f276c0aa6337a105dbbef7954cec3c2c462ab2398d58485e4d6fc5d28a1250e82afc4fb108bd051525b0ca17f1db15f3e638c3723dfe293f679074c18b'
             '29cdeb1bcee1cc7b86916f21cf5b974926e0cca771bd154010eba0ff43511c5e19eb9f88c102aa88e457936a7bc4816b4c3b4dbd752141035f918f0a073ab88b'
             '5f21b061931fa1224d59cd7b66cb16bc3d7d6d743d63c5a657d21b4aff463c5292fa8f880a572094bae235931c5623f2ec19ed7ffe79ed4bf29683f42bbd22cd'
             '52dfa1d6908b026b59c23f580d9264a11cf8f125e6b5a30dffd9104f324b225ddbd0266e6aaf482e8d283977897084506f86d18519e1b1c086b0fa63809160e8'
@@ -123,23 +116,22 @@ prepare() {
 
   if [[ $_usegcc == 1 ]] ; then
     if in_array ccache ${BUILDENV[*]} ; then
-      echo "ac_add_options --with-ccache=/usr/bin/ccache" >> .mozconfig
+      echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
     fi
     echo "ac_add_options --disable-elf-hack" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
   fi
 
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-  
-  patch -Np1 -i "$srcdir/0001-bz-1521249.patch"
-  
+
+  #patch -Np1 -i "$srcdir/0001-bz-1521249.patch"
+
   msg "Patching for KDE"
   patch -Np1 -i "$srcdir/mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "$srcdir/mozilla-kde-$_patchrev.patch"
   patch -Np1 -i "$srcdir/firefox-kde-$_patchrev.patch"
-  #patch -Np1 -i "$srcdir/firefox-branded-icons-$_patchrev.patch"
   # add globalmenu support
-  patch -Np1 -i "$srcdir/unity-menubar-r2254.patch"
+  patch -Np1 -i "$srcdir/unity-menubar-r2258.patch"
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i "$srcdir/pgo_fix_missing_kdejs.patch"
@@ -147,9 +139,6 @@ prepare() {
   patch -Np1 -i "$srcdir/2000_system_harfbuzz_support.patch"
   patch -Np1 -i "$srcdir/2001_system_graphite2_support.patch"
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1542958
-  # note: fixes compile errrors when using elf migrartion
-  patch -Np1 -i  "$srcdir/2014_spectre_variant2_bug1542958.patch"
-  patch -Np1 -i  "$srcdir/2015_spectre_variant2_bug1542958.patch"
 
   patch -Np1 -i "$srcdir/plasmafox-${_pfdate}.patch"
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
