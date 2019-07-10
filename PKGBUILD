@@ -47,7 +47,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         plasmafox.desktop
         vendor.js
         kde.js
-		#0001-bz-1521249.patch
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -115,9 +114,9 @@ prepare() {
   fi
 
   if [[ $_usegcc == 1 ]] ; then
-    if in_array ccache ${BUILDENV[*]} ; then
-      echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
-    fi
+    #if in_array ccache ${BUILDENV[*]} ; then
+    #  echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
+    #fi
     echo "ac_add_options --disable-elf-hack" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
   fi
