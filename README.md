@@ -1,5 +1,14 @@
 ### Plasmafox web browser
 
+**Main differences between Plasmafox and Firefox:**
+ - KDE integration
+ - Compiled with GCC instead of Clang, for a smaller package size
+ - Uses many system libraries (e.g. libvpx, nspr, icu, zlib etc.)
+ - Some Mozilla services like Pocket and Sync disabled to enhance privacy
+ - Removed most of trademark-restricted marks like the name "Firefox" and the icons
+ - (Currently) lacks some features like EME and WebRTC
+
+
 **Credits go to Mozilla and:**
 - [Waterfox project](https://github.com/MrAlex94/Waterfox/) for the inspiration
 - [sgse](https://github.com/sgse) for the icons
