@@ -15,7 +15,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=68.0
+pkgver=68.0.1
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -34,9 +34,9 @@ makedepends=('unzip' 'zip' 'diffutils' 'python' 'yasm' 'mesa' 'imake'
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
-#conflicts=('firefox' 'firefox-kde' 'firefox-appmenu')
+#conflicts=('firefox' 'firefox-kde')
 _patchrev=840132a4a9b3
-_pfdate=20190710
+_pfdate=20190715
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -47,6 +47,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         plasmafox.desktop
         vendor.js
         kde.js
+		user.js
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -65,14 +66,19 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         plasmafox-wordmark.svg
         about.png
         default{16,22,24,32,48,64,128,256}.png
+	# additions
+	plasmafox.profile
+	plasmafox.psd
 )
-sha512sums=('fcb6f6dd8069ca43b0b75cba4566f81c94535e66ddeb80fbdd4f47eaac2efc82d6e6bd36bf7cbebdc260a74886ba3f007a321d88fdf30731d3b669a38273f42e'
+install=plasmafox.install
+sha512sums=('96b45135cf0b2368013afccb8c375de54d591a4e11016e8b65fc83904cedc362096dd15814cd02be23f6e52e392c605817b86a59ee2300d3e7a754d345399c81'
             'SKIP'
-            '84288e003d49a43545dacaca19cbd06b1d0bce12e51c193f1d4e7e024caee581cf7ffe60c87fab0e37041ff6a083487f77ce6ad31a0d392237c9c1ffec9f7bbc'
+            '1d8b5c7ca124322e515923365cedaab2f7cffdee321c9720bfe667d51f6854def4afd44ac07537139bda0b5e0705b4e9945c33bba446e58c4857ec91c03cb8d5'
             '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
             '54803473813683a3c295e205b0fe964592d63c8654094eeb4acfcfa844e30d82e782fcb993a9dc06a6a5767424656578b343ee273aac836f8033d9bfcad44bad'
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
-            'd9e324d7cb67fb1a4412abda926a2bfc7e362134a473088d9bbe9941d8649dcc83433efc036bee6446cc37641ddfeb769c6b46217b6734e20edab89eb67aa29f'
+            '1aa098df062e26d1e427b13d76d62c94be141ba020d1b21fdbf81800a453d924c7b860fa6c565fef9873916c650549ed94302d936348c5b5ee35028aa479df26'
+            '92f0bffdd02e1a691fbe08cb3a6bcebe95afd9b7e648fd6be886bf1ad18eaf037cbaf8e2f325036537c2fb8022a085c90f144d6ff1a724c933744d8a018d725c'
             '477f35750230a5913a5a955a4b2e7e74e600111c1d358849bc222b442dd7e17448fd618d1ea04051b6cf0756949c6c6310055e1644315f96fc9db6fc8d771415'
             '3de5ac11ad66e3819bb81d5dd784340bcb6d9334275f0918d8e8a3f59ffcf1ddf2649ea6168c0db4d9caed5555dd7d55e3d338cbf4a30d72802183765e8a4a98'
             'fae7ac214cc021adfcb8a66bde9efd90c65e87e5b991a6f4eb3d34b711a9b3234463afbd7cf0ab08596a4a16365d5ae44d343c9b5918bdab78437eb0d8d75bff'
@@ -93,6 +99,8 @@ sha512sums=('fcb6f6dd8069ca43b0b75cba4566f81c94535e66ddeb80fbdd4f47eaac2efc82d6e
             'f7795078111c6f117df2de504fb0e66dda93cfc5e0f26bccfad6ed6a6c2fb0a24a36451bc6097b3310ea2b636be196e48873473826f80e5ab1d017774fb9ba41'
             '83c305b7af85d40652d358518db4794e7b182ce0c9f81bc1c6106814f5bfa0f9800d972fb6a40466cf7dd3b3fec0f6b2f49da8df52ce9c227b8ba9b35b9b35c9'
             '0c1b1aa9b6e12cf3c3a5bcac9d1cb95e3c89a58ea54eaebb5bb7c678e26c41b8a611b48f20c130db2ef0bd826975f9961ae5f0f4b924588dab7d6329224c080b'
+            'ef9e9c83ab9512e94782e9615fb8c3d069a55f8c8eb0f432b7db2461716f0eb82b501d6ee509d887b037c5d44c983db68986e92b23ff595dfc97de76d42a9f17'
+            'b667c3223f0c9ecbc62623e37b7d92084f0b6e9534f7a10462a176a7dbff0e01d4bdc0dc10be52bbdb43fb46fb0af22f8006b208b6da91f106b3002b45fc0cf6'
 )
 
 validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
@@ -114,16 +122,19 @@ prepare() {
   fi
 
   if [[ $_usegcc == 1 ]] ; then
-    #if in_array ccache ${BUILDENV[*]} ; then
-    #  echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
-    #fi
-    echo "ac_add_options --disable-elf-hack" >> .mozconfig
+    if in_array ccache ${BUILDENV[*]} ; then
+      echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
+    fi
+    #echo "ac_add_options --disable-elf-hack" >> .mozconfig
+    echo "ac_add_options --enable-gold" >> .mozconfig
+    echo "ac_add_options --enable-linker=gold" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
+  else
+    echo "ac_add_options --enable-linker=lld" >> .mozconfig
+    echo "ac_add_options --enable-clang-plugin" >> .mozconfig
   fi
 
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-
-  #patch -Np1 -i "$srcdir/0001-bz-1521249.patch"
 
   msg "Patching for KDE"
   patch -Np1 -i "$srcdir/mozilla-nongnome-proxies-$_patchrev.patch"
@@ -134,7 +145,7 @@ prepare() {
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i "$srcdir/pgo_fix_missing_kdejs.patch"
-  
+
   patch -Np1 -i "$srcdir/2000_system_harfbuzz_support.patch"
   patch -Np1 -i "$srcdir/2001_system_graphite2_support.patch"
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1542958
@@ -191,11 +202,15 @@ package() {
   install -Dm644 "$srcdir/vendor.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/vendor.js"
   install -Dm644 "$srcdir/kde.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/kde.js"
 
+  install -Dm644 "$srcdir/user.js" "$pkgdir/usr/lib/plasmafox/distribution/user.js"
+  install -Dm644 "$srcdir/plasmafox.profile" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.firejail-profile"
+  install -Dm644 "$srcdir/plasmafox.psd" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.psd"
+
   _distini="$pkgdir/usr/lib/plasmafox/distribution/distribution.ini"
   install -Dm644 /dev/stdin "$_distini" <<END
 [Global]
 id=plasmafox
-version=0.9
+version=1.0
 about=Plasmafox for Manjaro
 
 [Preferences]

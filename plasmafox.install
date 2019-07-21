@@ -1,0 +1,17 @@
+post_install() {
+	echo -e "---> In order to add some security/privacy tweaks from ghacks,"
+	echo -e "---> symlink /usr/lib/plasmafox/distribution/user.js to your profile dir,"
+	echo -e "---> which by default is in ~/.plasmafox/name-of-profile."
+	echo -e "---> Also included are profiles for Firejail and profile-sync-daemon,"
+	echo -e "---> which you can rename and symlink to /etc/firejail and"
+	echo -e "---> /usr/share/psd/browsers respectively. \n"
+}
+
+post_upgrade() {
+	echo -e "---> In order to add some security/privacy tweaks from ghacks,"
+	echo -e "---> symlink /usr/lib/plasmafox/distribution/user.js to your profile dir,"
+	echo -e "---> which by default is in ~/.plasmafox/name-of-profile.\n"
+	echo -e "---> Also included are profiles for Firejail and profile-sync-daemon,"
+	echo -e "---> which you can rename and symlink to /etc/firejail and"
+	echo -e "---> /usr/share/psd/browsers respectively. \n"
+}
