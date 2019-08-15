@@ -15,7 +15,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=68.0.1
+pkgver=68.0.2
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -48,6 +48,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         vendor.js
         kde.js
 		user.js
+		0001-Use-remoting-name-for-GDK-application-names.patch
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -71,13 +72,14 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha512sums=('96b45135cf0b2368013afccb8c375de54d591a4e11016e8b65fc83904cedc362096dd15814cd02be23f6e52e392c605817b86a59ee2300d3e7a754d345399c81'
+sha512sums=('5c289825fd0de062b9943eabcc16e09c1821c04717e689aa8df03162e722b72ea698195f3ea93e1e746c481dacd77d125301dba951468d134b986e35eb4ef5bb'
             'SKIP'
             '1d8b5c7ca124322e515923365cedaab2f7cffdee321c9720bfe667d51f6854def4afd44ac07537139bda0b5e0705b4e9945c33bba446e58c4857ec91c03cb8d5'
-            '05f4bf526071b6731215ef883160ca8ccc63079d43f40d8617f05cf441f455348f9ae1bb5bb43284a8e3a61f61385409bf4f585a6588e82a289ed8601ec53554'
+            '75a65a6c8f64c2bc1006720c8ae66064a484ba3b51d26c4138021e79acd7acc950e4008f56fb9f8ad5c95287d36ce43bd5530221385f1c01b47736a85c096fbe'
             '54803473813683a3c295e205b0fe964592d63c8654094eeb4acfcfa844e30d82e782fcb993a9dc06a6a5767424656578b343ee273aac836f8033d9bfcad44bad'
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
             '1aa098df062e26d1e427b13d76d62c94be141ba020d1b21fdbf81800a453d924c7b860fa6c565fef9873916c650549ed94302d936348c5b5ee35028aa479df26'
+            '40c931b8abbe5880122dbcc93d457e04e9b4f2bc3e0275e9e3e35dd347fe0658f9446c89e99553203be8a8c9ab6f4ca872a7aedc514920c107b9235c04df91dc'
             '92f0bffdd02e1a691fbe08cb3a6bcebe95afd9b7e648fd6be886bf1ad18eaf037cbaf8e2f325036537c2fb8022a085c90f144d6ff1a724c933744d8a018d725c'
             '477f35750230a5913a5a955a4b2e7e74e600111c1d358849bc222b442dd7e17448fd618d1ea04051b6cf0756949c6c6310055e1644315f96fc9db6fc8d771415'
             '3de5ac11ad66e3819bb81d5dd784340bcb6d9334275f0918d8e8a3f59ffcf1ddf2649ea6168c0db4d9caed5555dd7d55e3d338cbf4a30d72802183765e8a4a98'
@@ -136,21 +138,21 @@ prepare() {
 
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
 
+  patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
   msg "Patching for KDE"
-  patch -Np1 -i "$srcdir/mozilla-nongnome-proxies-$_patchrev.patch"
-  patch -Np1 -i "$srcdir/mozilla-kde-$_patchrev.patch"
-  patch -Np1 -i "$srcdir/firefox-kde-$_patchrev.patch"
+  patch -Np1 -i "../mozilla-nongnome-proxies-$_patchrev.patch"
+  patch -Np1 -i "../mozilla-kde-$_patchrev.patch"
+  patch -Np1 -i "../firefox-kde-$_patchrev.patch"
   # add globalmenu support
-  patch -Np1 -i "$srcdir/unity-menubar-r2258.patch"
+  patch -Np1 -i "../unity-menubar-r2258.patch"
 
   # add missing file Makefile for pgo builds
-  patch -Np1 -i "$srcdir/pgo_fix_missing_kdejs.patch"
+  patch -Np1 -i "../pgo_fix_missing_kdejs.patch"
 
-  patch -Np1 -i "$srcdir/2000_system_harfbuzz_support.patch"
-  patch -Np1 -i "$srcdir/2001_system_graphite2_support.patch"
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1542958
+  patch -Np1 -i "../2000_system_harfbuzz_support.patch"
+  patch -Np1 -i "../2001_system_graphite2_support.patch"
 
-  patch -Np1 -i "$srcdir/plasmafox-${_pfdate}.patch"
+  patch -Np1 -i "../plasmafox-${_pfdate}.patch"
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
   cp "$srcdir/about-logo.png" ./browser/branding/unofficial/content/
