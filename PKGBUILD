@@ -15,7 +15,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=68.0.2
+pkgver=68.1.0esr
+_pkgver=68.1.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -35,7 +36,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde')
-_patchrev=840132a4a9b3
+#_patchrev=840132a4a9b3
+_patchrev=8a3c73e74e65
 _pfdate=20190715
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
@@ -72,17 +74,17 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha512sums=('5c289825fd0de062b9943eabcc16e09c1821c04717e689aa8df03162e722b72ea698195f3ea93e1e746c481dacd77d125301dba951468d134b986e35eb4ef5bb'
+sha512sums=('a53b04b6a4fc98065596117b6bc0aee40c36f74bca02dc7486fda7e9556ad6f221f5ead94db1dc5db572f277556a21b22a0395dae107b67336ca91e33df9882c'
             'SKIP'
-            '1d8b5c7ca124322e515923365cedaab2f7cffdee321c9720bfe667d51f6854def4afd44ac07537139bda0b5e0705b4e9945c33bba446e58c4857ec91c03cb8d5'
+            '30cb3a3afedcf2910ceaeac6bcd6192d9eb5646c5d6b795e09a249873a375ebc8ac6e980db1bf68332374e718d0e246a5408bc49374d076befed6c0d12904672'
             '75a65a6c8f64c2bc1006720c8ae66064a484ba3b51d26c4138021e79acd7acc950e4008f56fb9f8ad5c95287d36ce43bd5530221385f1c01b47736a85c096fbe'
             '54803473813683a3c295e205b0fe964592d63c8654094eeb4acfcfa844e30d82e782fcb993a9dc06a6a5767424656578b343ee273aac836f8033d9bfcad44bad'
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
             '1aa098df062e26d1e427b13d76d62c94be141ba020d1b21fdbf81800a453d924c7b860fa6c565fef9873916c650549ed94302d936348c5b5ee35028aa479df26'
             '40c931b8abbe5880122dbcc93d457e04e9b4f2bc3e0275e9e3e35dd347fe0658f9446c89e99553203be8a8c9ab6f4ca872a7aedc514920c107b9235c04df91dc'
             '92f0bffdd02e1a691fbe08cb3a6bcebe95afd9b7e648fd6be886bf1ad18eaf037cbaf8e2f325036537c2fb8022a085c90f144d6ff1a724c933744d8a018d725c'
-            '477f35750230a5913a5a955a4b2e7e74e600111c1d358849bc222b442dd7e17448fd618d1ea04051b6cf0756949c6c6310055e1644315f96fc9db6fc8d771415'
-            '3de5ac11ad66e3819bb81d5dd784340bcb6d9334275f0918d8e8a3f59ffcf1ddf2649ea6168c0db4d9caed5555dd7d55e3d338cbf4a30d72802183765e8a4a98'
+            'aa8ec717c069b0f3482dcb764933cbb8a87edac6dca14c77d659c5fc095a583084ec47b49b6e239f2d28560652a3485c41c3a8572984eaa23c4b7fc45d12470b'
+            '91d5b3c77375719b8b56a0609d228b951b50ce4aa1c6e13f70f3259b79918cea1928993280722b2110f472cb0f5d511421922755bb2af300b0b3f25d1c8f032d'
             'fae7ac214cc021adfcb8a66bde9efd90c65e87e5b991a6f4eb3d34b711a9b3234463afbd7cf0ab08596a4a16365d5ae44d343c9b5918bdab78437eb0d8d75bff'
             '354e477574bdf89afe9a7099aea88a1c99b5d4ab9a12277442ec983458374f228d404b2e51f7f790c72016313b152d6967fd545eef47778ca1cab66d4059b9e5'
             'd5c1f57aa54d7a0b4a68cd50eb19e66b2b54663c3cbfe4f9ed6ef19796df73cdf83a450ab13079c7f4e1e9d9510f900596724395ba0bcd17a4817790c8a2af91'
@@ -114,7 +116,7 @@ fi
 
 prepare() {
   #cd mozilla-unified
-  cd firefox-$pkgver
+  cd firefox-${pkgver//esr}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
 
@@ -165,7 +167,7 @@ prepare() {
 
 build() {
   #cd mozilla-unified
-  cd firefox-$pkgver
+  cd firefox-${pkgver//esr}
   #export MOZ_SOURCE_REPO="$_repo"
   export MOZ_NOSPAM=1
   export MOZ_PGO=1
@@ -194,7 +196,7 @@ build() {
 
 package() {
   #cd mozilla-unified
-  cd firefox-$pkgver
+  cd firefox-${pkgver//esr}
   
   [[ "$CARCH" == "i686" ]] && cp "$srcdir/kde.js" obj-i686-pc-linux-gnu/dist/bin/defaults/pref
   [[ "$CARCH" == "x86_64" ]] && cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
