@@ -154,11 +154,7 @@ prepare() {
   patch -Np1 -i "../2000_system_harfbuzz_support.patch"
   patch -Np1 -i "../2001_system_graphite2_support.patch"
 
-  #patch -Np1 -i "../plasmafox-${_pfdate}.patch"
-  patch -Np1 -i ../0001-remove-some-parts-of-telemetry-pocket-and-uitour.patch
-  patch -Np1 -i ../0002-branding-and-icons.patch
-  patch -Np1 -i ../0003-change-user-agent-handling.patch
-  patch -Np1 -i ../0004-disable-screenshots-and-health-report.patch
+  patch -Np1 -i "../plasmafox-${_pfdate}.patch"
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
   cp "$srcdir/about-logo.png" ./browser/branding/unofficial/content/
