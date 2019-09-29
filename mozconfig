@@ -61,6 +61,7 @@ ac_add_options --disable-eme
 ac_add_options --disable-gpsd
 # ac_add_options --disable-synth-speechd
 # ac_add_options --disable-synth-pico
+# ac_add_options --disable-marionette
 ac_add_options --disable-nfc
 ac_add_options --disable-debug
 ac_add_options --disable-debug-symbols
