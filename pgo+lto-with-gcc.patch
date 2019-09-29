@@ -68,16 +68,3 @@ https://bugzilla.mozilla.org/show_bug.cgi?id=1516081
      # We want to make sure we use binutils and other binaries in the tooltool
      # package.
      mk_add_options "export PATH=$TOOLTOOL_DIR/gcc/bin:$PATH"
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88561
-
---- a/extensions/spellcheck/src/moz.build
-+++ b/extensions/spellcheck/src/moz.build
-@@ -28,3 +28,8 @@ EXPORTS.mozilla += [
- 
- if CONFIG['CC_TYPE'] in ('clang', 'gcc'):
-     CXXFLAGS += ['-Wno-error=shadow']
-+
-+# spell checker triggers bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88561
-+# in gcc 7 and 8. It will be fixed in GCC 7.5 and 8.3
-+if CONFIG['CC_TYPE'] in ('gcc'):
-+    CXXFLAGS += ['-fno-devirtualize']

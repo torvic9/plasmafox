@@ -1,0 +1,64 @@
+From bf20676afd8fe7f9d956aabc53938c22edca4e2a Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sun, 29 Sep 2019 20:23:38 +0200
+Subject: [PATCH 3/5] change user agent handling
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ netwerk/protocol/http/nsHttpHandler.cpp | 24 ++++++++++--------------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
+
+diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
+index 176837695f..5c2c7b4e83 100644
+--- a/netwerk/protocol/http/nsHttpHandler.cpp
++++ b/netwerk/protocol/http/nsHttpHandler.cpp
+@@ -481,13 +481,13 @@ nsresult nsHttpHandler::Init() {
+   // monitor some preference changes
+   Preferences::RegisterPrefixCallbacks(
+       PREF_CHANGE_METHOD(nsHttpHandler::PrefsChanged), gCallbackPrefs, this);
+   PrefsChanged(nullptr);
+ 
+-  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
++  mMisc.AssignLiteral("rv:" MOZ_APP_UA_VERSION);
+ 
+-  mCompatFirefox.AssignLiteral("Firefox/" MOZILLA_UAVERSION);
++  mCompatFirefox.AssignLiteral("Plasmafox/" MOZ_APP_UA_VERSION);
+ 
+   nsCOMPtr<nsIXULAppInfo> appInfo =
+       do_GetService("@mozilla.org/xre/app-info;1");
+ 
+   mAppName.AssignLiteral(MOZ_APP_UA_NAME);
+@@ -936,22 +936,18 @@ void nsHttpHandler::BuildUserAgent() {
+   mUserAgent += ' ';
+   mUserAgent += mProduct;
+   mUserAgent += '/';
+   mUserAgent += mProductSub;
+ 
+-  bool isFirefox = mAppName.EqualsLiteral("Firefox");
+-  if (isFirefox || mCompatFirefoxEnabled) {
+-    // "Firefox/x.y" (compatibility) app token
+-    mUserAgent += ' ';
+-    mUserAgent += mCompatFirefox;
+-  }
+-  if (!isFirefox) {
+-    // App portion
+-    mUserAgent += ' ';
+-    mUserAgent += mAppName;
+-    mUserAgent += '/';
+-    mUserAgent += mAppVersion;
++  // App portion
++  mUserAgent += ' ';
++  mUserAgent += "Firefox";
++  mUserAgent += '/';
++  mUserAgent += mAppVersion;
++  if (mCompatFirefoxEnabled) {
++		mUserAgent += ' ';
++		mUserAgent += mCompatFirefox;
+   }
+ }
+ 
+ #ifdef XP_WIN
+ #  define WNT_BASE "Windows NT %ld.%ld"
+-- 
+2.23.0
+

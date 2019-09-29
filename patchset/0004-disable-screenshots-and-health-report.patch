@@ -1,0 +1,65 @@
+From af17b3b364ab37c4f1f4f3770697f32cc2cd3838 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sun, 29 Sep 2019 20:29:55 +0200
+Subject: [PATCH 4/5] disable screenshots and health report
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/extensions/moz.build | 1 -
+ browser/moz.build            | 4 ----
+ browser/moz.configure        | 2 +-
+ 3 files changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/browser/extensions/moz.build b/browser/extensions/moz.build
+index d82083e1c5..a53bc25e7e 100644
+--- a/browser/extensions/moz.build
++++ b/browser/extensions/moz.build
+@@ -6,9 +6,8 @@
+ 
+ DIRS += [
+     'formautofill',
+     'fxmonitor',
+     'pdfjs',
+-    'screenshots',
+     'webcompat',
+     'report-site-issue'
+ ]
+diff --git a/browser/moz.build b/browser/moz.build
+index 15e11f45ff..b9c003e03c 100644
+--- a/browser/moz.build
++++ b/browser/moz.build
+@@ -27,14 +27,10 @@ DIRS += [
+ ]
+ 
+ if CONFIG['MAKENSISU']:
+     DIRS += ['installer/windows']
+ 
+-TEST_DIRS += [
+-    'tools/mozscreenshots',
+-]
+-
+ DIST_SUBDIR = 'browser'
+ export('DIST_SUBDIR')
+ 
+ # These defines are read in firefox.js
+ DEFINES['APP_VERSION'] = CONFIG['MOZ_APP_VERSION']
+diff --git a/browser/moz.configure b/browser/moz.configure
+index 3057a5040c..d125f3512c 100644
+--- a/browser/moz.configure
++++ b/browser/moz.configure
+@@ -3,11 +3,11 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ imply_option('MOZ_PLACES', True)
+-imply_option('MOZ_SERVICES_HEALTHREPORT', True)
++imply_option('MOZ_SERVICES_HEALTHREPORT', False)
+ imply_option('MOZ_SERVICES_SYNC', True)
+ imply_option('MOZ_DEDICATED_PROFILES', True)
+ imply_option('MOZ_BLOCK_PROFILE_DOWNGRADE', True)
+ 
+ with only_when(target_is_linux & compile_environment):
+-- 
+2.23.0
+

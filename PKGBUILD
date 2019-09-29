@@ -17,7 +17,7 @@ pkgname=plasmafox
 _pkgname=firefox
 pkgver=68.1.0esr
 _pkgver=68.1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -38,20 +38,20 @@ provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde')
 #_patchrev=840132a4a9b3
 _patchrev=8a3c73e74e65
-_pfdate=20190715
+_pfdate=20190929
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
-		#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
+	#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
         mozconfig
         plasmafox.desktop
         vendor.js
         kde.js
-		user.js
-		0001-Use-remoting-name-for-GDK-application-names.patch
-		plasmafox-${_pfdate}.patch
+	user.js
+	0001-Use-remoting-name-for-GDK-application-names.patch
+	plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
         firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
@@ -82,7 +82,7 @@ sha512sums=('a53b04b6a4fc98065596117b6bc0aee40c36f74bca02dc7486fda7e9556ad6f221f
             'acfa19df86fdeab344c1594369e581c0a41c3aedbc80977b300b721d413c24265b3ec4496f502370851de2a284ced478cc6aa17280bc990c37cc5fa7a6392f63'
             '1aa098df062e26d1e427b13d76d62c94be141ba020d1b21fdbf81800a453d924c7b860fa6c565fef9873916c650549ed94302d936348c5b5ee35028aa479df26'
             '40c931b8abbe5880122dbcc93d457e04e9b4f2bc3e0275e9e3e35dd347fe0658f9446c89e99553203be8a8c9ab6f4ca872a7aedc514920c107b9235c04df91dc'
-            '92f0bffdd02e1a691fbe08cb3a6bcebe95afd9b7e648fd6be886bf1ad18eaf037cbaf8e2f325036537c2fb8022a085c90f144d6ff1a724c933744d8a018d725c'
+            'e97857aca6c8f04909fea114b614a2b8d444d7e5c04841799dcc74b3e3d557a386b5dde2404b74dbc053de856046810b7fd71ceecbfcaa663e537a4f9b0c3422'
             'aa8ec717c069b0f3482dcb764933cbb8a87edac6dca14c77d659c5fc095a583084ec47b49b6e239f2d28560652a3485c41c3a8572984eaa23c4b7fc45d12470b'
             '91d5b3c77375719b8b56a0609d228b951b50ce4aa1c6e13f70f3259b79918cea1928993280722b2110f472cb0f5d511421922755bb2af300b0b3f25d1c8f032d'
             'fae7ac214cc021adfcb8a66bde9efd90c65e87e5b991a6f4eb3d34b711a9b3234463afbd7cf0ab08596a4a16365d5ae44d343c9b5918bdab78437eb0d8d75bff'
@@ -111,7 +111,7 @@ validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 if [[ $_usegcc == 1 ]] ; then
   source+=('pgo+lto-with-gcc.patch')
-  sha512sums+=('e307d1f1212ae1b4f376eb7786724e56eb9f010f9cd14e2d6887f751d1f9d5397f2dff699cbb098d24824d9457351c82c083f8b8d0f105752b4afb8ccd956d8b')
+  sha512sums+=('5fa6e10e67bdcd680ac4c48f8fe95d03a26daf6b88437ec7e5909f21364a43fe0d9f71e54e8f5452808fac4e114191ace932f820589bab7b850d95e881d991aa')
 fi
 
 prepare() {
@@ -154,7 +154,11 @@ prepare() {
   patch -Np1 -i "../2000_system_harfbuzz_support.patch"
   patch -Np1 -i "../2001_system_graphite2_support.patch"
 
-  patch -Np1 -i "../plasmafox-${_pfdate}.patch"
+  #patch -Np1 -i "../plasmafox-${_pfdate}.patch"
+  patch -Np1 -i ../0001-remove-some-parts-of-telemetry-pocket-and-uitour.patch
+  patch -Np1 -i ../0002-branding-and-icons.patch
+  patch -Np1 -i ../0003-change-user-agent-handling.patch
+  patch -Np1 -i ../0004-disable-screenshots-and-health-report.patch
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
   cp "$srcdir/about-logo.png" ./browser/branding/unofficial/content/

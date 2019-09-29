@@ -1,0 +1,600 @@
+From e1454a0fcdb1eb61cf641a1b216d0c34b9648bc6 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sun, 29 Sep 2019 20:00:29 +0200
+Subject: [PATCH 1/5] remove some parts of telemetry, pocket, and uitour
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ .../base/content/browser-contentblocking.js   | 10 ---
+ browser/base/content/browser.css              | 65 -------------------
+ browser/base/content/browser.js               | 50 --------------
+ browser/base/content/browser.xul              | 36 ----------
+ .../test/performance/browser_startup.js       |  1 -
+ browser/base/content/utilityOverlay.js        |  6 --
+ browser/components/BrowserGlue.jsm            | 37 -----------
+ browser/components/moz.build                  |  2 -
+ browser/components/search/moz.build           |  3 -
+ browser/modules/moz.build                     |  1 -
+ browser/modules/test/browser/browser.ini      | 19 ------
+ browser/themes/linux/browser.css              | 31 ---------
+ toolkit/components/telemetry/moz.build        |  1 -
+ 13 files changed, 262 deletions(-)
+
+diff --git a/browser/base/content/browser-contentblocking.js b/browser/base/content/browser-contentblocking.js
+index 1e7dacc8b3..09566b9c2d 100644
+--- a/browser/base/content/browser-contentblocking.js
++++ b/browser/base/content/browser-contentblocking.js
+@@ -1482,20 +1482,10 @@ var ContentBlocking = {
+     } else if (cryptominingAllowing) {
+       this.cryptominersHistogramAdd("allowed");
+     }
+   },
+ 
+-  // Check if any existing window has a UItour initiated, both showing and hidden.
+-  anyOtherWindowHasTour() {
+-    for (let win of BrowserWindowTracker.orderedWindows) {
+-      if (win != window && UITour.tourBrowsersByWindow.has(win)) {
+-        return true;
+-      }
+-    }
+-    return false;
+-  },
+-
+   disableForCurrentPage() {
+     let baseURI = this._baseURIForChannelClassifier;
+ 
+     // Add the current host in the 'trackingprotection' consumer of
+     // the permission manager using a normalized URI. This effectively
+diff --git a/browser/base/content/browser.css b/browser/base/content/browser.css
+index 8137435f9e..0251434cb3 100644
+--- a/browser/base/content/browser.css
++++ b/browser/base/content/browser.css
+@@ -1276,75 +1276,10 @@ toolbarpaletteitem > toolbaritem {
+ :root[customizing=true] .addon-banner-item,
+ :root[customizing=true] .panel-banner-item {
+   display: none;
+ }
+ 
+-/* UI Tour */
+-
+-@keyframes uitour-wobble {
+-  from {
+-    transform: rotate(0deg) translateX(3px) rotate(0deg);
+-  }
+-  50% {
+-    transform: rotate(360deg) translateX(3px) rotate(-360deg);
+-  }
+-  to {
+-    transform: rotate(720deg) translateX(0px) rotate(-720deg);
+-  }
+-}
+-
+-@keyframes uitour-zoom {
+-  from {
+-    transform: scale(0.8);
+-  }
+-  50% {
+-    transform: scale(1.0);
+-  }
+-  to {
+-    transform: scale(0.8);
+-  }
+-}
+-
+-@keyframes uitour-color {
+-  from {
+-    border-color: #5B9CD9;
+-  }
+-  50% {
+-    border-color: #FF0000;
+-  }
+-  to {
+-    border-color: #5B9CD9;
+-  }
+-}
+-
+-#UITourHighlightContainer,
+-#UITourHighlight {
+-  pointer-events: none;
+-}
+-
+-#UITourHighlight[active] {
+-  animation-delay: 2s;
+-  animation-fill-mode: forwards;
+-  animation-iteration-count: infinite;
+-  animation-timing-function: linear;
+-}
+-
+-#UITourHighlight[active="wobble"] {
+-  animation-name: uitour-wobble;
+-  animation-delay: 0s;
+-  animation-duration: 1.5s;
+-  animation-iteration-count: 1;
+-}
+-#UITourHighlight[active="zoom"] {
+-  animation-name: uitour-zoom;
+-  animation-duration: 1s;
+-}
+-#UITourHighlight[active="color"] {
+-  animation-name: uitour-color;
+-  animation-duration: 2s;
+-}
+-
+ /* Combined context-menu items */
+ #context-navigation > .menuitem-iconic > .menu-iconic-text,
+ #context-navigation > .menuitem-iconic > .menu-accel-container {
+   display: none;
+ }
+diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
+index 80f16fd690..0c518d243b 100644
+--- a/browser/base/content/browser.js
++++ b/browser/base/content/browser.js
+@@ -16,11 +16,10 @@ ChromeUtils.import("resource://gre/modules/NotificationDB.jsm");
+ 
+ XPCOMUtils.defineLazyModuleGetters(this, {
+   AddonManager: "resource://gre/modules/AddonManager.jsm",
+   AMTelemetry: "resource://gre/modules/AddonManager.jsm",
+   NewTabPagePreloading: "resource:///modules/NewTabPagePreloading.jsm",
+-  BrowserUsageTelemetry: "resource:///modules/BrowserUsageTelemetry.jsm",
+   BrowserUtils: "resource://gre/modules/BrowserUtils.jsm",
+   BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
+   CFRPageActions: "resource://activity-stream/lib/CFRPageActions.jsm",
+   CharsetMenu: "resource://gre/modules/CharsetMenu.jsm",
+   Color: "resource://gre/modules/Color.jsm",
+@@ -49,11 +48,10 @@ XPCOMUtils.defineLazyModuleGetters(this, {
+   PanelView: "resource:///modules/PanelMultiView.jsm",
+   PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
+   PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm",
+   PlacesTransactions: "resource://gre/modules/PlacesTransactions.jsm",
+   PluralForm: "resource://gre/modules/PluralForm.jsm",
+-  Pocket: "chrome://pocket/content/Pocket.jsm",
+   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+   ProcessHangMonitor: "resource:///modules/ProcessHangMonitor.jsm",
+   PromiseUtils: "resource://gre/modules/PromiseUtils.jsm",
+   // TODO (Bug 1529552): Remove once old urlbar code goes away.
+   ReaderMode: "resource://gre/modules/ReaderMode.jsm",
+@@ -70,11 +68,10 @@ XPCOMUtils.defineLazyModuleGetters(this, {
+   SubframeCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
+   TabModalPrompt: "chrome://global/content/tabprompts.jsm",
+   TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
+   TelemetryEnvironment: "resource://gre/modules/TelemetryEnvironment.jsm",
+   Translation: "resource:///modules/translation/Translation.jsm",
+-  UITour: "resource:///modules/UITour.jsm",
+   UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
+   UrlbarInput: "resource:///modules/UrlbarInput.jsm",
+   UrlbarPrefs: "resource:///modules/UrlbarPrefs.jsm",
+   UrlbarTokenizer: "resource:///modules/UrlbarTokenizer.jsm",
+   UrlbarUtils: "resource:///modules/UrlbarUtils.jsm",
+@@ -5028,57 +5025,10 @@ const BrowserSearch = {
+       "browser.link.open_newwindow"
+     );
+     var where = newWindowPref == 3 ? "tab" : "window";
+     openTrustedLinkIn(this.searchEnginesURL, where);
+   },
+-
+-  /**
+-   * Helper to record a search with Telemetry.
+-   *
+-   * Telemetry records only search counts and nothing pertaining to the search itself.
+-   *
+-   * @param engine
+-   *        (nsISearchEngine) The engine handling the search.
+-   * @param source
+-   *        (string) Where the search originated from. See BrowserUsageTelemetry for
+-   *        allowed values.
+-   * @param details [optional]
+-   *        An optional parameter passed to |BrowserUsageTelemetry.recordSearch|.
+-   *        See its documentation for allowed options.
+-   *        Additionally, if the search was a suggested search, |details.selection|
+-   *        indicates where the item was in the suggestion list and how the user
+-   *        selected it: {selection: {index: The selected index, kind: "key" or "mouse"}}
+-   */
+-  recordSearchInTelemetry(engine, source, details = {}) {
+-    try {
+-      BrowserUsageTelemetry.recordSearch(gBrowser, engine, source, details);
+-    } catch (ex) {
+-      Cu.reportError(ex);
+-    }
+-  },
+-
+-  /**
+-   * Helper to record a one-off search with Telemetry.
+-   *
+-   * Telemetry records only search counts and nothing pertaining to the search itself.
+-   *
+-   * @param engine
+-   *        (nsISearchEngine) The engine handling the search.
+-   * @param source
+-   *        (string) Where the search originated from. See BrowserUsageTelemetry for
+-   *        allowed values.
+-   * @param type
+-   *        (string) Indicates how the user selected the search item.
+-   */
+-  recordOneoffSearchInTelemetry(engine, source, type) {
+-    try {
+-      const details = { type, isOneOff: true };
+-      BrowserUsageTelemetry.recordSearch(gBrowser, engine, source, details);
+-    } catch (ex) {
+-      Cu.reportError(ex);
+-    }
+-  },
+ };
+ 
+ XPCOMUtils.defineConstant(this, "BrowserSearch", BrowserSearch);
+ 
+ function FillHistoryMenu(aParent) {
+diff --git a/browser/base/content/browser.xul b/browser/base/content/browser.xul
+index 4e12279215..cad058cd0c 100644
+--- a/browser/base/content/browser.xul
++++ b/browser/base/content/browser.xul
+@@ -315,46 +315,10 @@
+                 oncommand="StarUI.panel.hidePopup();"/>
+ #endif
+       </hbox>
+     </panel>
+ 
+-    <!-- UI tour experience -->
+-    <panel id="UITourTooltip"
+-           type="arrow"
+-           hidden="true"
+-           noautofocus="true"
+-           noautohide="true"
+-           align="start"
+-           orient="vertical"
+-           role="alert">
+-     <vbox>
+-      <hbox id="UITourTooltipBody">
+-        <image id="UITourTooltipIcon"/>
+-        <vbox flex="1">
+-          <hbox id="UITourTooltipTitleContainer">
+-            <label id="UITourTooltipTitle" flex="1"/>
+-            <toolbarbutton id="UITourTooltipClose" class="close-icon"
+-                           tooltiptext="&uiTour.infoPanel.close;"/>
+-          </hbox>
+-          <description id="UITourTooltipDescription" flex="1"/>
+-        </vbox>
+-      </hbox>
+-      <hbox id="UITourTooltipButtons" flex="1" align="center"/>
+-     </vbox>
+-    </panel>
+-    <!-- type="default" forces frames to be created so that the panel's size can be determined -->
+-    <panel id="UITourHighlightContainer"
+-           type="default"
+-           hidden="true"
+-           noautofocus="true"
+-           noautohide="true"
+-           flip="none"
+-           consumeoutsideclicks="false"
+-           mousethrough="always">
+-      <box id="UITourHighlight"></box>
+-    </panel>
+-
+     <panel id="sidebarMenu-popup"
+            class="cui-widget-panel"
+            role="group"
+            type="arrow"
+            hidden="true"
+diff --git a/browser/base/content/test/performance/browser_startup.js b/browser/base/content/test/performance/browser_startup.js
+index 274359efb0..f331db1220 100644
+--- a/browser/base/content/test/performance/browser_startup.js
++++ b/browser/base/content/test/performance/browser_startup.js
+@@ -59,11 +59,10 @@ const startupPhases = {
+       components: new Set(["nsSearchService.js"]),
+       modules: new Set([
+         "chrome://webcompat/content/data/ua_overrides.jsm",
+         "chrome://webcompat/content/lib/ua_overrider.jsm",
+         "resource:///modules/AboutNewTab.jsm",
+-        "resource:///modules/BrowserUsageTelemetry.jsm",
+         "resource:///modules/ContentCrashHandlers.jsm",
+         "resource:///modules/ShellService.jsm",
+         "resource://gre/modules/NewTabUtils.jsm",
+         "resource://gre/modules/PageThumbs.jsm",
+         "resource://gre/modules/PlacesUtils.jsm",
+diff --git a/browser/base/content/utilityOverlay.js b/browser/base/content/utilityOverlay.js
+index 9a1010b2af..7ba7a6ff1e 100644
+--- a/browser/base/content/utilityOverlay.js
++++ b/browser/base/content/utilityOverlay.js
+@@ -1078,16 +1078,10 @@ function openTroubleshootingPage() {
+ function openFeedbackPage() {
+   var url = Services.urlFormatter.formatURLPref("app.feedback.baseURL");
+   openTrustedLinkIn(url, "tab");
+ }
+ 
+-function openTourPage() {
+-  let scope = {};
+-  ChromeUtils.import("resource:///modules/UITour.jsm", scope);
+-  openTrustedLinkIn(scope.UITour.url, "tab");
+-}
+-
+ function buildHelpMenu() {
+   document.getElementById(
+     "feedbackPage"
+   ).disabled = !Services.policies.isAllowed("feedbackCommands");
+ 
+diff --git a/browser/components/BrowserGlue.jsm b/browser/components/BrowserGlue.jsm
+index 7f61019c3f..a4054e31f2 100644
+--- a/browser/components/BrowserGlue.jsm
++++ b/browser/components/BrowserGlue.jsm
+@@ -269,40 +269,20 @@ let LEGACY_ACTORS = {
+         resize: {},
+       },
+     },
+   },
+ 
+-  SearchTelemetry: {
+-    child: {
+-      module: "resource:///actors/SearchTelemetryChild.jsm",
+-      events: {
+-        DOMContentLoaded: {},
+-        pageshow: { mozSystemGroup: true },
+-      },
+-    },
+-  },
+-
+   ShieldFrame: {
+     child: {
+       module: "resource://normandy-content/ShieldFrameChild.jsm",
+       events: {
+         ShieldPageEvent: { wantUntrusted: true },
+       },
+       matches: ["about:studies"],
+     },
+   },
+ 
+-  UITour: {
+-    child: {
+-      module: "resource:///modules/UITourChild.jsm",
+-      events: {
+-        mozUITour: { wantUntrusted: true },
+-      },
+-      permissions: ["uitour"],
+-    },
+-  },
+-
+   URIFixup: {
+     child: {
+       module: "resource:///actors/URIFixupChild.jsm",
+       group: "browsers",
+       observers: ["keyword-uri-fixup"],
+@@ -432,11 +412,10 @@ XPCOMUtils.defineLazyModuleGetters(this, {
+   AsyncShutdown: "resource://gre/modules/AsyncShutdown.jsm",
+   AutoCompletePopup: "resource://gre/modules/AutoCompletePopup.jsm",
+   Blocklist: "resource://gre/modules/Blocklist.jsm",
+   BookmarkHTMLUtils: "resource://gre/modules/BookmarkHTMLUtils.jsm",
+   BookmarkJSONUtils: "resource://gre/modules/BookmarkJSONUtils.jsm",
+-  BrowserUsageTelemetry: "resource:///modules/BrowserUsageTelemetry.jsm",
+   BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
+   ContextualIdentityService:
+     "resource://gre/modules/ContextualIdentityService.jsm",
+   Corroborate: "resource://gre/modules/Corroborate.jsm",
+   DateTimePickerParent: "resource://gre/modules/DateTimePickerParent.jsm",
+@@ -465,19 +444,16 @@ XPCOMUtils.defineLazyModuleGetters(this, {
+   ProcessHangMonitor: "resource:///modules/ProcessHangMonitor.jsm",
+   RemoteSettings: "resource://services-settings/remote-settings.js",
+   RFPHelper: "resource://gre/modules/RFPHelper.jsm",
+   SafeBrowsing: "resource://gre/modules/SafeBrowsing.jsm",
+   Sanitizer: "resource:///modules/Sanitizer.jsm",
+-  SaveToPocket: "chrome://pocket/content/SaveToPocket.jsm",
+-  SearchTelemetry: "resource:///modules/SearchTelemetry.jsm",
+   SessionStartup: "resource:///modules/sessionstore/SessionStartup.jsm",
+   SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
+   ShellService: "resource:///modules/ShellService.jsm",
+   TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
+   TabUnloader: "resource:///modules/TabUnloader.jsm",
+   UIState: "resource://services-sync/UIState.jsm",
+-  UITour: "resource:///modules/UITour.jsm",
+   WebChannel: "resource://gre/modules/WebChannel.jsm",
+   WindowsRegistry: "resource://gre/modules/WindowsRegistry.jsm",
+ });
+ 
+ // eslint-disable-next-line no-unused-vars
+@@ -1187,11 +1163,10 @@ BrowserGlue.prototype = {
+       "resource:///modules/themes/dark/"
+     );
+ 
+     Normandy.init();
+ 
+-    SaveToPocket.init();
+     Services.obs.notifyObservers(null, "browser-ui-startup-complete");
+   },
+ 
+   _checkForOldBuildUpdates() {
+     // check for update if our build is old
+@@ -1795,12 +1770,10 @@ BrowserGlue.prototype = {
+       if (mod.uninit) {
+         mod.uninit();
+       }
+     }
+ 
+-    BrowserUsageTelemetry.uninit();
+-    SearchTelemetry.uninit();
+     // Only uninit PingCentre if the getter has initialized it
+     if (Object.prototype.hasOwnProperty.call(this, "pingCentre")) {
+       this.pingCentre.uninit();
+     }
+ 
+@@ -1873,13 +1846,10 @@ BrowserGlue.prototype = {
+     if (this._windowsWereRestored) {
+       return;
+     }
+     this._windowsWereRestored = true;
+ 
+-    BrowserUsageTelemetry.init();
+-    SearchTelemetry.init();
+-
+     // Show update notification, if needed.
+     if (Services.prefs.prefHasUserValue("app.update.postupdate")) {
+       this._showUpdateNotification();
+     }
+ 
+@@ -4290,17 +4260,10 @@ var JawsScreenReaderVersionCheck = {
+       options
+     );
+   },
+ };
+ 
+-// Listen for UITour messages.
+-// Do it here instead of the UITour module itself so that the UITour module is lazy loaded
+-// when the first message is received.
+-Services.mm.addMessageListener("UITour:onPageEvent", function(aMessage) {
+-  UITour.onPageEvent(aMessage, aMessage.data);
+-});
+-
+ // Listen for HybridContentTelemetry messages.
+ // Do it here instead of HybridContentTelemetry.init() so that
+ // the module can be lazily loaded on the first message.
+ Services.mm.addMessageListener(
+   "HybridContentTelemetry:onTelemetryMessage",
+diff --git a/browser/components/moz.build b/browser/components/moz.build
+index 674be6fb7e..46120b9eac 100644
+--- a/browser/components/moz.build
++++ b/browser/components/moz.build
+@@ -42,20 +42,18 @@ DIRS += [
+     'library',
+     'migration',
+     'newtab',
+     'originattributes',
+     'places',
+-    'pocket',
+     'preferences',
+     'privatebrowsing',
+     'protocolhandler',
+     'resistfingerprinting',
+     'search',
+     'sessionstore',
+     'shell',
+     'syncedtabs',
+-    'uitour',
+     'urlbar',
+     'translation',
+ ]
+ 
+ DIRS += ['build']
+diff --git a/browser/components/search/moz.build b/browser/components/search/moz.build
+index 714a8080d1..794f1d3229 100644
+--- a/browser/components/search/moz.build
++++ b/browser/components/search/moz.build
+@@ -2,13 +2,10 @@
+ # vim: set filetype=python:
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-EXTRA_JS_MODULES += [
+-    'SearchTelemetry.jsm',
+-]
+ 
+ BROWSER_CHROME_MANIFESTS += [
+     'test/browser/browser.ini',
+     'test/browser/google_codes/browser.ini',
+ ]
+diff --git a/browser/modules/moz.build b/browser/modules/moz.build
+index 6a55905a90..cdbe22eb4e 100644
+--- a/browser/modules/moz.build
++++ b/browser/modules/moz.build
+@@ -132,11 +132,10 @@ BROWSER_CHROME_MANIFESTS += [
+ XPCSHELL_TESTS_MANIFESTS += ['test/unit/xpcshell.ini']
+ 
+ EXTRA_JS_MODULES += [
+     'AboutNewTab.jsm',
+     'AsyncTabSwitcher.jsm',
+-    'BrowserUsageTelemetry.jsm',
+     'BrowserWindowTracker.jsm',
+     'ContentClick.jsm',
+     'ContentCrashHandlers.jsm',
+     'ContentMetaHandler.jsm',
+     'ContentObservers.js',
+diff --git a/browser/modules/test/browser/browser.ini b/browser/modules/test/browser/browser.ini
+index f4fb6ef55a..06a6db4f68 100644
+--- a/browser/modules/test/browser/browser.ini
++++ b/browser/modules/test/browser/browser.ini
+@@ -34,24 +34,5 @@ support-files =
+ [browser_taskbar_preview.js]
+ skip-if = os != win || (os == win && bits == 64) # bug 1456807
+ [browser_UnsubmittedCrashHandler.js]
+ run-if = crashreporter
+ [browser_urlBar_zoom.js]
+-[browser_UsageTelemetry.js]
+-[browser_UsageTelemetry_domains.js]
+-[browser_UsageTelemetry_private_and_restore.js]
+-skip-if = verify && debug
+-[browser_UsageTelemetry_uniqueOriginsVisitedInPast24Hours.js]
+-[browser_UsageTelemetry_urlbar_extension.js]
+-[browser_UsageTelemetry_urlbar_places.js]
+-[browser_UsageTelemetry_urlbar_remotetab.js]
+-[browser_UsageTelemetry_urlbar.js]
+-support-files =
+-  usageTelemetrySearchSuggestions.sjs
+-  usageTelemetrySearchSuggestions.xml
+-[browser_UsageTelemetry_searchbar.js]
+-support-files =
+-  usageTelemetrySearchSuggestions.sjs
+-  usageTelemetrySearchSuggestions.xml
+-[browser_UsageTelemetry_content.js]
+-[browser_UsageTelemetry_content_aboutHome.js]
+-[browser_UsageTelemetry_content_aboutRestartRequired.js]
+diff --git a/browser/themes/linux/browser.css b/browser/themes/linux/browser.css
+index 7f47fc83c7..a65564f877 100644
+--- a/browser/themes/linux/browser.css
++++ b/browser/themes/linux/browser.css
+@@ -507,41 +507,10 @@ notification[value="translation"] menulist > .menulist-dropmarker {
+ 
+ %include ../shared/customizableui/customizeMode.inc.css
+ 
+ /* End customization mode */
+ 
+-%include ../shared/UITour.inc.css
+-
+-#UITourHighlight {
+-  /* Below are some fixes for people without an X compositor on Linux.
+-     This is why we can't have nice things: */
+-  /* Animations don't repaint properly without an X compositor. */
+-  animation-name: none !important;
+-  /* Opacity rounds to 0 or 1 on Linux without an X compositor, making the
+-     background color not visible. Anti-aliasing is not available either. Make a
+-     thicker outline and cancel border-radius for that case. */
+-     outline: 4px solid rgb(0,200,215);
+-     border-radius: 0 !important;
+-}
+-
+-#UITourTooltipDescription {
+-  font-size: 1.05rem;
+-}
+-
+-#UITourTooltipClose {
+-  margin-inline-end: -4px;
+-}
+-
+-/**
+- * Override the --arrowpanel-padding so the background extends
+- * to the sides and bottom of the panel.
+- */
+-#UITourTooltipButtons {
+-  margin-left: -10px;
+-  margin-bottom: -10px;
+-}
+-
+ %include ../shared/contextmenu.inc.css
+ 
+ #context-navigation > .menuitem-iconic > .menu-iconic-left {
+   /* override toolkit/themes/linux/global/menu.css */
+   padding-inline-end: 0 !important;
+diff --git a/toolkit/components/telemetry/moz.build b/toolkit/components/telemetry/moz.build
+index a364939b40..728912588a 100644
+--- a/toolkit/components/telemetry/moz.build
++++ b/toolkit/components/telemetry/moz.build
+@@ -114,11 +114,10 @@ EXTRA_JS_MODULES += [
+     'app/TelemetrySend.jsm',
+     'app/TelemetryStorage.jsm',
+     'app/TelemetryTimestamps.jsm',
+     'app/TelemetryUtils.jsm',
+     'other/GCTelemetry.jsm',
+-    'other/UITelemetry.jsm',
+     'pings/CoveragePing.jsm',
+     'pings/EcosystemTelemetry.jsm',
+     'pings/EventPing.jsm',
+     'pings/HealthPing.jsm',
+     'pings/ModulesPing.jsm',
+-- 
+2.23.0
+

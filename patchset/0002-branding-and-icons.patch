@@ -1,0 +1,253 @@
+From 34d35b10ab39d99816a33cd349ca714c52b822c8 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sun, 29 Sep 2019 20:20:16 +0200
+Subject: [PATCH 2/5] branding and icons
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/base/content/aboutDialog.xul                 |  8 ++++----
+ browser/base/content/overrides/app-license.html      |  2 +-
+ browser/branding/branding-common.mozbuild            |  3 +++
+ browser/branding/unofficial/configure.sh             |  3 ++-
+ browser/branding/unofficial/locales/en-US/brand.dtd  | 12 ++++++------
+ browser/branding/unofficial/locales/en-US/brand.ftl  | 12 ++++++------
+ .../unofficial/locales/en-US/brand.properties        | 10 +++++-----
+ browser/branding/unofficial/pref/firefox-branding.js |  8 ++++----
+ browser/installer/package-manifest.in                |  3 +++
+ browser/locales/en-US/browser/aboutDialog.ftl        |  2 +-
+ .../shared/privatebrowsing/aboutPrivateBrowsing.css  |  2 +-
+ 11 files changed, 36 insertions(+), 29 deletions(-)
+
+diff --git a/browser/base/content/aboutDialog.xul b/browser/base/content/aboutDialog.xul
+index 66733ffc03..5b29566c98 100644
+--- a/browser/base/content/aboutDialog.xul
++++ b/browser/base/content/aboutDialog.xul
+@@ -126,21 +126,21 @@
+           </description>
+ #endif
+           <vbox id="experimental" hidden="true">
+             <description class="text-blurb" id="warningDesc" data-l10n-id="warningDesc-version"></description>
+             <description class="text-blurb" id="communityExperimentalDesc" data-l10n-id="community-exp">
+-              <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-exp-mozillaLink"></label>
++              <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-exp-mozillaLink"></label>
+               <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-exp-creditsLink"></label>
+             </description>
+           </vbox>
+           <description class="text-blurb" id="communityDesc" data-l10n-id="community-2">
+-            <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-mozillaLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-mozillaLink"></label>
+             <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-creditsLink"></label>
+           </description>
+           <description class="text-blurb" id="contributeDesc" data-l10n-id="helpus">
+-            <label is="text-link" href="https://donate.mozilla.org/?utm_source=firefox&#38;utm_medium=referral&#38;utm_campaign=firefox_about&#38;utm_content=firefox_about" data-l10n-name="helpus-donateLink"></label>
+-            <label is="text-link" href="http://www.mozilla.org/contribute/" data-l10n-name="helpus-getInvolvedLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-donateLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-getInvolvedLink"></label>
+           </description>
+         </vbox>
+       </vbox>
+     </hbox>
+     <vbox id="bottomBox">
+diff --git a/browser/base/content/overrides/app-license.html b/browser/base/content/overrides/app-license.html
+index e7a158c792..ca394bcefe 100644
+--- a/browser/base/content/overrides/app-license.html
++++ b/browser/base/content/overrides/app-license.html
+@@ -1,6 +1,6 @@
+ <!-- This Source Code Form is subject to the terms of the Mozilla Public
+    - License, v. 2.0. If a copy of the MPL was not distributed with this
+    - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+     <p><b>Binaries</b> of this product have been made available to you by the
+-    <a href="http://www.mozilla.org/">Mozilla Project</a> under the Mozilla
++    <a href="http://github.com/torvic9/plasmafox">Plasmafox Project</a> under the Mozilla
+     Public License 2.0 (MPL). <a href="about:rights">Know your rights</a>.</p>
+diff --git a/browser/branding/branding-common.mozbuild b/browser/branding/branding-common.mozbuild
+index 78541ab5f5..fd7d5a5b3c 100644
+--- a/browser/branding/branding-common.mozbuild
++++ b/browser/branding/branding-common.mozbuild
+@@ -25,9 +25,12 @@ def FirefoxBranding():
+         ]
+     elif 'gtk' in CONFIG['MOZ_WIDGET_TOOLKIT']:
+         FINAL_TARGET_FILES.chrome.icons.default += [
+             'default128.png',
+             'default16.png',
++            'default22.png',
++            'default24.png',
++            'default256.png',
+             'default32.png',
+             'default48.png',
+             'default64.png',
+         ]
+diff --git a/browser/branding/unofficial/configure.sh b/browser/branding/unofficial/configure.sh
+index edd3bd3e86..c20a3b626a 100644
+--- a/browser/branding/unofficial/configure.sh
++++ b/browser/branding/unofficial/configure.sh
+@@ -1,5 +1,6 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-MOZ_APP_DISPLAYNAME=Nightly
++MOZ_APP_DISPLAYNAME=plasmafox
++MOZ_APP_PROFILE=plasmafox
+diff --git a/browser/branding/unofficial/locales/en-US/brand.dtd b/browser/branding/unofficial/locales/en-US/brand.dtd
+index 1710be75ba..229cb5717c 100644
+--- a/browser/branding/unofficial/locales/en-US/brand.dtd
++++ b/browser/branding/unofficial/locales/en-US/brand.dtd
+@@ -1,13 +1,13 @@
+ <!-- This Source Code Form is subject to the terms of the Mozilla Public
+    - License, v. 2.0. If a copy of the MPL was not distributed with this
+    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+ 
+-<!ENTITY  brandShorterName      "Nightly">
+-<!ENTITY  brandShortName        "Nightly">
+-<!ENTITY  brandFullName         "Nightly">
++<!ENTITY  brandShorterName      "Plasmafox">
++<!ENTITY  brandShortName        "Plasmafox">
++<!ENTITY  brandFullName         "Plasmafox">
+ <!-- LOCALIZATION NOTE (brandProductName):
+    This brand name can be used in messages where the product name needs to
+    remain unchanged across different versions (Nightly, Beta, etc.). -->
+-<!ENTITY  brandProductName      "Firefox">
+-<!ENTITY  vendorShortName       "Mozilla">
+-<!ENTITY  trademarkInfo.part1   " ">
++<!ENTITY  brandProductName      "Plasmafox">
++<!ENTITY  vendorShortName       "Plasmafox">
++<!ENTITY  trademarkInfo.part1   "Plasmafox is not associated with Mozilla">
+diff --git a/browser/branding/unofficial/locales/en-US/brand.ftl b/browser/branding/unofficial/locales/en-US/brand.ftl
+index ef268375fe..cb9ed00d1c 100644
+--- a/browser/branding/unofficial/locales/en-US/brand.ftl
++++ b/browser/branding/unofficial/locales/en-US/brand.ftl
+@@ -10,13 +10,13 @@
+ ## - Transliterated.
+ ## - Translated.
+ ##
+ ## Reference: https://www.mozilla.org/styleguide/communications/translation/
+ 
+--brand-shorter-name = Nightly
+--brand-short-name = Nightly
+--brand-full-name = Nightly
++-brand-shorter-name = Plasmafox
++-brand-short-name = Plasmafox
++-brand-full-name = Plasmafox
+ # This brand name can be used in messages where the product name needs to
+ # remain unchanged across different versions (Nightly, Beta, etc.).
+--brand-product-name = Firefox
+--vendor-short-name = Mozilla
+-trademarkInfo = { " " }
++-brand-product-name = Plasmafox
++-vendor-short-name = Plasmafox
++trademarkInfo = { "Plasmafox is not associated with Mozilla" }
+diff --git a/browser/branding/unofficial/locales/en-US/brand.properties b/browser/branding/unofficial/locales/en-US/brand.properties
+index 7c86db3f43..e7dfa02951 100644
+--- a/browser/branding/unofficial/locales/en-US/brand.properties
++++ b/browser/branding/unofficial/locales/en-US/brand.properties
+@@ -1,14 +1,14 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-brandShorterName=Nightly
+-brandShortName=Nightly
+-brandFullName=Nightly
++brandShorterName=Plasmafox
++brandShortName=Plasmafox
++brandFullName=Plasmafox
+ # LOCALIZATION NOTE(brandProductName):
+ # This brand name can be used in messages where the product name needs to
+ # remain unchanged across different versions (Nightly, Beta, etc.).
+-brandProductName=Firefox
+-vendorShortName=Mozilla
++brandProductName=Plasmafox
++vendorShortName=Plasmafox
+ 
+ syncBrandShortName=Sync
+diff --git a/browser/branding/unofficial/pref/firefox-branding.js b/browser/branding/unofficial/pref/firefox-branding.js
+index 038f4565c0..1c04a645ad 100644
+--- a/browser/branding/unofficial/pref/firefox-branding.js
++++ b/browser/branding/unofficial/pref/firefox-branding.js
+@@ -1,22 +1,22 @@
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+-pref("startup.homepage_override_url", "");
+-pref("startup.homepage_welcome_url", "");
++pref("startup.homepage_override_url", "https://github.com/torvic9/plasmafox");
++pref("startup.homepage_welcome_url", "https://github.com/torvic9/plasmafox");
+ pref("startup.homepage_welcome_url.additional", "");
+ // The time interval between checks for a new version (in seconds)
+ pref("app.update.interval", 86400); // 24 hours
+ // Give the user x seconds to react before showing the big UI. default=24 hours
+ pref("app.update.promptWaitTime", 86400);
+ // URL user can browse to manually if for some reason all update installation
+ // attempts fail.
+-pref("app.update.url.manual", "https://nightly.mozilla.org");
++pref("app.update.url.manual", "https://github.com/torvic9/plasmafox");
+ // A default value for the "More information about this update" link
+ // supplied in the "An update is available" page of the update wizard.
+-pref("app.update.url.details", "https://nightly.mozilla.org");
++pref("app.update.url.details", "https://github.com/torvic9/plasmafox");
+ 
+ // The number of days a binary is permitted to be old
+ // without checking for an update.  This assumes that
+ // app.update.checkInstallTime is true.
+ pref("app.update.checkInstallTime.days", 2);
+diff --git a/browser/installer/package-manifest.in b/browser/installer/package-manifest.in
+index 675e0e2637..f902f1615c 100644
+--- a/browser/installer/package-manifest.in
++++ b/browser/installer/package-manifest.in
+@@ -248,14 +248,17 @@
+ @RESPATH@/chrome/toolkit.manifest
+ @RESPATH@/chrome/recording.manifest
+ @RESPATH@/chrome/recording/*
+ #ifdef MOZ_GTK
+ @RESPATH@/browser/chrome/icons/default/default16.png
++@RESPATH@/browser/chrome/icons/default/default22.png
++@RESPATH@/browser/chrome/icons/default/default24.png
+ @RESPATH@/browser/chrome/icons/default/default32.png
+ @RESPATH@/browser/chrome/icons/default/default48.png
+ @RESPATH@/browser/chrome/icons/default/default64.png
+ @RESPATH@/browser/chrome/icons/default/default128.png
++@RESPATH@/browser/chrome/icons/default/default256.png
+ #endif
+ @RESPATH@/browser/features/*
+ 
+ ; [Webide Files]
+ @RESPATH@/browser/chrome/webide@JAREXT@
+diff --git a/browser/locales/en-US/browser/aboutDialog.ftl b/browser/locales/en-US/browser/aboutDialog.ftl
+index 5737302831..5b8aeb7a8f 100644
+--- a/browser/locales/en-US/browser/aboutDialog.ftl
++++ b/browser/locales/en-US/browser/aboutDialog.ftl
+@@ -37,11 +37,11 @@ channel-description = You are currently on the <label data-l10n-name="current-ch
+ 
+ warningDesc-version = { -brand-short-name } is experimental and may be unstable.
+ 
+ community-exp = <label data-l10n-name="community-exp-mozillaLink">{ -vendor-short-name }</label> is a <label data-l10n-name="community-exp-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
+ 
+-community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, a <label data-l10n-name="community-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
++community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, to be used with Manjaro KDE.
+ 
+ helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
+ 
+ bottomLinks-license = Licensing Information
+ bottomLinks-rights = End-User Rights
+diff --git a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
+index 9db1b0b268..b0aeb44521 100644
+--- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
++++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
+@@ -122,11 +122,11 @@ a.button:hover:active {
+   height: 97px;
+   width: 97px;
+ }
+ 
+ .wordmark {
+-  background: url("resource://activity-stream/data/content/assets/firefox-wordmark.svg") no-repeat center center;
++  background: url("resource://activity-stream/data/content/assets/plasmafox-wordmark.svg") no-repeat center center;
+   background-size: 175px;
+   -moz-context-properties: fill;
+   display: inline-block;
+   fill: #fff;
+   height: 97px;
+-- 
+2.23.0
+
