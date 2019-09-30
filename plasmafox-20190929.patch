@@ -1581,3 +1581,37 @@ index cb8f3f17e3..c90794e10c 100644
 -- 
 2.23.0
 
+From f2fcc224019b56853907c6ba5e83ab554a137646 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Mon, 30 Sep 2019 08:02:28 +0200
+Subject: [PATCH] fix missing semicolons
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/app/profile/firefox.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
+index 5fd853c3b2..5909c9a47c 100644
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@ -1878,14 +1878,14 @@ pref("media.peerconnection.ice.default_address_only", true);
+ pref("media.peerconnection.ice.no_host", true);
+ pref("browser.newtabpage.enhanced", false);
+ pref("browser.newtabpage.directory.source", "data:application/json,{}");
+ pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
+ pref("browser.newtabpage.activity-stream.telemetry", false);
+-pref("browser.newtabpage.activity-stream.telemetry.ping.endpoint", "")
++pref("browser.newtabpage.activity-stream.telemetry.ping.endpoint", "");
+ pref("browser.newtabpage.activity-stream.feeds.snippets", false);
+ pref("browser.newtabpage.activity-stream.asrouter.providers.snippets", "");
+ pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
+ pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);
+ pref("browser.newtabpage.activity-stream.showSponsored", false);
+-pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false)
++pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
+ pref("network.predictor.enable-prefetch", false);
+ pref("devtools.debugger.remote-enabled", false);
+-- 
+2.23.0
+
