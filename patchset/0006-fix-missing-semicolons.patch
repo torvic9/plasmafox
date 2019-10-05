@@ -1,7 +1,7 @@
 From f2fcc224019b56853907c6ba5e83ab554a137646 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Mon, 30 Sep 2019 08:02:28 +0200
-Subject: [PATCH] fix missing semicolons
+Subject: [PATCH 6/7] fix missing semicolons
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---

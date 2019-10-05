@@ -17,7 +17,7 @@ pkgname=plasmafox
 _pkgname=firefox
 pkgver=68.1.0esr
 _pkgver=68.1.0
-pkgrel=2
+pkgrel=5
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -38,7 +38,7 @@ provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde')
 #_patchrev=840132a4a9b3
 _patchrev=8a3c73e74e65
-_pfdate=20190929
+_pfdate=20191001
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -62,6 +62,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         pgo_fix_missing_kdejs.patch
         2001_system_graphite2_support.patch
         2000_system_harfbuzz_support.patch
+	2015_fix_cssparser.patch
         # artwork
         about-background.png
         about-logo.png
@@ -82,7 +83,7 @@ sha256sums=('f56f5fa5a4744be0b9acf259cb991254d708a50b9a0a12d1d846ffa5a6c409ac'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '0a5fc459a27a3bf044615f96903f55dc2d0541a8ec5e742ba1485742b78fe689'
+            '42d97c38b85f0639588e15be614427a6d69f8c9b855363e7bfa3fc14fec8f7bf'
             '6b66eb3889159c777f55d5e7d4d397679407e7ca8f2269d6289e6945fec67404'
             'dd47e4fd81c088777e14dc6a08bf3a4aa8ac15f1022df3d22d48258f8dfdc31a'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
@@ -90,6 +91,7 @@ sha256sums=('f56f5fa5a4744be0b9acf259cb991254d708a50b9a0a12d1d846ffa5a6c409ac'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
             '6abc616964cac17807509dbc1c1aa7e4234f6793c14bf884222c258a9da4d055'
             'c8d7b19378e0ef15f9f9aefae95e4a7c024de88e78dc5bfc712c3bf5fe725ef1'
+            '54e49fc744f5ec940c4dc1c75d891f33683ff68f5b11e68e5d05d7108c50ad52'
             '84e4725ed246046a419a5cb005a0d681e3ea7e179a3c7cdb341a1149ab4761f9'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -153,6 +155,7 @@ prepare() {
 
   patch -Np1 -i "../2000_system_harfbuzz_support.patch"
   patch -Np1 -i "../2001_system_graphite2_support.patch"
+  patch -Np1 -i "../2015_fix_cssparser.patch"
 
   patch -Np1 -i "../plasmafox-${_pfdate}.patch"
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/

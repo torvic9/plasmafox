@@ -1,7 +1,7 @@
 From fc859bc1a564ded4d9f4474c80ed185174660f54 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Sun, 29 Sep 2019 23:32:22 +0200
-Subject: [PATCH 5/5] preferences
+Subject: [PATCH 5/7] preferences
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
