@@ -1,7 +1,7 @@
 From bf20676afd8fe7f9d956aabc53938c22edca4e2a Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Sun, 29 Sep 2019 20:23:38 +0200
-Subject: [PATCH 3/7] change user agent handling
+Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
@@ -12,8 +12,7 @@ diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsH
 index 176837695f..5c2c7b4e83 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
-@@ -481,13 +481,13 @@ nsresult nsHttpHandler::Init() {
-   // monitor some preference changes
+@@ -482,11 +482,11 @@ nsresult nsHttpHandler::Init() {
    Preferences::RegisterPrefixCallbacks(
        PREF_CHANGE_METHOD(nsHttpHandler::PrefsChanged), gCallbackPrefs, this);
    PrefsChanged(nullptr);
@@ -27,9 +26,7 @@ index 176837695f..5c2c7b4e83 100644
    nsCOMPtr<nsIXULAppInfo> appInfo =
        do_GetService("@mozilla.org/xre/app-info;1");
  
-   mAppName.AssignLiteral(MOZ_APP_UA_NAME);
-@@ -936,22 +936,18 @@ void nsHttpHandler::BuildUserAgent() {
-   mUserAgent += ' ';
+@@ -937,20 +937,16 @@ void nsHttpHandler::BuildUserAgent() {
    mUserAgent += mProduct;
    mUserAgent += '/';
    mUserAgent += mProductSub;
@@ -58,7 +55,6 @@ index 176837695f..5c2c7b4e83 100644
  }
  
  #ifdef XP_WIN
- #  define WNT_BASE "Windows NT %ld.%ld"
 -- 
 2.23.0
 

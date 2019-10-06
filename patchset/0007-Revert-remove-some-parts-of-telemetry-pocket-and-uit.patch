@@ -1,8 +1,7 @@
 From d2a61bcf84614b39d9ba4745871e2d715ec2fcad Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Tue, 1 Oct 2019 20:41:18 +0200
-Subject: [PATCH 7/7] Revert "remove some parts of telemetry, pocket, and
- uitour"
+Subject: [PATCH] Revert "remove some parts of telemetry, pocket, and uitour"
 
 This reverts commit e1454a0fcdb1eb61cf641a1b216d0c34b9648bc6.
 
@@ -27,8 +26,7 @@ diff --git a/browser/base/content/browser-contentblocking.js b/browser/base/cont
 index 09566b9c2d..1e7dacc8b3 100644
 --- a/browser/base/content/browser-contentblocking.js
 +++ b/browser/base/content/browser-contentblocking.js
-@@ -1482,10 +1482,20 @@ var ContentBlocking = {
-     } else if (cryptominingAllowing) {
+@@ -1483,8 +1483,18 @@ var ContentBlocking = {
        this.cryptominersHistogramAdd("allowed");
      }
    },
@@ -47,13 +45,11 @@ index 09566b9c2d..1e7dacc8b3 100644
      let baseURI = this._baseURIForChannelClassifier;
  
      // Add the current host in the 'trackingprotection' consumer of
-     // the permission manager using a normalized URI. This effectively
 diff --git a/browser/base/content/browser.css b/browser/base/content/browser.css
 index 0251434cb3..8137435f9e 100644
 --- a/browser/base/content/browser.css
 +++ b/browser/base/content/browser.css
-@@ -1276,10 +1276,75 @@ toolbarpaletteitem > toolbaritem {
- :root[customizing=true] .addon-banner-item,
+@@ -1277,8 +1277,73 @@ toolbarpaletteitem > toolbaritem {
  :root[customizing=true] .panel-banner-item {
    display: none;
  }
@@ -127,13 +123,11 @@ index 0251434cb3..8137435f9e 100644
  #context-navigation > .menuitem-iconic > .menu-iconic-text,
  #context-navigation > .menuitem-iconic > .menu-accel-container {
    display: none;
- }
 diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
 index 0c518d243b..80f16fd690 100644
 --- a/browser/base/content/browser.js
 +++ b/browser/base/content/browser.js
-@@ -16,10 +16,11 @@ ChromeUtils.import("resource://gre/modules/NotificationDB.jsm");
- 
+@@ -17,8 +17,9 @@ ChromeUtils.import("resource://gre/modules/NotificationDB.jsm");
  XPCOMUtils.defineLazyModuleGetters(this, {
    AddonManager: "resource://gre/modules/AddonManager.jsm",
    AMTelemetry: "resource://gre/modules/AddonManager.jsm",
@@ -143,9 +137,7 @@ index 0c518d243b..80f16fd690 100644
    BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
    CFRPageActions: "resource://activity-stream/lib/CFRPageActions.jsm",
    CharsetMenu: "resource://gre/modules/CharsetMenu.jsm",
-   Color: "resource://gre/modules/Color.jsm",
-@@ -48,10 +49,11 @@ XPCOMUtils.defineLazyModuleGetters(this, {
-   PanelView: "resource:///modules/PanelMultiView.jsm",
+@@ -49,8 +50,9 @@ XPCOMUtils.defineLazyModuleGetters(this, {
    PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
    PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm",
    PlacesTransactions: "resource://gre/modules/PlacesTransactions.jsm",
@@ -155,9 +147,7 @@ index 0c518d243b..80f16fd690 100644
    ProcessHangMonitor: "resource:///modules/ProcessHangMonitor.jsm",
    PromiseUtils: "resource://gre/modules/PromiseUtils.jsm",
    // TODO (Bug 1529552): Remove once old urlbar code goes away.
-   ReaderMode: "resource://gre/modules/ReaderMode.jsm",
-@@ -68,10 +70,11 @@ XPCOMUtils.defineLazyModuleGetters(this, {
-   SubframeCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
+@@ -69,8 +71,9 @@ XPCOMUtils.defineLazyModuleGetters(this, {
    TabModalPrompt: "chrome://global/content/tabprompts.jsm",
    TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
    TelemetryEnvironment: "resource://gre/modules/TelemetryEnvironment.jsm",
@@ -167,9 +157,7 @@ index 0c518d243b..80f16fd690 100644
    UrlbarInput: "resource:///modules/UrlbarInput.jsm",
    UrlbarPrefs: "resource:///modules/UrlbarPrefs.jsm",
    UrlbarTokenizer: "resource:///modules/UrlbarTokenizer.jsm",
-   UrlbarUtils: "resource:///modules/UrlbarUtils.jsm",
-@@ -5025,10 +5028,57 @@ const BrowserSearch = {
-       "browser.link.open_newwindow"
+@@ -5026,8 +5029,55 @@ const BrowserSearch = {
      );
      var where = newWindowPref == 3 ? "tab" : "window";
      openTrustedLinkIn(this.searchEnginesURL, where);
@@ -225,13 +213,11 @@ index 0c518d243b..80f16fd690 100644
  
  XPCOMUtils.defineConstant(this, "BrowserSearch", BrowserSearch);
  
- function FillHistoryMenu(aParent) {
 diff --git a/browser/base/content/browser.xul b/browser/base/content/browser.xul
 index cad058cd0c..4e12279215 100644
 --- a/browser/base/content/browser.xul
 +++ b/browser/base/content/browser.xul
-@@ -315,10 +315,46 @@
-                 oncommand="StarUI.panel.hidePopup();"/>
+@@ -316,8 +316,44 @@
  #endif
        </hbox>
      </panel>
@@ -276,13 +262,11 @@ index cad058cd0c..4e12279215 100644
             class="cui-widget-panel"
             role="group"
             type="arrow"
-            hidden="true"
 diff --git a/browser/base/content/test/performance/browser_startup.js b/browser/base/content/test/performance/browser_startup.js
 index f331db1220..274359efb0 100644
 --- a/browser/base/content/test/performance/browser_startup.js
 +++ b/browser/base/content/test/performance/browser_startup.js
-@@ -59,10 +59,11 @@ const startupPhases = {
-       components: new Set(["nsSearchService.js"]),
+@@ -60,8 +60,9 @@ const startupPhases = {
        modules: new Set([
          "chrome://webcompat/content/data/ua_overrides.jsm",
          "chrome://webcompat/content/lib/ua_overrider.jsm",
@@ -292,13 +276,11 @@ index f331db1220..274359efb0 100644
          "resource:///modules/ShellService.jsm",
          "resource://gre/modules/NewTabUtils.jsm",
          "resource://gre/modules/PageThumbs.jsm",
-         "resource://gre/modules/PlacesUtils.jsm",
 diff --git a/browser/base/content/utilityOverlay.js b/browser/base/content/utilityOverlay.js
 index 7ba7a6ff1e..9a1010b2af 100644
 --- a/browser/base/content/utilityOverlay.js
 +++ b/browser/base/content/utilityOverlay.js
-@@ -1078,10 +1078,16 @@ function openTroubleshootingPage() {
- function openFeedbackPage() {
+@@ -1079,8 +1079,14 @@ function openFeedbackPage() {
    var url = Services.urlFormatter.formatURLPref("app.feedback.baseURL");
    openTrustedLinkIn(url, "tab");
  }
@@ -313,13 +295,11 @@ index 7ba7a6ff1e..9a1010b2af 100644
    document.getElementById(
      "feedbackPage"
    ).disabled = !Services.policies.isAllowed("feedbackCommands");
- 
 diff --git a/browser/components/BrowserGlue.jsm b/browser/components/BrowserGlue.jsm
 index a4054e31f2..7f61019c3f 100644
 --- a/browser/components/BrowserGlue.jsm
 +++ b/browser/components/BrowserGlue.jsm
-@@ -269,20 +269,40 @@ let LEGACY_ACTORS = {
-         resize: {},
+@@ -270,8 +270,18 @@ let LEGACY_ACTORS = {
        },
      },
    },
@@ -338,8 +318,7 @@ index a4054e31f2..7f61019c3f 100644
      child: {
        module: "resource://normandy-content/ShieldFrameChild.jsm",
        events: {
-         ShieldPageEvent: { wantUntrusted: true },
-       },
+@@ -280,8 +290,18 @@ let LEGACY_ACTORS = {
        matches: ["about:studies"],
      },
    },
@@ -358,9 +337,7 @@ index a4054e31f2..7f61019c3f 100644
      child: {
        module: "resource:///actors/URIFixupChild.jsm",
        group: "browsers",
-       observers: ["keyword-uri-fixup"],
-@@ -412,10 +432,11 @@ XPCOMUtils.defineLazyModuleGetters(this, {
-   AsyncShutdown: "resource://gre/modules/AsyncShutdown.jsm",
+@@ -413,8 +433,9 @@ XPCOMUtils.defineLazyModuleGetters(this, {
    AutoCompletePopup: "resource://gre/modules/AutoCompletePopup.jsm",
    Blocklist: "resource://gre/modules/Blocklist.jsm",
    BookmarkHTMLUtils: "resource://gre/modules/BookmarkHTMLUtils.jsm",
@@ -370,9 +347,7 @@ index a4054e31f2..7f61019c3f 100644
    ContextualIdentityService:
      "resource://gre/modules/ContextualIdentityService.jsm",
    Corroborate: "resource://gre/modules/Corroborate.jsm",
-   DateTimePickerParent: "resource://gre/modules/DateTimePickerParent.jsm",
-@@ -444,16 +465,19 @@ XPCOMUtils.defineLazyModuleGetters(this, {
-   ProcessHangMonitor: "resource:///modules/ProcessHangMonitor.jsm",
+@@ -445,14 +466,17 @@ XPCOMUtils.defineLazyModuleGetters(this, {
    RemoteSettings: "resource://services-settings/remote-settings.js",
    RFPHelper: "resource://gre/modules/RFPHelper.jsm",
    SafeBrowsing: "resource://gre/modules/SafeBrowsing.jsm",
@@ -390,9 +365,7 @@ index a4054e31f2..7f61019c3f 100644
    WindowsRegistry: "resource://gre/modules/WindowsRegistry.jsm",
  });
  
- // eslint-disable-next-line no-unused-vars
-@@ -1163,10 +1187,11 @@ BrowserGlue.prototype = {
-       "resource:///modules/themes/dark/"
+@@ -1164,8 +1188,9 @@ BrowserGlue.prototype = {
      );
  
      Normandy.init();
@@ -402,9 +375,7 @@ index a4054e31f2..7f61019c3f 100644
    },
  
    _checkForOldBuildUpdates() {
-     // check for update if our build is old
-@@ -1770,10 +1795,12 @@ BrowserGlue.prototype = {
-       if (mod.uninit) {
+@@ -1771,8 +1796,10 @@ BrowserGlue.prototype = {
          mod.uninit();
        }
      }
@@ -415,9 +386,7 @@ index a4054e31f2..7f61019c3f 100644
      if (Object.prototype.hasOwnProperty.call(this, "pingCentre")) {
        this.pingCentre.uninit();
      }
- 
-@@ -1846,10 +1873,13 @@ BrowserGlue.prototype = {
-     if (this._windowsWereRestored) {
+@@ -1847,8 +1874,11 @@ BrowserGlue.prototype = {
        return;
      }
      this._windowsWereRestored = true;
@@ -429,9 +398,7 @@ index a4054e31f2..7f61019c3f 100644
      if (Services.prefs.prefHasUserValue("app.update.postupdate")) {
        this._showUpdateNotification();
      }
- 
-@@ -4260,10 +4290,17 @@ var JawsScreenReaderVersionCheck = {
-       options
+@@ -4261,8 +4291,15 @@ var JawsScreenReaderVersionCheck = {
      );
    },
  };
@@ -447,13 +414,11 @@ index a4054e31f2..7f61019c3f 100644
  // Do it here instead of HybridContentTelemetry.init() so that
  // the module can be lazily loaded on the first message.
  Services.mm.addMessageListener(
-   "HybridContentTelemetry:onTelemetryMessage",
 diff --git a/browser/components/moz.build b/browser/components/moz.build
 index 46120b9eac..674be6fb7e 100644
 --- a/browser/components/moz.build
 +++ b/browser/components/moz.build
-@@ -42,18 +42,20 @@ DIRS += [
-     'library',
+@@ -43,16 +43,18 @@ DIRS += [
      'migration',
      'newtab',
      'originattributes',
@@ -472,13 +437,11 @@ index 46120b9eac..674be6fb7e 100644
      'translation',
  ]
  
- DIRS += ['build']
 diff --git a/browser/components/search/moz.build b/browser/components/search/moz.build
 index 794f1d3229..714a8080d1 100644
 --- a/browser/components/search/moz.build
 +++ b/browser/components/search/moz.build
-@@ -2,10 +2,13 @@
- # vim: set filetype=python:
+@@ -3,8 +3,11 @@
  # This Source Code Form is subject to the terms of the Mozilla Public
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -490,13 +453,11 @@ index 794f1d3229..714a8080d1 100644
  BROWSER_CHROME_MANIFESTS += [
      'test/browser/browser.ini',
      'test/browser/google_codes/browser.ini',
- ]
 diff --git a/browser/modules/moz.build b/browser/modules/moz.build
 index cdbe22eb4e..6a55905a90 100644
 --- a/browser/modules/moz.build
 +++ b/browser/modules/moz.build
-@@ -132,10 +132,11 @@ BROWSER_CHROME_MANIFESTS += [
- XPCSHELL_TESTS_MANIFESTS += ['test/unit/xpcshell.ini']
+@@ -133,8 +133,9 @@ XPCSHELL_TESTS_MANIFESTS += ['test/unit/xpcshell.ini']
  
  EXTRA_JS_MODULES += [
      'AboutNewTab.jsm',
@@ -506,13 +467,11 @@ index cdbe22eb4e..6a55905a90 100644
      'ContentClick.jsm',
      'ContentCrashHandlers.jsm',
      'ContentMetaHandler.jsm',
-     'ContentObservers.js',
 diff --git a/browser/modules/test/browser/browser.ini b/browser/modules/test/browser/browser.ini
 index 06a6db4f68..f4fb6ef55a 100644
 --- a/browser/modules/test/browser/browser.ini
 +++ b/browser/modules/test/browser/browser.ini
-@@ -34,5 +34,24 @@ support-files =
- [browser_taskbar_preview.js]
+@@ -35,4 +35,23 @@ support-files =
  skip-if = os != win || (os == win && bits == 64) # bug 1456807
  [browser_UnsubmittedCrashHandler.js]
  run-if = crashreporter
@@ -540,8 +499,7 @@ diff --git a/browser/themes/linux/browser.css b/browser/themes/linux/browser.css
 index a65564f877..7f47fc83c7 100644
 --- a/browser/themes/linux/browser.css
 +++ b/browser/themes/linux/browser.css
-@@ -507,10 +507,41 @@ notification[value="translation"] menulist > .menulist-dropmarker {
- 
+@@ -508,8 +508,39 @@ notification[value="translation"] menulist > .menulist-dropmarker {
  %include ../shared/customizableui/customizeMode.inc.css
  
  /* End customization mode */
@@ -581,13 +539,11 @@ index a65564f877..7f47fc83c7 100644
  
  #context-navigation > .menuitem-iconic > .menu-iconic-left {
    /* override toolkit/themes/linux/global/menu.css */
-   padding-inline-end: 0 !important;
 diff --git a/toolkit/components/telemetry/moz.build b/toolkit/components/telemetry/moz.build
 index 728912588a..a364939b40 100644
 --- a/toolkit/components/telemetry/moz.build
 +++ b/toolkit/components/telemetry/moz.build
-@@ -114,10 +114,11 @@ EXTRA_JS_MODULES += [
-     'app/TelemetrySend.jsm',
+@@ -115,8 +115,9 @@ EXTRA_JS_MODULES += [
      'app/TelemetryStorage.jsm',
      'app/TelemetryTimestamps.jsm',
      'app/TelemetryUtils.jsm',
@@ -597,7 +553,6 @@ index 728912588a..a364939b40 100644
      'pings/EcosystemTelemetry.jsm',
      'pings/EventPing.jsm',
      'pings/HealthPing.jsm',
-     'pings/ModulesPing.jsm',
 -- 
 2.23.0
 

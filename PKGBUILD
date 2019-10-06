@@ -2,7 +2,7 @@
 # based on ideas by Waterfox and firefox-kde-opensuse
 
 # enable gcc build
-_usegcc=1
+_usegcc=0
 
 # enable gtk3 wayland (experimental)
 _gtk3_wayland=0
@@ -15,32 +15,31 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=68.1.0esr
-_pkgver=68.1.0
-pkgrel=5
+pkgver=69.0.2
+#_pkgver=68.1.0
+pkgrel=0.3
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
-         'dbus-glib' 'hicolor-icon-theme'
-	 'libvpx' 'icu'  'libevent' 'nss>=3.28.3' 'nspr>=4.10.6' 'hunspell' 'hunspell-en_US'
-	 'sqlite' 'libnotify' 'ffmpeg' 'gtk3')
+         'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
+         'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3' 'kplasmafoxhelper'
+         'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent')
 
-makedepends=('unzip' 'zip' 'diffutils' 'python' 'yasm' 'mesa' 'imake'
-             'xorg-server-xvfb' 'libpulse' 'inetutils' 'autoconf2.13' 'rust'
-             'cargo' 'mercurial' 'llvm' 'clang'
-             'gtk2' 'nodejs' 'cbindgen' 'nasm')
+makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
+			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
+			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2' 
+			 'nodejs' 'cbindgen' 'nasm')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 #conflicts=('firefox' 'firefox-kde')
-#_patchrev=840132a4a9b3
-_patchrev=8a3c73e74e65
-_pfdate=20191001
+_patchrev=9e4b30f05706
+_pfdate=20191006
 _cpus=$(nproc)
-options=('!emptydirs' '!makeflags')
+options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
@@ -58,11 +57,12 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         # Gecko/toolkit patchset
         mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-        unity-menubar-r2258.patch
+        no-relinking.patch
+        unity-menubar-r2271.patch
         pgo_fix_missing_kdejs.patch
+		2000_system_harfbuzz_support.patch
         2001_system_graphite2_support.patch
-        2000_system_harfbuzz_support.patch
-	2015_fix_cssparser.patch
+        7002_system_av1_support.patch
         # artwork
         about-background.png
         about-logo.png
@@ -75,23 +75,24 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('f56f5fa5a4744be0b9acf259cb991254d708a50b9a0a12d1d846ffa5a6c409ac'
+sha256sums=('2904ef954626d2a7f320670ccb7cb5d9060610f091c94190a6cbee14aa2cd82e'
             'SKIP'
-            'cf02e932ee0b5f52f3135a6c679b25346fce9ed03ff3bc2d096585f7c611c938'
+            '896913e7746d4773d0032a8e5de1255e3def805b2cfc923b59dc9dd530e6624b'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             '27adc95e19ff290e2576cd25b702005a576b93cbd52d36bde61c7644222bd577'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '42d97c38b85f0639588e15be614427a6d69f8c9b855363e7bfa3fc14fec8f7bf'
-            '6b66eb3889159c777f55d5e7d4d397679407e7ca8f2269d6289e6945fec67404'
-            'dd47e4fd81c088777e14dc6a08bf3a4aa8ac15f1022df3d22d48258f8dfdc31a'
+            '5c521b0341a64472e6be4f360d1a2f939016825ac6d9e5c1d2af4f936ca06099'
+            '3461cc5a196d53e427ec623836b632158ea410821031078764f7bedc31baa3ba'
+            'a0eaea0fcb02d9b2c24d35276cb03a0a1923b13391730a77f46452862d6e2cc0'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
-            '03684be59adac8ab83c4c5cad3156879983b6d1311555fcaa8476684730d94f8'
+            '2dc9d1aa5eb7798c89f46478f254ae61e4122b4d1956d6044426288627d8a014'
+            '2fd7261853ee2ed95ca6a68838de1e7cc18e01c7a56db9abcad4ac93867cedf7'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
-            '6abc616964cac17807509dbc1c1aa7e4234f6793c14bf884222c258a9da4d055'
-            'c8d7b19378e0ef15f9f9aefae95e4a7c024de88e78dc5bfc712c3bf5fe725ef1'
-            '54e49fc744f5ec940c4dc1c75d891f33683ff68f5b11e68e5d05d7108c50ad52'
+            'f4dec8eabd537805192114fa519297f42b1d85c48648a36d823d7bced9536ba5'
+            '88a8c2f813d10dad8e0e8b4453a6741ceca58174534fdfeb5480152c25b2f692'
+            '263e61385b24b3db8c8c3b35bedccc6fdffdad9891437671e92b9ed026d5b1a3'
             '84e4725ed246046a419a5cb005a0d681e3ea7e179a3c7cdb341a1149ab4761f9'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -106,19 +107,18 @@ sha256sums=('f56f5fa5a4744be0b9acf259cb991254d708a50b9a0a12d1d846ffa5a6c409ac'
             '7e2062a8df9e9e28c51ff6435872a688cff040fdfa38ef93bf92e52d676e6dbc'
             '0a646abac6405b2e5d3bd0f13dc003e0ed45e1ad5856079274eb2936fa6d321b'
             '7d544704f4acf50f437299ed4025e429a104758bc3af5007e933d67b00c1151b'
-            '22d33cd66a1e1a8ff2ae086de145490b22c8cc1cb748f0273462a70c563e0b91'
-)
+            '22d33cd66a1e1a8ff2ae086de145490b22c8cc1cb748f0273462a70c563e0b91')
 
 validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 if [[ $_usegcc == 1 ]] ; then
   source+=('pgo+lto-with-gcc.patch')
-  sha256sums+=('b2881efafbbdc434da3be96f006d5ade18f38731fe8461ee795d8f0d11a6541a')
+  sha256sums+=('7dd7c1f06fcca05ee27230be787092768c048379560a19d6b73935dd2891e6b3')
 fi
 
 prepare() {
   #cd mozilla-unified
-  cd firefox-${pkgver//esr}
+  cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
 
@@ -127,37 +127,46 @@ prepare() {
            >> .mozconfig
   fi
 
-  if [[ $_usegcc == 1 ]] ; then
-    if in_array ccache ${BUILDENV[*]} ; then
+  if in_array ccache ${BUILDENV[*]} ; then
       echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
-    fi
-    #echo "ac_add_options --disable-elf-hack" >> .mozconfig
+  fi
+  
+  if [[ $_usegcc == 1 ]] ; then
+    echo "ac_add_options --disable-elf-hack" >> .mozconfig
     echo "ac_add_options --enable-gold" >> .mozconfig
     echo "ac_add_options --enable-linker=gold" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
   else
     echo "ac_add_options --enable-linker=lld" >> .mozconfig
-    echo "ac_add_options --enable-clang-plugin" >> .mozconfig
   fi
 
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
 
+  # Arch patches
   patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
+  patch -Np1 -i "../no-relinking.patch"
+  
+  # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i "../mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "../mozilla-kde-$_patchrev.patch"
   patch -Np1 -i "../firefox-kde-$_patchrev.patch"
+  
   # add globalmenu support
-  patch -Np1 -i "../unity-menubar-r2258.patch"
+  patch -Np1 -i "../unity-menubar-r2271.patch"
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i "../pgo_fix_missing_kdejs.patch"
-
+  
+  # use more system libs
   patch -Np1 -i "../2000_system_harfbuzz_support.patch"
   patch -Np1 -i "../2001_system_graphite2_support.patch"
-  patch -Np1 -i "../2015_fix_cssparser.patch"
+  patch -Np1 -i "../7002_system_av1_support.patch"
 
+  # Plasmafox patches
   patch -Np1 -i "../plasmafox-${_pfdate}.patch"
+  
+  # Artwork
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
   cp "$srcdir/about-logo.png" ./browser/branding/unofficial/content/
@@ -170,36 +179,81 @@ prepare() {
 
 build() {
   #cd mozilla-unified
-  cd firefox-${pkgver//esr}
+  cd firefox-${pkgver}
   #export MOZ_SOURCE_REPO="$_repo"
   export MOZ_NOSPAM=1
-  export MOZ_PGO=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
 
   if [[ $_usegcc == 1 ]] ; then
+	export MOZ_PGO=1
     export CC=gcc
     export CXX=g++
     export AR=gcc-ar
     export NM=gcc-nm
     export RANLIB=gcc-ranlib
+  
+	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
+	#./mach build
+	./mach buildsymbols
+	#./mach resource-usage
+  
   else
-    export CC=clang
-    export CXX=clang++
+    export CC='clang --target=x86_64-unknown-linux-gnu'
+    export CXX='clang++ --target=x86_64-unknown-linux-gnu'
     export AR=llvm-ar
     export NM=llvm-nm
     export RANLIB=llvm-ranlib
+    
+	# -fno-plt with cross-LTO causes obscure LLVM errors
+	# LLVM ERROR: Function Import: link error
+	CFLAGS="${CFLAGS/-fno-plt/}"
+	CXXFLAGS="${CXXFLAGS/-fno-plt/}"
+
+	# Do 3-tier PGO
+	msg2 "Building instrumented browser..."
+	cat >.mozconfig ../mozconfig - <<END
+ac_add_options --enable-profile-generate
+END
+	./mach build
+
+	msg2 "Profiling instrumented browser..."
+	./mach package
+	LLVM_PROFDATA=llvm-profdata \
+		JARLOG_FILE="$PWD/jarlog" \
+		xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
+		./mach python build/pgo/profileserver.py
+
+	if ! compgen -G '*.profraw' >&2; then
+		error "No profile data produced."
+		return 1
+	fi
+
+	if [[ ! -s jarlog ]]; then
+		error "No jar log produced."
+		return 1
+	fi
+
+	msg2 "Removing instrumented browser..."
+	./mach clobber
+
+	msg2 "Building optimized browser..."
+	cat >.mozconfig ../mozconfig - <<END
+ac_add_options --enable-lto=cross
+ac_add_options --enable-profile-use
+ac_add_options --with-pgo-profile-path=${PWD@Q}
+ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
+END
+	./mach build
+
+	msg2 "Building symbol archive..."
+	./mach buildsymbols
   fi
-  
-  xvfb-run -a -n 97 -s "-screen 0 1600x1200x24" ./mach build
-  #./mach build
-  ./mach buildsymbols
-  #./mach resource-usage
 }
 
 package() {
   #cd mozilla-unified
-  cd firefox-${pkgver//esr}
+  cd firefox-${pkgver}
   
   [[ "$CARCH" == "i686" ]] && cp "$srcdir/kde.js" obj-i686-pc-linux-gnu/dist/bin/defaults/pref
   [[ "$CARCH" == "x86_64" ]] && cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
@@ -221,7 +275,8 @@ version=1.0
 about=Plasmafox for Manjaro
 
 [Preferences]
-app.distributor=plasmafox
+app.distributor=$pkgname
+app.distributor.channel=$pkgname
 END
 
   for i in 16 22 24 32 48 64 128 256; do

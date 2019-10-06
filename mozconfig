@@ -4,8 +4,6 @@ ac_add_options --prefix=/usr
 ac_add_options --enable-hardening
 ac_add_options --enable-optimize
 ac_add_options --enable-rust-simd
-ac_add_options --enable-lto
-
 ac_add_options --enable-release
 # ac_add_options --disable-official-branding
 ac_add_options --with-branding=browser/branding/unofficial
@@ -42,6 +40,7 @@ ac_add_options --with-system-bz2
 ac_add_options --with-system-libvpx
 ac_add_options --with-system-harfbuzz
 ac_add_options --with-system-graphite2
+ac_add_options --with-system-av1
 # ac_add_options --enable-system-hunspell
 ac_add_options --enable-system-sqlite
 ac_add_options --enable-system-ffi
@@ -69,7 +68,7 @@ ac_add_options --disable-debug-js-modules
 ac_add_options --disable-webrtc
 ac_add_options --disable-cdp
 ac_add_options --disable-trace-logging
-ac_add_options --disable-rust-tests
+# ac_add_options --disable-rust-tests
 ac_add_options --disable-ipdl-tests
 ac_add_options --disable-necko-wifi
 # ac_add_options --disable-webspeech
