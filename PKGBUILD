@@ -16,8 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=69.0.2
-#_pkgver=68.1.0
-pkgrel=0.3
+pkgrel=0.4
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -83,7 +82,7 @@ sha256sums=('2904ef954626d2a7f320670ccb7cb5d9060610f091c94190a6cbee14aa2cd82e'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '5c521b0341a64472e6be4f360d1a2f939016825ac6d9e5c1d2af4f936ca06099'
+            'ddae435a5b9a757a21edb9c3da5d8711b74699642ef0dc7bc8e1f12f4c87e864'
             '3461cc5a196d53e427ec623836b632158ea410821031078764f7bedc31baa3ba'
             'a0eaea0fcb02d9b2c24d35276cb03a0a1923b13391730a77f46452862d6e2cc0'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
@@ -130,7 +129,7 @@ prepare() {
   if in_array ccache ${BUILDENV[*]} ; then
       echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
   fi
-  
+
   if [[ $_usegcc == 1 ]] ; then
     echo "ac_add_options --disable-elf-hack" >> .mozconfig
     echo "ac_add_options --enable-gold" >> .mozconfig
@@ -145,19 +144,19 @@ prepare() {
   # Arch patches
   patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
   patch -Np1 -i "../no-relinking.patch"
-  
+
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i "../mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "../mozilla-kde-$_patchrev.patch"
   patch -Np1 -i "../firefox-kde-$_patchrev.patch"
-  
+
   # add globalmenu support
   patch -Np1 -i "../unity-menubar-r2271.patch"
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i "../pgo_fix_missing_kdejs.patch"
-  
+
   # use more system libs
   patch -Np1 -i "../2000_system_harfbuzz_support.patch"
   patch -Np1 -i "../2001_system_graphite2_support.patch"
@@ -165,7 +164,7 @@ prepare() {
 
   # Plasmafox patches
   patch -Np1 -i "../plasmafox-${_pfdate}.patch"
-  
+
   # Artwork
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
@@ -187,24 +186,23 @@ build() {
 
   if [[ $_usegcc == 1 ]] ; then
 	export MOZ_PGO=1
-    export CC=gcc
-    export CXX=g++
-    export AR=gcc-ar
-    export NM=gcc-nm
-    export RANLIB=gcc-ranlib
-  
+	export CC=gcc
+	export CXX=g++
+	export AR=gcc-ar
+	export NM=gcc-nm
+	export RANLIB=gcc-ranlib
+
 	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
-	#./mach build
 	./mach buildsymbols
 	#./mach resource-usage
-  
+
   else
-    export CC='clang --target=x86_64-unknown-linux-gnu'
-    export CXX='clang++ --target=x86_64-unknown-linux-gnu'
-    export AR=llvm-ar
-    export NM=llvm-nm
-    export RANLIB=llvm-ranlib
-    
+	export CC='clang --target=x86_64-unknown-linux-gnu'
+	export CXX='clang++ --target=x86_64-unknown-linux-gnu'
+	export AR=llvm-ar
+	export NM=llvm-nm
+	export RANLIB=llvm-ranlib
+
 	# -fno-plt with cross-LTO causes obscure LLVM errors
 	# LLVM ERROR: Function Import: link error
 	CFLAGS="${CFLAGS/-fno-plt/}"
@@ -276,7 +274,6 @@ about=Plasmafox for Manjaro
 
 [Preferences]
 app.distributor=$pkgname
-app.distributor.channel=$pkgname
 END
 
   for i in 16 22 24 32 48 64 128 256; do

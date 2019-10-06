@@ -1,0 +1,54 @@
+From 803b880949c7a78488e5ed3cf16695739aeded26 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sun, 6 Oct 2019 11:37:50 +0200
+Subject: [PATCH] set DDG as default search engine
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/app/profile/firefox.js                 | 2 ++
+ browser/components/search/extensions/list.json | 8 ++++----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
+index 3eb20b6f24..63fd1b0d78 100644
+--- a/browser/app/profile/firefox.js
++++ b/browser/app/profile/firefox.js
+@@ -1898,4 +1898,6 @@ pref("browser.newtabpage.activity-stream.section.highlights.includePocket", fals
+ pref("browser.newtabpage.activity-stream.showSponsored", false);
+ pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
+ pref("network.predictor.enable-prefetch", false);
+ pref("devtools.debugger.remote-enabled", false);
++// This is probably not needed
++pref("browser.search.defaultenginename", "DuckDuckGo");
+diff --git a/browser/components/search/extensions/list.json b/browser/components/search/extensions/list.json
+index d023e0a0e5..8f8936ece5 100644
+--- a/browser/components/search/extensions/list.json
++++ b/browser/components/search/extensions/list.json
+@@ -1,10 +1,10 @@
+ {
+   "default": {
+-    "searchDefault": "Google",
+-    "searchOrder": ["Google", "Bing"],
++    "searchDefault": "DuckDuckGo",
++    "searchOrder": ["DuckDuckGo", "Ecosia"],
+     "visibleDefaultEngines": [
+-      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
++      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "ecosia", "twitter", "wikipedia"
+     ]
+   },
+   "regionOverrides": {
+     "US": {
+@@ -53,9 +53,9 @@
+   "locales": {
+     "en-US": {
+       "default": {
+         "visibleDefaultEngines": [
+-          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
++          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "ecosia", "twitter", "wikipedia"
+         ]
+       },
+       "KZ": {
+         "visibleDefaultEngines": [
+-- 
+2.23.0
+
