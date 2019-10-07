@@ -2,7 +2,7 @@
 
 **Main differences between Plasmafox and Firefox:**
  - KDE integration
- - Compiled with GCC instead of Clang, for a smaller package size
+ - Compiled with GCC (before 69.0.2). Now (starting with 69.0.2) built with Clang.
  - Uses many system libraries (e.g. libvpx, nspr, icu, zlib etc.)
  - Some Mozilla services like Pocket, Telemetry, and Sync disabled to enhance privacy
  - Removed most of trademark-restricted marks like the name "Firefox" and the icons
