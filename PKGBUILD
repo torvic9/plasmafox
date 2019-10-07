@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=69.0.2
-pkgrel=0.4
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -34,7 +34,7 @@ makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
-#conflicts=('firefox' 'firefox-kde')
+conflicts=('plasmafox-esr')
 _patchrev=9e4b30f05706
 _pfdate=20191006
 _cpus=$(nproc)
