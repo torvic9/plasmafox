@@ -15,7 +15,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=69.0.2
+pkgver=69.0.3
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -23,7 +23,7 @@ license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
-         'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3' 'kplasmafoxhelper'
+         'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3'
          'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent')
 
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
@@ -74,9 +74,9 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('2904ef954626d2a7f320670ccb7cb5d9060610f091c94190a6cbee14aa2cd82e'
+sha256sums=('7527947a876c1734b8b2339f19b8ff8da6f4e4d06351b44940cb48d3509bb891'
             'SKIP'
-            '896913e7746d4773d0032a8e5de1255e3def805b2cfc923b59dc9dd530e6624b'
+            'e18ef90bb102bfb3f402e6eae91387df9904f2b0a74a02ca6d78f17d1cc31495'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             '27adc95e19ff290e2576cd25b702005a576b93cbd52d36bde61c7644222bd577'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -131,14 +131,11 @@ prepare() {
   fi
 
   if [[ $_usegcc == 1 ]] ; then
-    echo "ac_add_options --disable-elf-hack" >> .mozconfig
     echo "ac_add_options --enable-gold" >> .mozconfig
     echo "ac_add_options --enable-linker=gold" >> .mozconfig
     patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
-  else
-    echo "ac_add_options --enable-linker=lld" >> .mozconfig
   fi
-
+  
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
 
   # Arch patches
