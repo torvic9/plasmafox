@@ -72,6 +72,8 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# additions
 	plasmafox.profile
 	plasmafox.psd
+	#GCC support patch
+	pgo+lto-with-gcc.patch
 )
 install=plasmafox.install
 sha256sums=('7527947a876c1734b8b2339f19b8ff8da6f4e4d06351b44940cb48d3509bb891'
@@ -106,14 +108,10 @@ sha256sums=('7527947a876c1734b8b2339f19b8ff8da6f4e4d06351b44940cb48d3509bb891'
             '7e2062a8df9e9e28c51ff6435872a688cff040fdfa38ef93bf92e52d676e6dbc'
             '0a646abac6405b2e5d3bd0f13dc003e0ed45e1ad5856079274eb2936fa6d321b'
             '7d544704f4acf50f437299ed4025e429a104758bc3af5007e933d67b00c1151b'
-            '22d33cd66a1e1a8ff2ae086de145490b22c8cc1cb748f0273462a70c563e0b91')
+            '22d33cd66a1e1a8ff2ae086de145490b22c8cc1cb748f0273462a70c563e0b91'
+	    '7dd7c1f06fcca05ee27230be787092768c048379560a19d6b73935dd2891e6b3')
 
 validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
-
-if [[ $_usegcc == 1 ]] ; then
-  source+=('pgo+lto-with-gcc.patch')
-  sha256sums+=('7dd7c1f06fcca05ee27230be787092768c048379560a19d6b73935dd2891e6b3')
-fi
 
 prepare() {
   #cd mozilla-unified
