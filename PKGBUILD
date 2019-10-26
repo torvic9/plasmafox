@@ -2,7 +2,7 @@
 # based on ideas by Waterfox and firefox-kde-opensuse
 
 # enable gcc build
-_usegcc=0
+_usegcc=1
 
 # enable gtk3 wayland (experimental)
 _gtk3_wayland=0
@@ -15,13 +15,13 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=69.0.3
+pkgver=70.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
-depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
+depends=('libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
          'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3'
          'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent')
@@ -29,14 +29,14 @@ depends=('mozilla-common' 'libxt' 'startup-notification' 'mime-types'
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
 			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2' 
-			 'nodejs' 'cbindgen' 'nasm')
+			 'nodejs' 'cbindgen' 'nasm' 'sccache')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
-_patchrev=9e4b30f05706
-_pfdate=20191006
+_patchrev=8a4f5aea2475
+_pfdate=20191026
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -56,10 +56,11 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         # Gecko/toolkit patchset
         mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
+        mozilla-fix-top-level-asm-$_patchrev.patch::$_patchurl/mozilla-fix-top-level-asm.patch
         no-relinking.patch
-        unity-menubar-r2271.patch
+        unity-menubar-r2278.patch
         pgo_fix_missing_kdejs.patch
-		2000_system_harfbuzz_support.patch
+	2000_system_harfbuzz_support.patch
         2001_system_graphite2_support.patch
         7002_system_av1_support.patch
         # artwork
@@ -74,24 +75,25 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('7527947a876c1734b8b2339f19b8ff8da6f4e4d06351b44940cb48d3509bb891'
+sha256sums=('cd9f2902753831c07c4b2ee64f7826f33ca1123add6440dc34abe3ff173a0cc6'
             'SKIP'
-            'e18ef90bb102bfb3f402e6eae91387df9904f2b0a74a02ca6d78f17d1cc31495'
+            '97f63dd8761913eec0bca9246f81672140a92ef92a50809fc00a6f9c145eb904'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             '27adc95e19ff290e2576cd25b702005a576b93cbd52d36bde61c7644222bd577'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            'ddae435a5b9a757a21edb9c3da5d8711b74699642ef0dc7bc8e1f12f4c87e864'
-            '3461cc5a196d53e427ec623836b632158ea410821031078764f7bedc31baa3ba'
-            'a0eaea0fcb02d9b2c24d35276cb03a0a1923b13391730a77f46452862d6e2cc0'
+            '215afbe17e867283c95817bbbf5b3f3f0808c7b2f3abde04a6c4fe8e7fcf8910'
+            'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
+            '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
+            '97a74c2852989229bfdd74ce6aa0982c51252e6b9283eb64b5c6812549dd5612'
             '2dc9d1aa5eb7798c89f46478f254ae61e4122b4d1956d6044426288627d8a014'
-            '2fd7261853ee2ed95ca6a68838de1e7cc18e01c7a56db9abcad4ac93867cedf7'
+            'f07798006ad7bb065fb36ec087514fbfd5cef2111e24ae58d64669c45746fbda'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
-            'f4dec8eabd537805192114fa519297f42b1d85c48648a36d823d7bced9536ba5'
+            '4b1aca5f9bbca741bc052420677440ec6ef42469007f868823b836576338ad88'
             '88a8c2f813d10dad8e0e8b4453a6741ceca58174534fdfeb5480152c25b2f692'
-            '263e61385b24b3db8c8c3b35bedccc6fdffdad9891437671e92b9ed026d5b1a3'
+            '802e4c741ba503535a4df7bf03d21837d1c8e1d5f5c928028f869e23d202c1c0'
             '84e4725ed246046a419a5cb005a0d681e3ea7e179a3c7cdb341a1149ab4761f9'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -126,14 +128,18 @@ prepare() {
            >> .mozconfig
   fi
 
-  if in_array ccache ${BUILDENV[*]} ; then
-      echo "ac_add_options --with-ccache=/usr/bin/sccache" >> .mozconfig
-  fi
+  #if in_array ccache ${BUILDENV[*]} ; then
+  #echo "ac_add_options --with-ccache" >> .mozconfig
+  #echo "mk_add_options 'export RUSTC_WRAPPER=sccache'" >> .mozconfig
+  #echo "mk_add_options 'export SCCACHE_VERBOSE_STATS=1'" >> .mozconfig
+  #fi
 
   if [[ $_usegcc == 1 ]] ; then
     echo "ac_add_options --enable-gold" >> .mozconfig
     echo "ac_add_options --enable-linker=gold" >> .mozconfig
-    patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
+    #patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
+  else
+    echo "ac_add_options --enable-linker=lld" >> .mozconfig
   fi
   
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
@@ -141,25 +147,29 @@ prepare() {
   # Arch patches
   patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
   patch -Np1 -i "../no-relinking.patch"
-
+  
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i "../mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "../mozilla-kde-$_patchrev.patch"
   patch -Np1 -i "../firefox-kde-$_patchrev.patch"
+  #patch -Np1 -i "../mozilla-fix-top-level-asm-$_patchrev.patch"
 
   # add globalmenu support
-  patch -Np1 -i "../unity-menubar-r2271.patch"
+  msg "Ubuntu global menu"
+  patch -Np1 -i "../unity-menubar-r2278.patch"
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i "../pgo_fix_missing_kdejs.patch"
 
   # use more system libs
+  msg "Add system harfbuzz/graphite2/av1 support"
   patch -Np1 -i "../2000_system_harfbuzz_support.patch"
   patch -Np1 -i "../2001_system_graphite2_support.patch"
   patch -Np1 -i "../7002_system_av1_support.patch"
 
   # Plasmafox patches
+  msg "Plasmafox patches"
   patch -Np1 -i "../plasmafox-${_pfdate}.patch"
 
   # Artwork
@@ -199,6 +209,7 @@ build() {
 	export AR=llvm-ar
 	export NM=llvm-nm
 	export RANLIB=llvm-ranlib
+	#export RUSTC_WRAPPER=sccache
 
 	# -fno-plt with cross-LTO causes obscure LLVM errors
 	# LLVM ERROR: Function Import: link error
@@ -208,7 +219,7 @@ build() {
 	# Do 3-tier PGO
 	msg2 "Building instrumented browser..."
 	cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-profile-generate
+ac_add_options --enable-profile-generate=cross
 END
 	./mach build
 
@@ -235,7 +246,7 @@ END
 	msg2 "Building optimized browser..."
 	cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross
-ac_add_options --enable-profile-use
+ac_add_options --enable-profile-use=cross
 ac_add_options --with-pgo-profile-path=${PWD@Q}
 ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
@@ -255,15 +266,15 @@ package() {
 
   DESTDIR="$pkgdir" ./mach install
 
-  install -Dm644 "$srcdir/vendor.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/vendor.js"
-  install -Dm644 "$srcdir/kde.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/kde.js"
+  install -Dvm644 "$srcdir/vendor.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/vendor.js"
+  install -Dvm644 "$srcdir/kde.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/kde.js"
 
-  install -Dm644 "$srcdir/user.js" "$pkgdir/usr/lib/plasmafox/distribution/user.js"
-  install -Dm644 "$srcdir/plasmafox.profile" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.firejail-profile"
-  install -Dm644 "$srcdir/plasmafox.psd" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.psd"
+  install -Dvm644 "$srcdir/user.js" "$pkgdir/usr/lib/plasmafox/distribution/user.js"
+  install -Dvm644 "$srcdir/plasmafox.profile" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.firejail-profile"
+  install -Dvm644 "$srcdir/plasmafox.psd" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.psd"
 
   _distini="$pkgdir/usr/lib/plasmafox/distribution/distribution.ini"
-  install -Dm644 /dev/stdin "$_distini" <<END
+  install -Dvm644 /dev/stdin "$_distini" <<END
 [Global]
 id=plasmafox
 version=1.0
@@ -274,18 +285,33 @@ app.distributor=$pkgname
 END
 
   for i in 16 22 24 32 48 64 128 256; do
-      install -Dm644 browser/branding/unofficial/default$i.png \
+      install -Dvm644 browser/branding/unofficial/default$i.png \
         "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/plasmafox.png"
   done
 
-  install -Dm644 browser/branding/unofficial/content/about-logo.png \
+  install -Dvm644 browser/branding/unofficial/content/about-logo.png \
     "$pkgdir/usr/share/icons/hicolor/192x192/apps/plasmafox.png"
   #install -Dm644 browser/branding/official/content/about-logo@2x.png \
   #  "$pkgdir/usr/share/icons/hicolor/384x384/apps/firefox.png"
 
   install -Dm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
 
-  #workaround for now
-  #https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-  ln -sf plasmafox "$pkgdir/usr/lib/plasmafox/plasmafox-bin"
+  # Install a wrapper to avoid confusion about binary path
+  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$pkgname" <<END
+#!/bin/sh
+exec /usr/lib/$pkgname/plasmafox "\$@"
+END
+
+  # Replace duplicate binary with wrapper
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
+  ln -srfv "$pkgdir/usr/bin/$pkgname" "$pkgdir/usr/lib/$pkgname/plasmafox-bin"
+
+  # Use system certificates
+  local nssckbi="$pkgdir/usr/lib/$pkgname/libnssckbi.so"
+  if [[ -e $nssckbi ]]; then
+    ln -srfv "$pkgdir/usr/lib/libnssckbi.so" "$nssckbi"
+  fi
+
+  find . -name '*crashreporter-symbols-full.zip' -exec \
+	cp -fvt "$startdir" {} +
 }

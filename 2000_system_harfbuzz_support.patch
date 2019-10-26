@@ -47,13 +47,13 @@ diff --git a/dom/base/moz.build b/dom/base/moz.build
 +    CXXFLAGS += CONFIG['MOZ_HARFBUZZ_CFLAGS']
 +
  GENERATED_FILES += [
-     'PropertyUseCounterMap.inc',
      'UseCounterList.h',
  ]
- 
- countermap = GENERATED_FILES['PropertyUseCounterMap.inc']
- countermap.script = 'gen-usecounters.py:property_map'
+
+ counterlist = GENERATED_FILES['UseCounterList.h']
+ counterlist.script = 'gen-usecounters.py:use_counter_list'
  countermap.inputs = ['UseCounters.conf']
+ 
 diff --git a/gfx/moz.build b/gfx/moz.build
 --- a/gfx/moz.build
 +++ b/gfx/moz.build
@@ -102,11 +102,11 @@ diff --git a/gfx/skia/generate_mozbuild.py b/gfx/skia/generate_mozbuild.py
 +if CONFIG['MOZ_SYSTEM_HARFBUZZ']:
 +    CXXFLAGS += CONFIG['MOZ_HARFBUZZ_CFLAGS']
 +
- if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk3', 'android'):
+ if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk', 'android'):
      CXXFLAGS += CONFIG['MOZ_CAIRO_CFLAGS']
      CXXFLAGS += CONFIG['CAIRO_FT_CFLAGS']
  
- if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk3':
+ if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
      CXXFLAGS += CONFIG['MOZ_PANGO_CFLAGS']
  
  if CONFIG['MOZ_ENABLE_SKIA_PDF_SFNTLY']:
@@ -125,11 +125,11 @@ diff --git a/gfx/skia/moz.build b/gfx/skia/moz.build
 +if CONFIG['MOZ_SYSTEM_HARFBUZZ']:
 +    CXXFLAGS += CONFIG['MOZ_HARFBUZZ_CFLAGS']
 +
- if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk3', 'android'):
+ if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk', 'android'):
      CXXFLAGS += CONFIG['MOZ_CAIRO_CFLAGS']
      CXXFLAGS += CONFIG['CAIRO_FT_CFLAGS']
  
- if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk3':
+ if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
      CXXFLAGS += CONFIG['MOZ_PANGO_CFLAGS']
  
  if CONFIG['MOZ_ENABLE_SKIA_PDF_SFNTLY']:

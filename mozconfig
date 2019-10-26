@@ -69,7 +69,7 @@ ac_add_options --disable-debug-js-modules
 ac_add_options --disable-webrtc
 ac_add_options --disable-cdp
 ac_add_options --disable-trace-logging
-# ac_add_options --disable-rust-tests
+ac_add_options --disable-rust-tests
 ac_add_options --disable-ipdl-tests
 ac_add_options --disable-necko-wifi
 # ac_add_options --disable-webspeech

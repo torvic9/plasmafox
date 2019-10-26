@@ -32,13 +32,13 @@ diff --git a/config/external/moz.build b/config/external/moz.build
 diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
 --- a/config/system-headers.mozbuild
 +++ b/config/system-headers.mozbuild
-@@ -1311,16 +1311,24 @@ if CONFIG['MOZ_ENABLE_CONTENTMANAGER']:
+@@ -1303,16 +1303,24 @@
+         'sys/event.h',
+     ]
+ 
+ if CONFIG['MOZ_ENABLE_LIBPROXY']:
      system_headers += [
-         'QtSparql/qsparqlconnection.h',
-         'QtSparql/qsparqlquery.h',
-         'QtSparql/qsparqlresult.h',
-         'SelectMultipleContentItemsPage.h',
-         'SelectSingleContentItemPage.h',
+         'proxy.h',
      ]
  
 +if CONFIG['MOZ_SYSTEM_AV1']:

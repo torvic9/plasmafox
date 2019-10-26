@@ -1,6 +1,6 @@
-From 34d35b10ab39d99816a33cd349ca714c52b822c8 Mon Sep 17 00:00:00 2001
+From 844f618097aa93b1bf5aece32bd039dda05fb7f7 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 29 Sep 2019 20:20:16 +0200
+Date: Sat, 26 Oct 2019 13:41:11 +0200
 Subject: [PATCH] branding and icons
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -12,17 +12,18 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  browser/branding/unofficial/locales/en-US/brand.dtd  | 12 ++++++------
  browser/branding/unofficial/locales/en-US/brand.ftl  | 12 ++++++------
  .../unofficial/locales/en-US/brand.properties        | 10 +++++-----
- browser/branding/unofficial/pref/firefox-branding.js |  8 ++++----
+ browser/branding/unofficial/pref/firefox-branding.js |  6 +++---
  browser/installer/package-manifest.in                |  3 +++
  browser/locales/en-US/browser/aboutDialog.ftl        |  2 +-
  .../shared/privatebrowsing/aboutPrivateBrowsing.css  |  2 +-
- 11 files changed, 36 insertions(+), 29 deletions(-)
+ 11 files changed, 35 insertions(+), 28 deletions(-)
 
 diff --git a/browser/base/content/aboutDialog.xul b/browser/base/content/aboutDialog.xul
 index 66733ffc03..5b29566c98 100644
 --- a/browser/base/content/aboutDialog.xul
 +++ b/browser/base/content/aboutDialog.xul
-@@ -127,19 +127,19 @@
+@@ -126,21 +126,21 @@
+           </description>
  #endif
            <vbox id="experimental" hidden="true">
              <description class="text-blurb" id="warningDesc" data-l10n-id="warningDesc-version"></description>
@@ -46,8 +47,9 @@ index 66733ffc03..5b29566c98 100644
          </vbox>
        </vbox>
      </hbox>
+     <vbox id="bottomBox">
 diff --git a/browser/base/content/overrides/app-license.html b/browser/base/content/overrides/app-license.html
-index e7a158c792..ca394bcefe 100644
+index e7a158c792..2730e9af0c 100644
 --- a/browser/base/content/overrides/app-license.html
 +++ b/browser/base/content/overrides/app-license.html
 @@ -1,6 +1,6 @@
@@ -56,14 +58,15 @@ index e7a158c792..ca394bcefe 100644
     - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
      <p><b>Binaries</b> of this product have been made available to you by the
 -    <a href="http://www.mozilla.org/">Mozilla Project</a> under the Mozilla
-+    <a href="http://github.com/torvic9/plasmafox">Plasmafox Project</a> under the Mozilla
++    <a href="https://github.com/torvic9/plasmafox">Plasmafox Project</a> under the Mozilla
      Public License 2.0 (MPL). <a href="about:rights">Know your rights</a>.</p>
 diff --git a/browser/branding/branding-common.mozbuild b/browser/branding/branding-common.mozbuild
-index 78541ab5f5..fd7d5a5b3c 100644
+index 908553b8b9..9fb2702eb2 100644
 --- a/browser/branding/branding-common.mozbuild
 +++ b/browser/branding/branding-common.mozbuild
-@@ -26,8 +26,11 @@ def FirefoxBranding():
-     elif 'gtk' in CONFIG['MOZ_WIDGET_TOOLKIT']:
+@@ -25,9 +25,12 @@ def FirefoxBranding():
+         ]
+     elif CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
          FINAL_TARGET_FILES.chrome.icons.default += [
              'default128.png',
              'default16.png',
@@ -114,7 +117,8 @@ diff --git a/browser/branding/unofficial/locales/en-US/brand.ftl b/browser/brand
 index ef268375fe..cb9ed00d1c 100644
 --- a/browser/branding/unofficial/locales/en-US/brand.ftl
 +++ b/browser/branding/unofficial/locales/en-US/brand.ftl
-@@ -11,12 +11,12 @@
+@@ -10,13 +10,13 @@
+ ## - Transliterated.
  ## - Translated.
  ##
  ## Reference: https://www.mozilla.org/styleguide/communications/translation/
@@ -158,17 +162,16 @@ index 7c86db3f43..e7dfa02951 100644
  
  syncBrandShortName=Sync
 diff --git a/browser/branding/unofficial/pref/firefox-branding.js b/browser/branding/unofficial/pref/firefox-branding.js
-index 038f4565c0..1c04a645ad 100644
+index 3f907f1b31..969f39dd9e 100644
 --- a/browser/branding/unofficial/pref/firefox-branding.js
 +++ b/browser/branding/unofficial/pref/firefox-branding.js
-@@ -1,21 +1,21 @@
- /* This Source Code Form is subject to the terms of the Mozilla Public
-  * License, v. 2.0. If a copy of the MPL was not distributed with this
+@@ -3,22 +3,22 @@
   * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
  
--pref("startup.homepage_override_url", "");
+ // This file contains branding-specific prefs.
+ 
+ pref("startup.homepage_override_url", "");
 -pref("startup.homepage_welcome_url", "");
-+pref("startup.homepage_override_url", "https://github.com/torvic9/plasmafox");
 +pref("startup.homepage_welcome_url", "https://github.com/torvic9/plasmafox");
  pref("startup.homepage_welcome_url.additional", "");
  // The time interval between checks for a new version (in seconds)
@@ -187,11 +190,13 @@ index 038f4565c0..1c04a645ad 100644
  // The number of days a binary is permitted to be old
  // without checking for an update.  This assumes that
  // app.update.checkInstallTime is true.
+ pref("app.update.checkInstallTime.days", 2);
 diff --git a/browser/installer/package-manifest.in b/browser/installer/package-manifest.in
-index 675e0e2637..f902f1615c 100644
+index 387010bdbb..5a0d2ac327 100644
 --- a/browser/installer/package-manifest.in
 +++ b/browser/installer/package-manifest.in
-@@ -249,12 +249,15 @@
+@@ -249,14 +249,17 @@
+ @RESPATH@/chrome/toolkit.manifest
  @RESPATH@/chrome/recording.manifest
  @RESPATH@/chrome/recording/*
  #ifdef MOZ_GTK
@@ -207,11 +212,13 @@ index 675e0e2637..f902f1615c 100644
  @RESPATH@/browser/features/*
  
  ; [Webide Files]
+ @RESPATH@/browser/chrome/webide@JAREXT@
 diff --git a/browser/locales/en-US/browser/aboutDialog.ftl b/browser/locales/en-US/browser/aboutDialog.ftl
 index 5737302831..5b8aeb7a8f 100644
 --- a/browser/locales/en-US/browser/aboutDialog.ftl
 +++ b/browser/locales/en-US/browser/aboutDialog.ftl
-@@ -38,9 +38,9 @@ channel-description = You are currently on the <label data-l10n-name="current-ch
+@@ -37,11 +37,11 @@ channel-description = You are currently on the <label data-l10n-name="current-ch
+ 
  warningDesc-version = { -brand-short-name } is experimental and may be unstable.
  
  community-exp = <label data-l10n-name="community-exp-mozillaLink">{ -vendor-short-name }</label> is a <label data-l10n-name="community-exp-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
@@ -222,27 +229,30 @@ index 5737302831..5b8aeb7a8f 100644
  helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
  
  bottomLinks-license = Licensing Information
+ bottomLinks-rights = End-User Rights
 diff --git a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-index 9db1b0b268..b0aeb44521 100644
+index 06d19ac4d4..bc30b127b0 100644
 --- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
 +++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-@@ -123,9 +123,9 @@ a.button:hover:active {
-   width: 97px;
+@@ -39,11 +39,11 @@ p {
+   height: 96px;
+   width: 96px;
  }
  
  .wordmark {
 -  background: url("resource://activity-stream/data/content/assets/firefox-wordmark.svg") no-repeat center center;
 +  background: url("resource://activity-stream/data/content/assets/plasmafox-wordmark.svg") no-repeat center center;
-   background-size: 175px;
+   background-size: 172px;
    -moz-context-properties: fill;
    display: inline-block;
    fill: #fff;
+   height: 96px;
 -- 
 2.23.0
 
-From bf20676afd8fe7f9d956aabc53938c22edca4e2a Mon Sep 17 00:00:00 2001
+From 8052f6afb4b34ac26f2c0f8155f96cacbb943caf Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 29 Sep 2019 20:23:38 +0200
+Date: Sat, 26 Oct 2019 13:45:05 +0200
 Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -251,10 +261,11 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
-index 176837695f..5c2c7b4e83 100644
+index a692c6ed70..881a95346a 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
-@@ -482,11 +482,11 @@ nsresult nsHttpHandler::Init() {
+@@ -474,13 +474,13 @@ nsresult nsHttpHandler::Init() {
+   // monitor some preference changes
    Preferences::RegisterPrefixCallbacks(
        PREF_CHANGE_METHOD(nsHttpHandler::PrefsChanged), gCallbackPrefs, this);
    PrefsChanged(nullptr);
@@ -268,7 +279,9 @@ index 176837695f..5c2c7b4e83 100644
    nsCOMPtr<nsIXULAppInfo> appInfo =
        do_GetService("@mozilla.org/xre/app-info;1");
  
-@@ -937,20 +937,16 @@ void nsHttpHandler::BuildUserAgent() {
+   mAppName.AssignLiteral(MOZ_APP_UA_NAME);
+@@ -929,22 +929,18 @@ void nsHttpHandler::BuildUserAgent() {
+   mUserAgent += ' ';
    mUserAgent += mProduct;
    mUserAgent += '/';
    mUserAgent += mProductSub;
@@ -297,56 +310,26 @@ index 176837695f..5c2c7b4e83 100644
  }
  
  #ifdef XP_WIN
+ #  define OSCPU_WINDOWS "Windows NT %ld.%ld"
 -- 
 2.23.0
 
-From af17b3b364ab37c4f1f4f3770697f32cc2cd3838 Mon Sep 17 00:00:00 2001
+From dc18d3c5ad26e6f284d6ce0f9e278d5bed99f4ad Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 29 Sep 2019 20:29:55 +0200
-Subject: [PATCH] disable screenshots and health report
+Date: Sat, 26 Oct 2019 16:20:16 +0200
+Subject: [PATCH] disable healthreport and normandy
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
- browser/extensions/moz.build | 1 -
- browser/moz.build            | 4 ----
- browser/moz.configure        | 2 +-
- 3 files changed, 1 insertion(+), 6 deletions(-)
+ browser/moz.configure | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/browser/extensions/moz.build b/browser/extensions/moz.build
-index d82083e1c5..a53bc25e7e 100644
---- a/browser/extensions/moz.build
-+++ b/browser/extensions/moz.build
-@@ -7,8 +7,7 @@
- DIRS += [
-     'formautofill',
-     'fxmonitor',
-     'pdfjs',
--    'screenshots',
-     'webcompat',
-     'report-site-issue'
- ]
-diff --git a/browser/moz.build b/browser/moz.build
-index 15e11f45ff..b9c003e03c 100644
---- a/browser/moz.build
-+++ b/browser/moz.build
-@@ -28,12 +28,8 @@ DIRS += [
- 
- if CONFIG['MAKENSISU']:
-     DIRS += ['installer/windows']
- 
--TEST_DIRS += [
--    'tools/mozscreenshots',
--]
--
- DIST_SUBDIR = 'browser'
- export('DIST_SUBDIR')
- 
- # These defines are read in firefox.js
 diff --git a/browser/moz.configure b/browser/moz.configure
-index 3057a5040c..d125f3512c 100644
+index a251050feb..5aada7532e 100644
 --- a/browser/moz.configure
 +++ b/browser/moz.configure
-@@ -4,9 +4,9 @@
+@@ -3,15 +3,15 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
  
@@ -356,26 +339,86 @@ index 3057a5040c..d125f3512c 100644
  imply_option('MOZ_SERVICES_SYNC', True)
  imply_option('MOZ_DEDICATED_PROFILES', True)
  imply_option('MOZ_BLOCK_PROFILE_DOWNGRADE', True)
+-imply_option('MOZ_NORMANDY', True)
++imply_option('MOZ_NORMANDY', False)
+ 
+ with only_when(target_is_linux & compile_environment):
+     option(env='MOZ_NO_PIE_COMPAT',
+            help='Enable non-PIE wrapper')
  
 -- 
 2.23.0
 
-From 8d9d992ab64bc89a8b1dffce88335491d2225f6f Mon Sep 17 00:00:00 2001
+From c5d2795c13c769e845581ac0b31c70e0f4781f0a Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 6 Oct 2019 10:28:46 +0200
+Date: Sat, 26 Oct 2019 17:17:07 +0200
 Subject: [PATCH] preferences
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
- browser/app/profile/firefox.js | 114 +++++++++++++++++----------------
- modules/libpref/init/all.js    |  17 ++---
- 2 files changed, 68 insertions(+), 63 deletions(-)
+ browser/app/moz.build               |   2 +
+ browser/app/profile/firefox-adds.js |  28 ++++++
+ browser/app/profile/firefox.js      | 139 +++++++++++++++-------------
+ 3 files changed, 105 insertions(+), 64 deletions(-)
+ create mode 100644 browser/app/profile/firefox-adds.js
 
+diff --git a/browser/app/moz.build b/browser/app/moz.build
+index ff9c25912d..e6d7867ad1 100644
+--- a/browser/app/moz.build
++++ b/browser/app/moz.build
+@@ -29,10 +29,12 @@ with Files("Makefile.in"):
+ 
+ with Files("profile/channel-prefs.js"):
+     BUG_COMPONENT = ("Firefox", "Installer")
+ with Files("profile/firefox.js"):
+     BUG_COMPONENT = ("Firefox", "General")
++with Files("profile/firefox-adds.js"):
++    BUG_COMPONENT = ("Firefox", "General")
+ 
+ if CONFIG['MOZ_NO_PIE_COMPAT']:
+     GeckoProgram(CONFIG['MOZ_APP_NAME'] + '-bin')
+ 
+     DIRS += ['no-pie']
+diff --git a/browser/app/profile/firefox-adds.js b/browser/app/profile/firefox-adds.js
+new file mode 100644
+index 0000000000..ddee9a7ad7
+--- /dev/null
++++ b/browser/app/profile/firefox-adds.js
+@@ -0,0 +1,28 @@
++// Additions
++pref("privacy.resistFingerprinting", true);
++pref("devtools.onboarding.telemetry.logged", false);
++pref("toolkit.telemetry.unified", false);
++pref("toolkit.telemetry.enabled", false);
++pref("toolkit.telemetry.server", "");
++pref("datareporting.healthreport.infoURL", "");
++pref("datareporting.healthreport.uploadEnabled", false);
++pref("datareporting.policy.dataSubmissionEnabled", false);
++pref("media.peerconnection.enabled", false);
++pref("media.peerconnection.ice.default_address_only", true);
++pref("media.peerconnection.ice.no_host", true);
++pref("browser.newtabpage.enhanced", false);
++pref("browser.newtabpage.directory.source", "data:application/json,{}");
++pref("browser.newtabpage.activity-stream.feeds.telemetry", false);
++pref("browser.newtabpage.activity-stream.telemetry", false);
++pref("browser.newtabpage.activity-stream.telemetry.ping.endpoint", "");
++pref("browser.newtabpage.activity-stream.feeds.snippets", false);
++pref("browser.newtabpage.activity-stream.asrouter.providers.snippets", "");
++pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
++pref("browser.newtabpage.activity-stream.section.highlights.includePocket", false);
++pref("browser.newtabpage.activity-stream.showSponsored", false);
++pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
++pref("network.predictor.enable-prefetch", false);
++pref("devtools.debugger.remote-enabled", false); 
++pref("network.connectivity-service.enabled", false);
++pref("general.useragent.override.addons.mozilla.org", "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0");
++pref("browser.search.defaultenginename", "DuckDuckGo");
 diff --git a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
-index eaa71a07f5..3eb20b6f24 100644
+index e6caa38595..868a0983d2 100644
 --- a/browser/app/profile/firefox.js
 +++ b/browser/app/profile/firefox.js
-@@ -145,9 +145,9 @@ pref("app.update.auto", true);
+@@ -145,11 +145,11 @@ pref("app.update.elevation.promptMaxAttempts", 2);
+   pref("app.update.auto", true);
  #endif
  
  // If set to true, the Update Service will apply updates in the background
@@ -386,8 +429,10 @@ index eaa71a07f5..3eb20b6f24 100644
  // Update service URL:
  pref("app.update.url", "https://aus5.mozilla.org/update/6/%PRODUCT%/%VERSION%/%BUILD_ID%/%BUILD_TARGET%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%SYSTEM_CAPABILITIES%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml");
  // app.update.url.manual is in branding section
-@@ -188,9 +188,9 @@ pref("browser.eme.ui.enabled", true);
- pref("browser.eme.ui.enabled", false);
+ // app.update.url.details is in branding section
+@@ -188,11 +188,11 @@ pref("lightweightThemes.getMoreURL", "https://addons.mozilla.org/%LOCALE%/firefo
+ #else
+   pref("browser.eme.ui.enabled", false);
  #endif
  
  // UI tour experience.
@@ -397,7 +442,9 @@ index eaa71a07f5..3eb20b6f24 100644
  pref("browser.uitour.requireSecure", true);
  pref("browser.uitour.themeOrigin", "https://addons.mozilla.org/%LOCALE%/firefox/themes/");
  pref("browser.uitour.url", "https://www.mozilla.org/%LOCALE%/firefox/%VERSION%/tour/");
-@@ -308,9 +308,9 @@ pref("browser.urlbar.timesBeforeHidingSuggestionsHint", 4);
+ // How long to show a Hearbeat survey (two hours, in seconds)
+@@ -308,11 +308,11 @@ pref("browser.urlbar.timesBeforeHidingSuggestionsHint", 4);
+ // Limit the number of characters sent to the current search engine to fetch
  // suggestions.
  pref("browser.urlbar.maxCharsForSearchSuggestions", 20);
  
@@ -408,7 +455,9 @@ index eaa71a07f5..3eb20b6f24 100644
  pref("browser.urlbar.oneOffSearches", true);
  
  // If changed to true, copying the entire URL from the location bar will put the
-@@ -369,9 +369,9 @@ pref("browser.helperApps.deleteTempFileOnExit", true);
+ // human readable (percent-decoded) URL on the clipboard.
+@@ -369,11 +369,11 @@ pref("browser.download.autohideButton", true);
+ 
  // search engines URL
  pref("browser.search.searchEnginesURL",      "https://addons.mozilla.org/%LOCALE%/firefox/search-engines/");
  
@@ -419,29 +468,23 @@ index eaa71a07f5..3eb20b6f24 100644
  
  // search bar results always open in a new tab
  pref("browser.search.openintab", false);
-@@ -463,11 +463,9 @@ pref("browser.tabs.loadBookmarksInTabs", false);
+ 
+@@ -467,13 +467,11 @@ pref("browser.tabs.loadBookmarksInBackground", false);
+ pref("browser.tabs.loadBookmarksInTabs", false);
  pref("browser.tabs.tabClipWidth", 140);
  pref("browser.tabs.tabMinWidth", 76);
  // Initial titlebar state is managed by -moz-gtk-csd-hide-titlebar-by-default
  // on Linux.
 -#ifndef UNIX_BUT_NOT_MAC
- pref("browser.tabs.drawInTitlebar", true);
+-  pref("browser.tabs.drawInTitlebar", true);
 -#endif
++pref("browser.tabs.drawInTitlebar", true);
  
  // Offer additional drag space to the user. The drag space
  // will only be shown if browser.tabs.drawInTitlebar is true.
  pref("browser.tabs.extraDragSpace", false);
-@@ -763,20 +761,16 @@ pref("browser.download.hide_plugins_without_extensions", true);
- // Backspace and Shift+Backspace behavior
- // 0 goes Back/Forward
- // 1 act like PgUp/PgDown
- // 2 and other values, nothing
--#ifdef UNIX_BUT_NOT_MAC
--pref("browser.backspace_action", 2);
--#else
- pref("browser.backspace_action", 0);
--#endif
  
+@@ -781,11 +779,11 @@ pref("browser.download.hide_plugins_without_extensions", true);
  // this will automatically enable inline spellchecking (if it is available) for
  // editable elements in HTML
  // 0 = spellcheck nothing
@@ -453,7 +496,9 @@ index eaa71a07f5..3eb20b6f24 100644
  pref("browser.send_pings", false);
  
  // At startup, if the handler service notices that the version number in the
-@@ -968,19 +962,19 @@ pref("toolkit.datacollection.infoURL",
+ // region.properties file is newer than the version number in the handler
+@@ -975,21 +973,21 @@ pref("toolkit.datacollection.infoURL",
+ // URL for "Learn More" for Crash Reporter
  pref("toolkit.crashreporter.infoURL",
       "https://www.mozilla.org/legal/privacy/firefox.html#crash-reporter");
  
@@ -463,11 +508,11 @@ index eaa71a07f5..3eb20b6f24 100644
  
  // base url for web-based feedback pages
  #ifdef MOZ_DEV_EDITION
--pref("app.feedback.baseURL", "https://input.mozilla.org/%LOCALE%/feedback/firefoxdev/%VERSION%/");
-+pref("app.feedback.baseURL", "https://github.com/torvic9/plasmafox");
+-  pref("app.feedback.baseURL", "https://input.mozilla.org/%LOCALE%/feedback/firefoxdev/%VERSION%/");
++  pref("app.feedback.baseURL", "https://github.com/torvic9/plasmafox");
  #else
--pref("app.feedback.baseURL", "https://input.mozilla.org/%LOCALE%/feedback/%APP%/%VERSION%/");
-+pref("app.feedback.baseURL", "https://github.com/torvic9/plasmafox");
+-  pref("app.feedback.baseURL", "https://input.mozilla.org/%LOCALE%/feedback/%APP%/%VERSION%/");
++  pref("app.feedback.baseURL", "https://github.com/torvic9/plasmafox");
  #endif
  
  // base URL for web-based marketing pages
@@ -477,33 +522,38 @@ index eaa71a07f5..3eb20b6f24 100644
  // Name of alternate about: page for certificate errors (when undefined, defaults to about:neterror)
  pref("security.alternate_certificate_error_page", "certerror");
  
-@@ -1400,12 +1394,12 @@ pref("dom.debug.propagate_gesture_events_through_content", false);
+ pref("security.certerrors.recordEventTelemetry", true);
+@@ -1403,14 +1401,14 @@ pref("security.cert_pinning.enforcement_level", 1);
+ pref("dom.debug.propagate_gesture_events_through_content", false);
  
  // All the Geolocation preferences are here.
  //
  #ifndef EARLY_BETA_OR_EARLIER
--pref("geo.wifi.uri", "https://www.googleapis.com/geolocation/v1/geolocate?key=%GOOGLE_LOCATION_SERVICE_API_KEY%");
-+pref("geo.wifi.uri", "");
+-  pref("geo.wifi.uri", "https://www.googleapis.com/geolocation/v1/geolocate?key=%GOOGLE_LOCATION_SERVICE_API_KEY%");
++  pref("geo.wifi.uri", "");
  #else
- // Use MLS on Nightly and early Beta.
--pref("geo.wifi.uri", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
-+pref("geo.wifi.uri", "");
+   // Use MLS on Nightly and early Beta.
+-  pref("geo.wifi.uri", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
++  pref("geo.wifi.uri", "");
  #endif
  
  #ifdef XP_MACOSX
- pref("geo.provider.use_corelocation", true);
-@@ -1416,9 +1410,9 @@ pref("geo.provider.use_corelocation", true);
- pref("geo.provider.ms-windows-location", true);
+   pref("geo.provider.use_corelocation", true);
+ #endif
+@@ -1419,22 +1417,22 @@ pref("dom.debug.propagate_gesture_events_through_content", false);
+ #ifdef XP_WIN
+   pref("geo.provider.ms-windows-location", true);
  #endif
  
  #if defined(MOZ_WIDGET_GTK) && defined(MOZ_GPSD)
--pref("geo.provider.use_gpsd", true);
-+pref("geo.provider.use_gpsd", false);
+-  pref("geo.provider.use_gpsd", true);
++  pref("geo.provider.use_gpsd", false);
  #endif
  
  // CustomizableUI debug logging.
  pref("browser.uiCustomization.debug", false);
-@@ -1427,9 +1421,9 @@ pref("browser.uiCustomization.debug", false);
+ 
+ // CustomizableUI state of the browser's user interface
  pref("browser.uiCustomization.state", "");
  
  // If set to false, FxAccounts and Sync will be unavailable.
@@ -514,7 +564,9 @@ index eaa71a07f5..3eb20b6f24 100644
  // The remote FxA root content URL. Must use HTTPS.
  pref("identity.fxaccounts.remote.root", "https://accounts.firefox.com/");
  
-@@ -1458,10 +1452,10 @@ pref("identity.sync.tokenserver.uri", "https://token.services.mozilla.com/1.0/sy
+ // The value of the context query parameter passed in fxa requests.
+@@ -1461,23 +1459,23 @@ pref("identity.sync.tokenserver.uri", "https://token.services.mozilla.com/1.0/sy
+ // of making changes to "identity.fxaccounts.*.uri".
  pref("identity.fxaccounts.autoconfig.uri", "");
  
  // URLs for promo links to mobile browsers. Note that consumers are expected to
@@ -527,8 +579,9 @@ index eaa71a07f5..3eb20b6f24 100644
  // Migrate any existing Firefox Account data from the default profile to the
  // Developer Edition profile.
  #ifdef MOZ_DEV_EDITION
-@@ -1470,9 +1464,9 @@ pref("identity.fxaccounts.migrateToDevEdition", true);
- pref("identity.fxaccounts.migrateToDevEdition", false);
+   pref("identity.fxaccounts.migrateToDevEdition", true);
+ #else
+   pref("identity.fxaccounts.migrateToDevEdition", false);
  #endif
  
  // If activated, send tab will use the new FxA commands backend.
@@ -538,7 +591,9 @@ index eaa71a07f5..3eb20b6f24 100644
  // Default is 24 hours.
  pref("identity.fxaccounts.commands.missed.fetch_interval", 86400);
  
-@@ -1503,16 +1497,12 @@ pref("media.gmp-gmpopenh264.enabled", true);
+ // On GTK, we now default to showing the menubar only when alt is pressed:
+@@ -1506,18 +1504,14 @@ pref("media.gmp-gmpopenh264.visible", true);
+ pref("media.gmp-gmpopenh264.enabled", true);
  
  // Switch block autoplay logic to v2, and enable UI.
  pref("media.autoplay.enabled.user-gestures-needed", true);
@@ -547,16 +602,19 @@ index eaa71a07f5..3eb20b6f24 100644
 +pref("media.autoplay.default", 5); // 0=Allowed, 1=Blocked, 5=All Blocked
  
 -#ifdef NIGHTLY_BUILD
- // Block WebAudio from playing automatically.
- pref("media.autoplay.block-webaudio", true);
+   // Block WebAudio from playing automatically.
+-  pref("media.autoplay.block-webaudio", true);
 -#else
--pref("media.autoplay.block-webaudio", false);
+-  pref("media.autoplay.block-webaudio", false);
 -#endif
++pref("media.autoplay.block-webaudio", true);
  
  #if defined(XP_WIN)
- #if defined(EARLY_BETA_OR_EARLIER) || defined(MOZ_DEV_EDITION)
- pref("media.videocontrols.picture-in-picture.enabled", true);
-@@ -1533,32 +1523,32 @@ pref("browser.translation.ui.show", false);
+   #if defined(EARLY_BETA_OR_EARLIER) || defined(MOZ_DEV_EDITION)
+     pref("media.videocontrols.picture-in-picture.enabled", true);
+     pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
+@@ -1531,47 +1525,45 @@ pref("browser.translation.ui.show", false);
+ // Allows to define the translation engine. Google is default, Bing or Yandex are other options.
  pref("browser.translation.engine", "Google");
  
  // Telemetry settings.
@@ -585,9 +643,10 @@ index eaa71a07f5..3eb20b6f24 100644
 +pref("toolkit.telemetry.hybridContent.enabled", false);
  // Whether to enable Ecosystem Telemetry, requires a restart.
  #ifdef NIGHTLY_BUILD
- pref("toolkit.telemetry.ecosystemtelemetry.enabled", true);
+-  pref("toolkit.telemetry.ecosystemtelemetry.enabled", true);
++  pref("toolkit.telemetry.ecosystemtelemetry.enabled", false);
  #else
- pref("toolkit.telemetry.ecosystemtelemetry.enabled", false);
+   pref("toolkit.telemetry.ecosystemtelemetry.enabled", false);
  #endif
  
  // Ping Centre Telemetry settings.
@@ -597,29 +656,72 @@ index eaa71a07f5..3eb20b6f24 100644
  pref("browser.ping-centre.staging.endpoint", "https://onyx_tiles.stage.mozaws.net/v3/links/ping-centre");
  pref("browser.ping-centre.production.endpoint", "https://tiles.services.mozilla.com/v3/links/ping-centre");
  
-@@ -1640,21 +1630,13 @@ pref("privacy.trackingprotection.introURL", "https://www.mozilla.org/%LOCALE%/fi
+ // Enable GMP support in the addon manager.
+ pref("media.gmp-provider.enabled", true);
+ 
+ // Enable blocking access to storage from tracking resources by default.
+ pref("network.cookie.cookieBehavior", 4 /* BEHAVIOR_REJECT_TRACKER */);
+-#ifdef EARLY_BETA_OR_EARLIER
+-  // Enable fingerprinting blocking by default only in nightly and early beta.
+-  pref("privacy.trackingprotection.fingerprinting.enabled", true);
+-#endif
++
++pref("privacy.trackingprotection.fingerprinting.enabled", true);
+ 
+ // Enable cryptomining blocking by default for all channels, only on desktop.
+ pref("privacy.trackingprotection.cryptomining.enabled", true);
+ 
+ pref("browser.contentblocking.database.enabled", true);
+@@ -1617,14 +1609,14 @@ pref("browser.contentblocking.features.strict", "tp,tpPrivate,cookieBehavior4,cm
+ pref("browser.contentblocking.customBlockList.preferences.ui.enabled", false);
+ 
+ pref("browser.contentblocking.reportBreakage.url", "https://tracking-protection-issues.herokuapp.com/new");
+ 
+ // Enable Protections report's Lockwise card by default.
+-pref("browser.contentblocking.report.lockwise.enabled", true);
++pref("browser.contentblocking.report.lockwise.enabled", false);
+ 
+ // Enable Protections report's Monitor card by default.
+-pref("browser.contentblocking.report.monitor.enabled", true);
++pref("browser.contentblocking.report.monitor.enabled", false);
+ 
+ // Disable Protections report's Proxy card by default.
+ pref("browser.contentblocking.report.proxy.enabled", false);
+ 
+ pref("browser.contentblocking.report.monitor.url", "https://monitor.firefox.com/?entrypoint=protection_report_monitor&utm_source=about-protections");
+@@ -1649,25 +1641,17 @@ pref("browser.contentblocking.report.cryptominer.url", "https://support.mozilla.
+ #endif
  
  // Always enable newtab segregation using containers
  pref("privacy.usercontext.about_newtab_segregation.enabled", true);
  // Enable Contextual Identity Containers
 -#ifdef NIGHTLY_BUILD
- pref("privacy.userContext.enabled", true);
- pref("privacy.userContext.ui.enabled", true);
+-  pref("privacy.userContext.enabled", true);
+-  pref("privacy.userContext.ui.enabled", true);
++pref("privacy.userContext.enabled", true);
++pref("privacy.userContext.ui.enabled", true);
  
- // 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is shown after X milliseconds.
- pref("privacy.userContext.longPressBehavior", 2);
+-  // 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is
+-  // shown after X milliseconds.
+-  pref("privacy.userContext.longPressBehavior", 2);
 -#else
--pref("privacy.userContext.enabled", false);
--pref("privacy.userContext.ui.enabled", false);
--
--// 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is shown after X milliseconds.
--pref("privacy.userContext.longPressBehavior", 0);
+-  pref("privacy.userContext.enabled", false);
+-  pref("privacy.userContext.ui.enabled", false);
++// 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is
++// shown after X milliseconds.
++pref("privacy.userContext.longPressBehavior", 2);
+ 
+-  // 0 disables long press, 1 when clicked, the menu is shown, 2 the menu is
+-  // shown after X milliseconds.
+-  pref("privacy.userContext.longPressBehavior", 0);
 -#endif
  pref("privacy.userContext.extension", "");
  
  // Start the browser in e10s mode
  pref("browser.tabs.remote.autostart", true);
-@@ -1671,9 +1653,9 @@ pref("browser.tabs.remote.tabCacheSize", 0);
+ pref("browser.tabs.remote.desktopbehavior", true);
+@@ -1699,11 +1683,11 @@ pref("browser.tabs.remote.tabCacheSize", 0);
+ 
  pref("browser.tabs.remote.warmup.maxTabs", 3);
  pref("browser.tabs.remote.warmup.unloadDelayMs", 2000);
  
@@ -630,31 +732,22 @@ index eaa71a07f5..3eb20b6f24 100644
  pref("browser.tabs.crashReporting.requestEmail", false);
  pref("browser.tabs.crashReporting.emailMe", false);
  pref("browser.tabs.crashReporting.email", "");
-@@ -1724,9 +1706,9 @@ pref("dom.push.enabled", true);
- pref("toolkit.pageThumbs.minWidth", 280);
- pref("toolkit.pageThumbs.minHeight", 190);
  
- // Enable speech synthesis
--pref("media.webspeech.synth.enabled", true);
-+pref("media.webspeech.synth.enabled", false);
+@@ -1768,11 +1752,11 @@ pref("browser.migrate.chrome.history.maxAgeInDays", 180);
  
- pref("browser.esedbreader.loglevel", "Error");
- 
- pref("browser.laterrun.enabled", false);
-@@ -1740,10 +1722,10 @@ pref("browser.migrate.chrome.history.maxAgeInDays", 180);
  // Enable browser frames for use on desktop.  Only exposed to chrome callers.
  pref("dom.mozBrowserFramesEnabled", true);
  
  pref("extensions.pocket.api", "api.getpocket.com");
 -pref("extensions.pocket.enabled", true);
--pref("extensions.pocket.oAuthConsumerKey", "40249-e88c401e1b1f2242d9e441c4");
 +pref("extensions.pocket.enabled", false);
-+pref("extensions.pocket.oAuthConsumerKey", "");
+ pref("extensions.pocket.oAuthConsumerKey", "40249-e88c401e1b1f2242d9e441c4");
  pref("extensions.pocket.site", "getpocket.com");
  
- pref("signon.schemeUpgrades", true);
- pref("signon.privateBrowsingCapture.enabled", true);
-@@ -1835,18 +1817,14 @@ pref("browser.chrome.errorReporter.infoURL",
+ pref("signon.generation.available", true);
+ pref("signon.generation.enabled", true);
+@@ -1873,20 +1857,17 @@ pref("browser.chrome.errorReporter.infoURL",
+      "https://support.mozilla.org/1/firefox/%VERSION%/%OS%/%LOCALE%/nightly-error-collection");
  
  // Normandy client preferences
  pref("app.normandy.api_url", "https://normandy.cdn.mozilla.net/api/v1");
@@ -666,15 +759,19 @@ index eaa71a07f5..3eb20b6f24 100644
  pref("app.normandy.run_interval_seconds", 21600); // 6 hours
  pref("app.normandy.shieldLearnMoreUrl", "https://support.mozilla.org/1/firefox/%VERSION%/%OS%/%LOCALE%/shield");
 -#ifdef MOZ_DATA_REPORTING
--pref("app.shield.optoutstudies.enabled", true);
+-  pref("app.shield.optoutstudies.enabled", true);
 -#else
- pref("app.shield.optoutstudies.enabled", false);
+-  pref("app.shield.optoutstudies.enabled", false);
 -#endif
++
++pref("app.shield.optoutstudies.enabled", false);
  
  // Multi-lingual preferences
  #if defined(RELEASE_OR_BETA) && !defined(MOZ_DEV_EDITION)
- pref("intl.multilingual.enabled", true);
-@@ -1871,10 +1849,10 @@ pref("fission.frontend.simulate-messages", false);
+   pref("intl.multilingual.enabled", true);
+   pref("intl.multilingual.downloadEnabled", true);
+@@ -1909,12 +1890,12 @@ pref("fission.frontend.simulate-messages", false);
+ // Coverage ping is disabled by default.
  pref("toolkit.coverage.enabled", false);
  pref("toolkit.coverage.endpoint.base", "https://coverage.mozilla.org");
  
@@ -687,7 +784,9 @@ index eaa71a07f5..3eb20b6f24 100644
  
  pref("browser.engagement.recent_visited_origins.expiry", 86400); // 24 * 60 * 60 (24 hours in seconds)
  
-@@ -1885,13 +1863,39 @@ pref("browser.toolbars.keyboard_navigation", true);
+ pref("browser.aboutConfig.showWarning", true);
+@@ -1923,11 +1904,11 @@ pref("browser.toolbars.keyboard_navigation", true);
+ 
  // Prefs to control the Firefox Account toolbar menu.
  // This pref will surface existing Firefox Account information
  // as a button next to the hamburger menu. It allows
@@ -696,14 +795,17 @@ index eaa71a07f5..3eb20b6f24 100644
 +pref("identity.fxaccounts.toolbar.enabled", false);
  pref("identity.fxaccounts.toolbar.accessed", false);
  
- // Check bundled JAR and XPI files for corruption.
- #ifdef RELEASE_OR_BETA
- pref("corroborator.enabled", false);
- #else
- pref("corroborator.enabled", true);
- #endif
+ // Prefs for different services supported by Firefox Account
+ pref("identity.fxaccounts.service.sendLoginUrl", "https://send.firefox.com/login/");
+ pref("identity.fxaccounts.service.monitorLoginUrl", "https://monitor.firefox.com/");
+@@ -2380,5 +2361,35 @@ pref("devtools.webide.restoreLastProject", true);
+ pref("devtools.webide.enableLocalRuntime", false);
+ pref("devtools.webide.lastConnectedRuntime", "");
+ pref("devtools.webide.lastSelectedProject", "");
+ pref("devtools.webide.zoom", "1");
+ pref("devtools.webide.busyTimeout", 10000);
 +
-+// Overrides
++// Additions
 +pref("privacy.resistFingerprinting", true);
 +pref("devtools.onboarding.telemetry.logged", false);
 +pref("toolkit.telemetry.unified", false);
@@ -728,90 +830,55 @@ index eaa71a07f5..3eb20b6f24 100644
 +pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
 +pref("network.predictor.enable-prefetch", false);
 +pref("devtools.debugger.remote-enabled", false);
-diff --git a/modules/libpref/init/all.js b/modules/libpref/init/all.js
-index e205cd4c55..58e7c39d8b 100644
---- a/modules/libpref/init/all.js
-+++ b/modules/libpref/init/all.js
-@@ -15,8 +15,9 @@
-  */
- 
- pref("keyword.enabled", false);
- pref("general.useragent.compatMode.firefox", false);
-+pref("general.useragent.override.addons.mozilla.org", "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0");
- 
- // This pref exists only for testing purposes. In order to disable all
- // overrides by default, don't initialize UserAgentOverrides.jsm.
- pref("general.useragent.site_specific_overrides", true);
-@@ -490,12 +491,12 @@ pref("media.recorder.audio_node.enabled", false);
- pref("media.recorder.video.frame_drops", true);
- 
- // Whether to autostart a media element with an |autoplay| attribute.
- // ALLOWED=0, BLOCKED=1, defined in dom/media/Autoplay.idl
--pref("media.autoplay.default", 0);
-+pref("media.autoplay.default", 1);
- 
- // By default, don't block WebAudio from playing automatically.
--pref("media.autoplay.block-webaudio", false);
-+pref("media.autoplay.block-webaudio", true);
- 
- // By default, don't block the media from extension background script.
- pref("media.autoplay.allow-extension-background-pages", true);
- 
-@@ -515,9 +516,9 @@ pref("media.video-queue.default-size", 10);
- // By default, send all of them.
- pref("media.video-queue.send-to-compositor-size", 9999);
- 
- // Whether to disable the video stats to prevent fingerprinting
--pref("media.video_stats.enabled", true);
-+pref("media.video_stats.enabled", false);
- 
- // Log level for cubeb, the audio input/output system. Valid values are
- // "verbose", "normal" and "" (log disabled).
- pref("media.cubeb.logging_level", "");
-@@ -1610,9 +1611,9 @@ pref("network.http.referer.hideOnionSource", false);
- pref("network.http.referer.trimmingPolicy", 0);
- // 0=full URI, 1=scheme+host+port+path, 2=scheme+host+port
- pref("network.http.referer.XOriginTrimmingPolicy", 0);
- // 0=always send, 1=send iff base domains match, 2=send iff hosts match
--pref("network.http.referer.XOriginPolicy", 0);
-+pref("network.http.referer.XOriginPolicy", 1);
- 
- // Include an origin header on non-GET and non-HEAD requests regardless of CORS
- // 0=never send, 1=send when same-origin only, 2=always send
- pref("network.http.sendOriginHeader", 0);
-@@ -2553,10 +2554,10 @@ pref("security.ssl.enable_ocsp_must_staple", true);
- // Insecure Form Field Warning
- pref("security.insecure_field_warning.contextual.enabled", false);
- pref("security.insecure_field_warning.ignore_local_ip_address", true);
- 
--// Disable pinning checks by default.
--pref("security.cert_pinning.enforcement_level", 0);
-+// Enable basic pinning.
-+pref("security.cert_pinning.enforcement_level", 1);
- // Do not process hpkp headers rooted by not built in roots by default.
- // This is to prevent accidental pinning from MITM devices and is used
- // for tests.
- pref("security.cert_pinning.process_headers_from_non_builtin_roots", false);
-@@ -5138,17 +5139,17 @@ pref("network.captive-portal-service.maxInterval", 1500000); // 25 minutes
- // Every 10 checks, the delay is increased by a factor of 5
- pref("network.captive-portal-service.backoffFactor", "5.0");
- pref("network.captive-portal-service.enabled", false);
- 
--pref("network.connectivity-service.enabled", true);
 +pref("network.connectivity-service.enabled", false);
- pref("network.connectivity-service.DNSv4.domain", "mozilla.org");
- pref("network.connectivity-service.DNSv6.domain", "mozilla.org");
- pref("network.connectivity-service.IPv4.url", "http://detectportal.firefox.com/success.txt?ipv4");
- pref("network.connectivity-service.IPv6.url", "http://detectportal.firefox.com/success.txt?ipv6");
- 
- // DNS Trusted Recursive Resolver
- // 0 - default off, 1 - race, 2 TRR first, 3 TRR only, 4 shadow, 5 off by choice
--pref("network.trr.mode", 0);
-+pref("network.trr.mode", 5);
- // DNS-over-HTTP service to use, must be HTTPS://
- pref("network.trr.uri", "https://mozilla.cloudflare-dns.com/dns-query");
- // DNS-over-HTTP service options, must be HTTPS://
- pref("network.trr.resolvers", "[{ \"name\": \"Cloudflare\", \"url\": \"https://mozilla.cloudflare-dns.com/dns-query\" }]");
++pref("general.useragent.override.addons.mozilla.org", "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0");
++pref("browser.search.defaultenginename", "DuckDuckGo");
++
+-- 
+2.23.0
+
+From e39397fe381a0abfc37493254cd3c416d3436776 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sat, 26 Oct 2019 17:26:29 +0200
+Subject: [PATCH] set ddg as default search engine
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/components/search/extensions/list.json | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/browser/components/search/extensions/list.json b/browser/components/search/extensions/list.json
+index d023e0a0e5..daea92519e 100644
+--- a/browser/components/search/extensions/list.json
++++ b/browser/components/search/extensions/list.json
+@@ -1,11 +1,11 @@
+ {
+   "default": {
+-    "searchDefault": "Google",
+-    "searchOrder": ["Google", "Bing"],
++    "searchDefault": "DuckDuckGo",
++    "searchOrder": ["DuckDuckGo", "Ecosia"],
+     "visibleDefaultEngines": [
+-      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
++      "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "twitter", "wikipedia"
+     ]
+   },
+   "regionOverrides": {
+     "US": {
+       "google-b-d": "google-b-1-d"
+@@ -52,11 +52,11 @@
+   },
+   "locales": {
+     "en-US": {
+       "default": {
+         "visibleDefaultEngines": [
+-          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
++          "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "twitter", "wikipedia"
+         ]
+       },
+       "KZ": {
+         "visibleDefaultEngines": [
+           "amazondotcom", "bing", "google", "twitter", "wikipedia", "ddg", "yandex-en"
 -- 
 2.23.0
 
@@ -1053,60 +1120,6 @@ index 4195a30a5d..338ad508c0 100644
      'translation',
  ]
  
--- 
-2.23.0
-
-From 803b880949c7a78488e5ed3cf16695739aeded26 Mon Sep 17 00:00:00 2001
-From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 6 Oct 2019 11:37:50 +0200
-Subject: [PATCH] set DDG as default search engine
-
-Signed-off-by: torvic9 <torvic9@mailbox.org>
----
- browser/app/profile/firefox.js                 | 2 ++
- browser/components/search/extensions/list.json | 8 ++++----
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
-index 3eb20b6f24..63fd1b0d78 100644
---- a/browser/app/profile/firefox.js
-+++ b/browser/app/profile/firefox.js
-@@ -1898,4 +1898,6 @@ pref("browser.newtabpage.activity-stream.section.highlights.includePocket", fals
- pref("browser.newtabpage.activity-stream.showSponsored", false);
- pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed", false);
- pref("network.predictor.enable-prefetch", false);
- pref("devtools.debugger.remote-enabled", false);
-+// This is probably not needed
-+pref("browser.search.defaultenginename", "DuckDuckGo");
-diff --git a/browser/components/search/extensions/list.json b/browser/components/search/extensions/list.json
-index d023e0a0e5..8f8936ece5 100644
---- a/browser/components/search/extensions/list.json
-+++ b/browser/components/search/extensions/list.json
-@@ -1,10 +1,10 @@
- {
-   "default": {
--    "searchDefault": "Google",
--    "searchOrder": ["Google", "Bing"],
-+    "searchDefault": "DuckDuckGo",
-+    "searchOrder": ["DuckDuckGo", "Ecosia"],
-     "visibleDefaultEngines": [
--      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
-+      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "ecosia", "twitter", "wikipedia"
-     ]
-   },
-   "regionOverrides": {
-     "US": {
-@@ -53,9 +53,9 @@
-   "locales": {
-     "en-US": {
-       "default": {
-         "visibleDefaultEngines": [
--          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
-+          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "ecosia", "twitter", "wikipedia"
-         ]
-       },
-       "KZ": {
-         "visibleDefaultEngines": [
 -- 
 2.23.0
 

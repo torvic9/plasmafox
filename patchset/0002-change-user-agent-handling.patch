@@ -1,6 +1,6 @@
-From bf20676afd8fe7f9d956aabc53938c22edca4e2a Mon Sep 17 00:00:00 2001
+From 8052f6afb4b34ac26f2c0f8155f96cacbb943caf Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 29 Sep 2019 20:23:38 +0200
+Date: Sat, 26 Oct 2019 13:45:05 +0200
 Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -9,10 +9,11 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
-index 176837695f..5c2c7b4e83 100644
+index a692c6ed70..881a95346a 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
-@@ -482,11 +482,11 @@ nsresult nsHttpHandler::Init() {
+@@ -474,13 +474,13 @@ nsresult nsHttpHandler::Init() {
+   // monitor some preference changes
    Preferences::RegisterPrefixCallbacks(
        PREF_CHANGE_METHOD(nsHttpHandler::PrefsChanged), gCallbackPrefs, this);
    PrefsChanged(nullptr);
@@ -26,7 +27,9 @@ index 176837695f..5c2c7b4e83 100644
    nsCOMPtr<nsIXULAppInfo> appInfo =
        do_GetService("@mozilla.org/xre/app-info;1");
  
-@@ -937,20 +937,16 @@ void nsHttpHandler::BuildUserAgent() {
+   mAppName.AssignLiteral(MOZ_APP_UA_NAME);
+@@ -929,22 +929,18 @@ void nsHttpHandler::BuildUserAgent() {
+   mUserAgent += ' ';
    mUserAgent += mProduct;
    mUserAgent += '/';
    mUserAgent += mProductSub;
@@ -55,6 +58,7 @@ index 176837695f..5c2c7b4e83 100644
  }
  
  #ifdef XP_WIN
+ #  define OSCPU_WINDOWS "Windows NT %ld.%ld"
 -- 
 2.23.0
 
