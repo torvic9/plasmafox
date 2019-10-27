@@ -155,7 +155,7 @@ prepare() {
   patch -Np1 -i "../mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "../mozilla-kde-$_patchrev.patch"
   patch -Np1 -i "../firefox-kde-$_patchrev.patch"
-  patch -Np1 -i "../mozilla-fix-top-level-asm-$_patchrev.patch"
+  #patch -Np1 -i "../mozilla-fix-top-level-asm-$_patchrev.patch"
 
   # add globalmenu support
   msg "Ubuntu global menu"
