@@ -2,7 +2,7 @@
 # based on ideas by Waterfox and firefox-kde-opensuse
 
 # enable gcc build
-_usegcc=1
+_usegcc=0
 
 # enable gtk3 wayland (experimental)
 _gtk3_wayland=0
@@ -28,8 +28,8 @@ depends=('libxt' 'startup-notification' 'mime-types'
 
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
-			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2' 
-			 'nodejs' 'cbindgen' 'nasm' 'sccache')
+			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2'
+			 'nodejs' 'cbindgen' 'nasm' 'zlib')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
@@ -77,9 +77,9 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('cd9f2902753831c07c4b2ee64f7826f33ca1123add6440dc34abe3ff173a0cc6'
             'SKIP'
-            '97f63dd8761913eec0bca9246f81672140a92ef92a50809fc00a6f9c145eb904'
+            '8c938b86e34373f1475d037ca296bae4215bf37b1190e4cb5540bd61b4dde04e'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
-            '27adc95e19ff290e2576cd25b702005a576b93cbd52d36bde61c7644222bd577'
+            'c0c45308cfe39dfbf061883e6ceb513137405d7bf36f4964b8b54b0c5e07e3a1'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
@@ -113,8 +113,8 @@ sha256sums=('cd9f2902753831c07c4b2ee64f7826f33ca1123add6440dc34abe3ff173a0cc6'
 validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 if [[ $_usegcc == 1 ]] ; then
-  source+=('pgo+lto-with-gcc.patch')
-  sha256sums+=('7dd7c1f06fcca05ee27230be787092768c048379560a19d6b73935dd2891e6b3')
+  source+=('2004_fix_sandbox_lto.patch')
+  sha256sums+=('92ca2b138b29e3fbe18427c849a1e06bd4e7d8a4003e39278886ec8f5d01e831')
 fi
 
 prepare() {
@@ -128,6 +128,7 @@ prepare() {
            >> .mozconfig
   fi
 
+  # ccache/sccache
   #if in_array ccache ${BUILDENV[*]} ; then
   #echo "ac_add_options --with-ccache" >> .mozconfig
   #echo "mk_add_options 'export RUSTC_WRAPPER=sccache'" >> .mozconfig
@@ -137,7 +138,8 @@ prepare() {
   if [[ $_usegcc == 1 ]] ; then
     echo "ac_add_options --enable-gold" >> .mozconfig
     echo "ac_add_options --enable-linker=gold" >> .mozconfig
-    #patch -Np1 -i "$srcdir/pgo+lto-with-gcc.patch"
+    echo "ac_add_options --enable-lto" >> .mozconfig
+    patch -Np1 -i "$srcdir/2004_fix_sandbox_lto.patch"
   else
     echo "ac_add_options --enable-linker=lld" >> .mozconfig
   fi
@@ -153,7 +155,7 @@ prepare() {
   patch -Np1 -i "../mozilla-nongnome-proxies-$_patchrev.patch"
   patch -Np1 -i "../mozilla-kde-$_patchrev.patch"
   patch -Np1 -i "../firefox-kde-$_patchrev.patch"
-  #patch -Np1 -i "../mozilla-fix-top-level-asm-$_patchrev.patch"
+  patch -Np1 -i "../mozilla-fix-top-level-asm-$_patchrev.patch"
 
   # add globalmenu support
   msg "Ubuntu global menu"
@@ -215,6 +217,8 @@ build() {
 	# LLVM ERROR: Function Import: link error
 	CFLAGS="${CFLAGS/-fno-plt/}"
 	CXXFLAGS="${CXXFLAGS/-fno-plt/}"
+	# we need a higher open file limit
+	ulimit -n 4096
 
 	# Do 3-tier PGO
 	msg2 "Building instrumented browser..."

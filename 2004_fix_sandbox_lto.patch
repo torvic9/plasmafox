@@ -1,0 +1,26 @@
+# HG changeset patch
+# Parent  b8e6418f771de6a3a183d0bb37d313512b61bbab
+https://bugs.gentoo.org/666580
+
+diff --git a/security/sandbox/linux/moz.build b/security/sandbox/linux/moz.build
+--- a/security/sandbox/linux/moz.build
++++ b/security/sandbox/linux/moz.build
+@@ -96,17 +96,17 @@ if CONFIG['CC_TYPE'] in ('clang', 'gcc')
+         '-Wno-empty-body',
+     ]
+ 
+ # gcc lto likes to put the top level asm in syscall.cc in a different partition
+ # from the function using it which breaks the build.  Work around that by
+ # forcing there to be only one partition.
+ for f in CONFIG['OS_CXXFLAGS']:
+     if f.startswith('-flto') and CONFIG['CC_TYPE'] != 'clang':
+-        LDFLAGS += ['--param lto-partitions=1']
++        LDFLAGS += ['--param', 'lto-partitions=1']
+ 
+ DEFINES['NS_NO_XPCOM'] = True
+ DisableStlWrapping()
+ 
+ LOCAL_INCLUDES += ['/security/sandbox/linux']
+ LOCAL_INCLUDES += ['/security/sandbox/chromium-shim']
+ LOCAL_INCLUDES += ['/security/sandbox/chromium']
+ LOCAL_INCLUDES += ['/nsprpub']
