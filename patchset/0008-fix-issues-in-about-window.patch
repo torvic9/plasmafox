@@ -1,0 +1,49 @@
+From 55bcc9e749e781f6c43307f0097c7ecfddbea7d4 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Fri, 1 Nov 2019 21:35:33 +0100
+Subject: [PATCH] fix issues in about window
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/base/content/aboutDialog.css                | 6 +++---
+ browser/branding/unofficial/content/aboutDialog.css | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/browser/base/content/aboutDialog.css b/browser/base/content/aboutDialog.css
+index c0435eac73..1597c26673 100644
+--- a/browser/base/content/aboutDialog.css
++++ b/browser/base/content/aboutDialog.css
+@@ -12,14 +12,14 @@
+ }
+ 
+ #rightBox {
+   background-image: url("chrome://branding/content/about-wordmark.svg");
+   background-repeat: no-repeat;
+-  background-size: 288px auto;
++  background-size: 108px auto;
+   /* padding-top creates room for the wordmark */
+-  padding-top: 38px;
+-  margin-top:20px;
++  padding-top: 30px;
++  margin-top:18px;
+ }
+ 
+ #rightBox:-moz-locale-dir(rtl) {
+   background-position: 100% 0;
+ }
+diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
+index be7fdcab6b..fe802d0538 100644
+--- a/browser/branding/unofficial/content/aboutDialog.css
++++ b/browser/branding/unofficial/content/aboutDialog.css
+@@ -19,7 +19,7 @@
+   margin-left: 280px;
+   margin-right: 20px;
+ }
+ 
+ #bottomBox {
+-  background-color: rgba(0,0,0,.7);
++  background-color: rgba(10,17,37,.4);
+ }
+-- 
+2.23.0
+
