@@ -18,7 +18,7 @@ _pkgname=firefox
 pkgver=70.0.1
 pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
-arch=('i686' 'x86_64')
+arch=('x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 depends=('libxt' 'startup-notification' 'mime-types'
@@ -82,9 +82,9 @@ sha256sums=('f2e9bb26af7682b31e82fdfc3a4b3e04fd1caa8b004469ea608185d33e35691b'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             'c0c45308cfe39dfbf061883e6ceb513137405d7bf36f4964b8b54b0c5e07e3a1'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
-            '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
+            '330e27f3c92c0bed1f85c0bf6428bace8fb7e8ecfe4339e6199167f6305cf3f2'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '6c77ade7f7e32b1dbfbe6a2c55c018de9a7f62c43e2937ad5f02ed4d37f17921'
+            '6286d2a6bdb1b653f8708d058f2ea7e274b0e3b6cd6e749baf575a5978056726'
             'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
             '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
@@ -281,7 +281,7 @@ package() {
 [Global]
 id=plasmafox
 version=1.0
-about=Plasmafox for Manjaro
+about=Plasmafox for Cleanjaro
 
 [Preferences]
 app.distributor=$pkgname

@@ -183,8 +183,9 @@ user_pref("privacy.firstparty.isolate.restrict_opener_access", true); // [DEFAUL
 /* 4608: [2021] disable the SpeechSynthesis (Text-to-Speech) part of the Web Speech API
 * [1] https://developer.mozilla.org/docs/Web/API/Web_Speech_API
 * [2] https://developer.mozilla.org/docs/Web/API/SpeechSynthesis
-* [3] https://wiki.mozilla.org/HTML5_Speech_API */
+* [3] https://wiki.mozilla.org/HTML5_Speech_API
+ */
 user_pref("media.webspeech.synth.enabled", false);
 
-user_pref("identity.fxaccounts.enabled", false); // disable and hide Firefox Accounts and Sync [FF60+] [RESTART]
-user_pref("identity.fxaccounts.toolbar.enabled", false); // disable FA in Toolbar
+user_pref("identity.fxaccounts.enabled", true); // disable and hide Firefox Accounts and Sync [FF60+] [RESTART]
+user_pref("identity.fxaccounts.toolbar.enabled", true); // disable FA in Toolbar

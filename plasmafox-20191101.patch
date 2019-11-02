@@ -172,7 +172,7 @@ index 3f907f1b31..969f39dd9e 100644
  
  pref("startup.homepage_override_url", "");
 -pref("startup.homepage_welcome_url", "");
-+pref("startup.homepage_welcome_url", "https://github.com/torvic9/plasmafox");
++pref("startup.homepage_welcome_url", "https://start.duckduckgo.com/");
  pref("startup.homepage_welcome_url.additional", "");
  // The time interval between checks for a new version (in seconds)
  pref("app.update.interval", 86400); // 24 hours
@@ -224,7 +224,7 @@ index 5737302831..5b8aeb7a8f 100644
  community-exp = <label data-l10n-name="community-exp-mozillaLink">{ -vendor-short-name }</label> is a <label data-l10n-name="community-exp-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
  
 -community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, a <label data-l10n-name="community-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
-+community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, to be used with Manjaro KDE.
++community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, to be used with Cleanjaro KDE.
  
  helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
  
@@ -559,7 +559,7 @@ index e6caa38595..868a0983d2 100644
  // If set to false, FxAccounts and Sync will be unavailable.
  // A restart is mandatory after flipping that preference.
 -pref("identity.fxaccounts.enabled", true);
-+pref("identity.fxaccounts.enabled", false);
++pref("identity.fxaccounts.enabled", true);
  
  // The remote FxA root content URL. Must use HTTPS.
  pref("identity.fxaccounts.remote.root", "https://accounts.firefox.com/");
@@ -586,7 +586,7 @@ index e6caa38595..868a0983d2 100644
  
  // If activated, send tab will use the new FxA commands backend.
 -pref("identity.fxaccounts.commands.enabled", true);
-+pref("identity.fxaccounts.commands.enabled", false);
++pref("identity.fxaccounts.commands.enabled", true);
  // How often should we try to fetch missed FxA commands on sync (in seconds).
  // Default is 24 hours.
  pref("identity.fxaccounts.commands.missed.fetch_interval", 86400);
@@ -792,7 +792,7 @@ index e6caa38595..868a0983d2 100644
  // as a button next to the hamburger menu. It allows
  // quick access to sign-in and manage your Firefox Account.
 -pref("identity.fxaccounts.toolbar.enabled", true);
-+pref("identity.fxaccounts.toolbar.enabled", false);
++pref("identity.fxaccounts.toolbar.enabled", true);
  pref("identity.fxaccounts.toolbar.accessed", false);
  
  // Prefs for different services supported by Firefox Account
