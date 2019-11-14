@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=70.0.1
-pkgrel=2
+pkgrel=5
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -78,7 +78,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('f2e9bb26af7682b31e82fdfc3a4b3e04fd1caa8b004469ea608185d33e35691b'
             'SKIP'
-            '8c938b86e34373f1475d037ca296bae4215bf37b1190e4cb5540bd61b4dde04e'
+            '57b24b41af7d1b5efd9253e7a5af35e441afd09e1497a65c9af3590c9eb663b8'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             'c0c45308cfe39dfbf061883e6ceb513137405d7bf36f4964b8b54b0c5e07e3a1'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -145,7 +145,9 @@ prepare() {
   fi
   
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-
+  ln -s /mnt/sparelin/l10n-base ../l10n-central
+  echo "ac_add_options --with-l10n-base=${srcdir}/l10n-central" >> .mozconfig
+  
   # Arch patches
   patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
   patch -Np1 -i "../no-relinking.patch"
@@ -191,6 +193,8 @@ build() {
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
+  export CARGO_HOME="$srcdir/.cargo"
+  ulimit -n 4096
 
   if [[ $_usegcc == 1 ]] ; then
 	export MOZ_PGO=1
@@ -202,7 +206,11 @@ build() {
 
 	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
 	./mach buildsymbols
-	#./mach resource-usage
+	# repackage l10n test
+	export MOZ_CHROME_MULTILOCALE="en-US de"
+	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
+		./mach build chrome-$AB_CD
+	done
 
   else
 	export CC='clang --target=x86_64-unknown-linux-gnu'
@@ -216,8 +224,6 @@ build() {
 	# LLVM ERROR: Function Import: link error
 	CFLAGS="${CFLAGS/-fno-plt/}"
 	CXXFLAGS="${CXXFLAGS/-fno-plt/}"
-	# we need a higher open file limit
-	ulimit -n 4096
 
 	# Do 3-tier PGO
 	msg2 "Building instrumented browser..."
@@ -257,6 +263,11 @@ END
 
 	msg2 "Building symbol archive..."
 	./mach buildsymbols
+	# repackage l10n test
+	export MOZ_CHROME_MULTILOCALE="en-US de fr pl"
+	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
+		./mach build chrome-$AB_CD
+	done
   fi
 }
 
@@ -267,7 +278,7 @@ package() {
   [[ "$CARCH" == "i686" ]] && cp "$srcdir/kde.js" obj-i686-pc-linux-gnu/dist/bin/defaults/pref
   [[ "$CARCH" == "x86_64" ]] && cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 
-  DESTDIR="$pkgdir" ./mach install
+  DESTDIR="$pkgdir" AB_CD=multi ./mach install
 
   install -Dvm644 "$srcdir/vendor.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/vendor.js"
   install -Dvm644 "$srcdir/kde.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/kde.js"
