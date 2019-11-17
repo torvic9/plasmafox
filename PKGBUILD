@@ -145,8 +145,9 @@ prepare() {
   fi
   
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-  ln -s /mnt/sparelin/l10n-base ../l10n-central
-  echo "ac_add_options --with-l10n-base=${srcdir}/l10n-central" >> .mozconfig
+  mkdir $srcdir/mozbuild
+  ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
+  echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
   
   # Arch patches
   patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
@@ -193,7 +194,7 @@ build() {
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
-  export CARGO_HOME="$srcdir/.cargo"
+  #export CARGO_HOME="$srcdir/.cargo"
   ulimit -n 4096
 
   if [[ $_usegcc == 1 ]] ; then
@@ -207,7 +208,7 @@ build() {
 	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
 	./mach buildsymbols
 	# repackage l10n test
-	export MOZ_CHROME_MULTILOCALE="en-US de"
+	export MOZ_CHROME_MULTILOCALE="en-US de fr pl"
 	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
 		./mach build chrome-$AB_CD
 	done
