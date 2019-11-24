@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=70.0.1
-pkgrel=5
+pkgrel=6
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -50,6 +50,8 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         kde.js
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
+	0001-Update-bindgen.patch
+	0002-Bug-1212502-Switch-mozinfo-to-using-the-distro-packa.patch
 	plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -84,6 +86,8 @@ sha256sums=('f2e9bb26af7682b31e82fdfc3a4b3e04fd1caa8b004469ea608185d33e35691b'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
+            '832d895c90d346fe4acf25b8b8ba9a62bea595fe5fcdeaf545c8e952393993fc'
+            '58890388e02af41055e1ec9797b7c094dee499a5219dc9c532c6cfccf2cce972'
             '6c77ade7f7e32b1dbfbe6a2c55c018de9a7f62c43e2937ad5f02ed4d37f17921'
             'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
             '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
@@ -152,6 +156,10 @@ prepare() {
   # Arch patches
   patch -Np1 -i "../0001-Use-remoting-name-for-GDK-application-names.patch"
   patch -Np1 -i "../no-relinking.patch"
+  
+  # Make it compile with Rust 1.39 and Python 3.8
+  patch -Np1 -i ../0001-Update-bindgen.patch
+  patch -Np1 -i ../0002-Bug-1212502-Switch-mozinfo-to-using-the-distro-packa.patch
   
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
@@ -309,7 +317,7 @@ END
   #install -Dm644 browser/branding/official/content/about-logo@2x.png \
   #  "$pkgdir/usr/share/icons/hicolor/384x384/apps/firefox.png"
 
-  install -Dm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
+  install -Dvm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
 
   # Install a wrapper to avoid confusion about binary path
   install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$pkgname" <<END
