@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=71.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -37,7 +37,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
 _patchrev=52b1745787cf
-_pfdate=20191203
+_pfdate=20191204
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -85,7 +85,7 @@ sha256sums=('78304cd58229e7103b56b34718aad051c9a4db30c266512a64f501ba58da7fbe'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
             '33f5aec0bba83b23410176c5351425d2ad949d7f0bf409a579be25bebb773fce'
-            '608a7a6c6211d18d728cd26576e582888b2cd74f26b03fd59425d67e3a8b8bbb'
+            '650bd69898f44f89cc32cc4f653f7f8f524cbe04e5520f5bc2765c8d02e0645c'
             'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
             '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
