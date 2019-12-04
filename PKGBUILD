@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=71.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -210,7 +210,7 @@ build() {
 	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
 	./mach buildsymbols
 	# repackage l10n test
-	export MOZ_CHROME_MULTILOCALE="en-US de fr pl"
+	export MOZ_CHROME_MULTILOCALE="en-US de"
 	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
 		./mach build chrome-$AB_CD
 	done
