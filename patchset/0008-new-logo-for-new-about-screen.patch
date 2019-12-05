@@ -1,0 +1,30 @@
+From 2d228c5075fa0292bb99866cf85ba78a06619bf3 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Thu, 5 Dec 2019 20:57:46 +0100
+Subject: [PATCH] new logo for new about screen
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ .../browser/branding/unofficial/content/aboutDialog.css         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+index 284c60f4ad..bde9a1fdda 100644
+--- a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
++++ b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+@@ -10,11 +10,11 @@
+ #clientBox {
+   padding: 10px 0 15px;
+ }
+ 
+ #leftBox {
+-  background-image: url("chrome://branding/content/about-logo.png");
++  background-image: url("chrome://branding/content/about-logo@2x.png");
+   background-repeat: no-repeat;
+   background-size: 192px auto;
+   background-position: center 20%;
+   /* min-width and min-height create room for the logo */
+   min-width: 210px;
+-- 
+2.24.0
+

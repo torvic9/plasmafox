@@ -1,0 +1,76 @@
+From c2e52f1b94fbed5847fea705b79aab78bf49ed56 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Thu, 5 Dec 2019 20:56:07 +0100
+Subject: [PATCH] Revert "bring back old about dialog"
+
+This reverts commit a846e16957cf3d89a01bbdb8f08dd413f2f66fe0.
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ .../unofficial/content/aboutDialog.css        | 34 +++++++++++++++++--
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+index fe802d0538..284c60f4ad 100644
+--- a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
++++ b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+@@ -1,16 +1,36 @@
+ /* This Source Code Form is subject to the terms of the Mozilla Public
+  * License, v. 2.0. If a copy of the MPL was not distributed with this
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+ #aboutDialogContainer {
+-  background-image: url("chrome://branding/content/about-background.png");
+-  background-repeat: no-repeat;
+-  background-color: rgb(10,17,37);
++  background-color: #130829;
+   color: #fff;
+ }
+ 
++#clientBox {
++  padding: 10px 0 15px;
++}
++
++#leftBox {
++  background-image: url("chrome://branding/content/about-logo.png");
++  background-repeat: no-repeat;
++  background-size: 192px auto;
++  background-position: center 20%;
++  /* min-width and min-height create room for the logo */
++  min-width: 210px;
++  min-height: 210px;
++  margin-top: 20px;
++  margin-inline-start: 30px;
++}
++
++@media (min-resolution: 2dppx) {
++  #leftBox {
++    background-image: url("chrome://branding/content/about-logo@2x.png");
++  }
++}
++
+ .text-link {
+   color: #fff !important;
+   text-decoration: underline;
+ }
+ 
+@@ -18,8 +38,16 @@
+   /* this margin prevents text from overlapping the planet image */
+   margin-left: 280px;
+   margin-right: 20px;
+ }
+ 
++#rightBox {
++  background-size: auto 64px;
++  margin-left: 30px;
++  margin-right: 30px;
++  padding-top: 64px;
++}
++
+ #bottomBox {
+   background-color: rgba(10,17,37,.4);
++  padding: 15px 10px 15px;
+ }
+-- 
+2.24.0
+

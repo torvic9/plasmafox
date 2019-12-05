@@ -16,7 +16,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=71.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -37,7 +37,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
 _patchrev=52b1745787cf
-_pfdate=20191204
+_pfdate=20191205
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -65,8 +65,9 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         2001_system_graphite2_support.patch
         7002_system_av1_support.patch
         # artwork
-        about-background.png
+        #about-background.png
         about-logo.png
+	about-logo@2x.png
         about-wordmark.svg
         plasmafox-wordmark.svg
         about.png
@@ -85,7 +86,7 @@ sha256sums=('78304cd58229e7103b56b34718aad051c9a4db30c266512a64f501ba58da7fbe'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
             '33f5aec0bba83b23410176c5351425d2ad949d7f0bf409a579be25bebb773fce'
-            'a0477a4cbf4f4e60843b5cff2fdf13145306e788650adc9b0807c06f2f2a8135'
+            '0681edd6d42588cd1ebd25e03f1a33032f4e2f0059f02e9f1d0aa962a6bd974c'
             'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
             '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
@@ -94,8 +95,8 @@ sha256sums=('78304cd58229e7103b56b34718aad051c9a4db30c266512a64f501ba58da7fbe'
             'cb21c074a2c2870206893a089b70e5e36292319765f0c8d1e62cc7e88b013a2e'
             '88a8c2f813d10dad8e0e8b4453a6741ceca58174534fdfeb5480152c25b2f692'
             '802e4c741ba503535a4df7bf03d21837d1c8e1d5f5c928028f869e23d202c1c0'
-            '64fe6e0886b53084c2ea74feb9c09f1f4c5f9b730c117403b732dd4bbb790513'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
+            '07060a4bddad57b4b830af45d4403cf6f0f869a659c46a0663b66348cfedb0c6'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
             'bdb5ff6cf072421a7bfd5d6d525b01ecb449dca0bf2bbe1830c3060571ce7718'
             '5bb9b27c16e09afbd7434840a022da7b83aa10590be9ec3ed150a92c2f420c22'
@@ -182,7 +183,8 @@ prepare() {
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
   cp "$srcdir/about-logo.png" ./browser/branding/unofficial/content/
-  cp "$srcdir/about-background.png" ./browser/branding/unofficial/content/
+  cp "$srcdir/about-logo@2x.png" ./browser/branding/unofficial/content/
+  #cp "$srcdir/about-background.png" ./browser/branding/unofficial/content/
   cp "$srcdir/about.png" ./browser/branding/unofficial/
   for i in 16 22 24 32 48 64 128 256; do
       cp "$srcdir/default$i.png" browser/branding/unofficial/
@@ -277,9 +279,8 @@ END
 package() {
   #cd mozilla-unified
   cd firefox-${pkgver}
-  
-  [[ "$CARCH" == "i686" ]] && cp "$srcdir/kde.js" obj-i686-pc-linux-gnu/dist/bin/defaults/pref
-  [[ "$CARCH" == "x86_64" ]] && cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
+
+  cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 
   DESTDIR="$pkgdir" AB_CD=multi ./mach install
 
@@ -308,8 +309,8 @@ END
 
   install -Dvm644 browser/branding/unofficial/content/about-logo.png \
     "$pkgdir/usr/share/icons/hicolor/192x192/apps/plasmafox.png"
-  #install -Dm644 browser/branding/official/content/about-logo@2x.png \
-  #  "$pkgdir/usr/share/icons/hicolor/384x384/apps/firefox.png"
+  install -Dm644 browser/branding/official/content/about-logo@2x.png \
+    "$pkgdir/usr/share/icons/hicolor/384x384/apps/plasmafox.png"
 
   install -Dvm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
 
