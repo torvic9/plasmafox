@@ -67,7 +67,7 @@ pref("browser.contentblocking.report.lockwise.enabled", false);
 pref("browser.contentblocking.report.monitor.enabled", false);
 pref("privacy.userContext.enabled", true);
 pref("privacy.userContext.ui.enabled", true);
-pref("privacy.userContext.longPressBehavior", 2)
+pref("privacy.userContext.longPressBehavior", 2);
 pref("browser.tabs.crashReporting.sendReport", false);
 pref("extensions.pocket.enabled", false);
 pref("app.normandy.enabled", false);

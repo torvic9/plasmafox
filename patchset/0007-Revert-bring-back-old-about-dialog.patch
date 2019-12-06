@@ -10,10 +10,10 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  .../unofficial/content/aboutDialog.css        | 34 +++++++++++++++++--
  1 file changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
 index fe802d0538..284c60f4ad 100644
---- a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
-+++ b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+--- a/browser/branding/unofficial/content/aboutDialog.css
++++ b/browser/branding/unofficial/content/aboutDialog.css
 @@ -1,16 +1,36 @@
  /* This Source Code Form is subject to the terms of the Mozilla Public
   * License, v. 2.0. If a copy of the MPL was not distributed with this

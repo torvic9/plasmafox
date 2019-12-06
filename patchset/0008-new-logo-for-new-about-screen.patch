@@ -8,10 +8,10 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  .../browser/branding/unofficial/content/aboutDialog.css         | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
 index 284c60f4ad..bde9a1fdda 100644
---- a/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
-+++ b/firefox-71.0/browser/branding/unofficial/content/aboutDialog.css
+--- a/browser/branding/unofficial/content/aboutDialog.css
++++ b/browser/branding/unofficial/content/aboutDialog.css
 @@ -10,11 +10,11 @@
  #clientBox {
    padding: 10px 0 15px;

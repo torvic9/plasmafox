@@ -37,7 +37,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
 _patchrev=52b1745787cf
-_pfdate=20191205
+_pfdate=20191206
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -79,14 +79,14 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('78304cd58229e7103b56b34718aad051c9a4db30c266512a64f501ba58da7fbe'
             'SKIP'
-            '57b24b41af7d1b5efd9253e7a5af35e441afd09e1497a65c9af3590c9eb663b8'
+            '5fbbf22961c84875ab21239700f44e852edd85bbf5b1bcb6eb440a08ebe4d8f6'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
-            '3e6cc5c9f0069d5793df81052aaea411a602fb83579b296026960a3bb92ac08d'
+            'ee730839ed63469c7ab8309b26566db00d0ffeedbb70c87989660d9837bc9cb5'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
             '33f5aec0bba83b23410176c5351425d2ad949d7f0bf409a579be25bebb773fce'
-            '0681edd6d42588cd1ebd25e03f1a33032f4e2f0059f02e9f1d0aa962a6bd974c'
+            '773168ce246283d8b1dab0a3063742c0a651e220fed92d732dc781fba2e63d20'
             'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
             '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
@@ -268,8 +268,9 @@ END
 
 	msg2 "Building symbol archive..."
 	./mach buildsymbols
+	./mach package
 	# repackage l10n test
-	export MOZ_CHROME_MULTILOCALE="en-US de"
+	export MOZ_CHROME_MULTILOCALE="de fr pl"
 	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
 		./mach build chrome-$AB_CD
 	done
@@ -282,6 +283,7 @@ package() {
 
   cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 
+  #AB_CD=multi ./mach package
   DESTDIR="$pkgdir" AB_CD=multi ./mach install
 
   install -Dvm644 "$srcdir/vendor.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/vendor.js"
@@ -332,4 +334,5 @@ END
 
   find . -name '*crashreporter-symbols-full.zip' -exec \
 	cp -fvt "$startdir" {} +
+  ./mach clobber
 }
