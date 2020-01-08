@@ -15,8 +15,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=71.0
-pkgrel=4
+pkgver=72.0.1
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -36,8 +36,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
-_patchrev=52b1745787cf
-_pfdate=20191206
+_patchrev=4c5d44d40a03
+_pfdate=20200107
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -50,7 +50,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         kde.js
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	0001-Bug-1212502-Switch-mozinfo-to-using-the-distro-packa.patch
 	plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
@@ -58,11 +57,8 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         # Gecko/toolkit patchset
         mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-        #mozilla-fix-top-level-asm-$_patchrev.patch::$_patchurl/mozilla-fix-top-level-asm.patch
-        unity-menubar-r2278.patch
+        unity-menubar-r2298.patch
         pgo_fix_missing_kdejs.patch
-        2000_system_harfbuzz_support.patch
-        2001_system_graphite2_support.patch
         7002_system_av1_support.patch
         # artwork
         #about-background.png
@@ -77,26 +73,23 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('78304cd58229e7103b56b34718aad051c9a4db30c266512a64f501ba58da7fbe'
+sha256sums=('1fa59aedc8469c3e6ffb12449ab7de2f93776f7679eedebfb74aa309b694956f'
             'SKIP'
-            '5fbbf22961c84875ab21239700f44e852edd85bbf5b1bcb6eb440a08ebe4d8f6'
+            '72bbdd0c488285561cfc3f620c3c5d3151de1084bfc754afc1c76d6a6ab47f74'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             'ee730839ed63469c7ab8309b26566db00d0ffeedbb70c87989660d9837bc9cb5'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '33f5aec0bba83b23410176c5351425d2ad949d7f0bf409a579be25bebb773fce'
-            '773168ce246283d8b1dab0a3063742c0a651e220fed92d732dc781fba2e63d20'
+            'c5171b082942d83cb9901717e15bd6829e67157bdc1ae2a55d8020b334da5fc5'
             'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
-            '08058fd55f8572cff0d505cb1183f91c52d21a3d468f1eecb220f089406da54e'
+            'c819d1777e4cb4a069e33c6b56fbb2da0d49107b8fc536c260a9a652cac9f31e'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
-            'f07798006ad7bb065fb36ec087514fbfd5cef2111e24ae58d64669c45746fbda'
+            '70b756e17d41f07c2160faa606c1b86f28ff07acc9b5d324d11bc7de300d6c82'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
-            'cb21c074a2c2870206893a089b70e5e36292319765f0c8d1e62cc7e88b013a2e'
-            '88a8c2f813d10dad8e0e8b4453a6741ceca58174534fdfeb5480152c25b2f692'
             '802e4c741ba503535a4df7bf03d21837d1c8e1d5f5c928028f869e23d202c1c0'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
-            '07060a4bddad57b4b830af45d4403cf6f0f869a659c46a0663b66348cfedb0c6'
+            '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
             'bdb5ff6cf072421a7bfd5d6d525b01ecb449dca0bf2bbe1830c3060571ce7718'
             '5bb9b27c16e09afbd7434840a022da7b83aa10590be9ec3ed150a92c2f420c22'
@@ -146,16 +139,13 @@ prepare() {
   fi
   
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-  mkdir $srcdir/mozbuild
-  ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
-  echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
+  #mkdir $srcdir/mozbuild
+  #ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
+  #echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
   
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-  
-  # Make it compile with Rust 1.39 and Python 3.8
-  patch -Np1 -i ../0001-Bug-1212502-Switch-mozinfo-to-using-the-distro-packa.patch
-  
+    
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
@@ -164,15 +154,12 @@ prepare() {
 
   # add globalmenu support
   msg "Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r2278.patch
+  patch -Np1 -i ../unity-menubar-r2298.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo_fix_missing_kdejs.patch
 
   # use more system libs
-  msg "Add system harfbuzz/graphite2/av1 support"
-  patch -Np1 -i ../2000_system_harfbuzz_support.patch
-  patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
 
   # Plasmafox patches
@@ -212,10 +199,10 @@ build() {
 	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
 	./mach buildsymbols
 	# repackage l10n test
-	export MOZ_CHROME_MULTILOCALE="en-US de"
-	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
-		./mach build chrome-$AB_CD
-	done
+	#export MOZ_CHROME_MULTILOCALE="en-US de"
+	#for AB_CD in $MOZ_CHROME_MULTILOCALE; do
+	#	./mach build chrome-$AB_CD
+	#done
 
   else
 	export CC='clang --target=x86_64-unknown-linux-gnu'
@@ -270,10 +257,10 @@ END
 	./mach buildsymbols
 	./mach package
 	# repackage l10n test
-	export MOZ_CHROME_MULTILOCALE="de fr pl"
-	for AB_CD in $MOZ_CHROME_MULTILOCALE; do
-		./mach build chrome-$AB_CD
-	done
+	#export MOZ_CHROME_MULTILOCALE="de fr pl"
+	#for AB_CD in $MOZ_CHROME_MULTILOCALE; do
+	#	./mach build chrome-$AB_CD
+	#done
   fi
 }
 
@@ -284,7 +271,8 @@ package() {
   cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 
   #AB_CD=multi ./mach package
-  DESTDIR="$pkgdir" AB_CD=multi ./mach install
+  #DESTDIR="$pkgdir" AB_CD=multi ./mach install
+  DESTDIR="$pkgdir" ./mach install
 
   install -Dvm644 "$srcdir/vendor.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/vendor.js"
   install -Dvm644 "$srcdir/kde.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/kde.js"
@@ -336,3 +324,4 @@ END
 	cp -fvt "$startdir" {} +
   ./mach clobber
 }
+

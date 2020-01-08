@@ -34,9 +34,9 @@ index c0435eac73..1597c26673 100644
 +  background-size: 108px auto;
    /* padding-top creates room for the wordmark */
 -  padding-top: 38px;
--  margin-top:20px;
+-  margin-top: 20px;
 +  padding-top: 30px;
-+  margin-top:18px;
++  margin-top: 18px;
  }
  
  #rightBox:-moz-locale-dir(rtl) {

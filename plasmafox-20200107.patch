@@ -34,9 +34,9 @@ index c0435eac73..1597c26673 100644
 +  background-size: 108px auto;
    /* padding-top creates room for the wordmark */
 -  padding-top: 38px;
--  margin-top:20px;
+-  margin-top: 20px;
 +  padding-top: 30px;
-+  margin-top:18px;
++  margin-top: 18px;
  }
  
  #rightBox:-moz-locale-dir(rtl) {
@@ -286,9 +286,9 @@ index 2d1aca30f6..e618fe5b7f 100644
 -- 
 2.24.0
 
-From 8052f6afb4b34ac26f2c0f8155f96cacbb943caf Mon Sep 17 00:00:00 2001
+From 4ebc8ab1412817231c691b52c173d369a645e74c Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sat, 26 Oct 2019 13:45:05 +0200
+Date: Tue, 7 Jan 2020 21:51:02 +0100
 Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -297,13 +297,13 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
-index a692c6ed70..881a95346a 100644
+index f9038508e6..66d46e4f15 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
-@@ -474,13 +474,13 @@ nsresult nsHttpHandler::Init() {
+@@ -457,13 +457,13 @@ nsresult nsHttpHandler::Init() {
    // monitor some preference changes
-   Preferences::RegisterPrefixCallbacks(
-       PREF_CHANGE_METHOD(nsHttpHandler::PrefsChanged), gCallbackPrefs, this);
+   Preferences::RegisterPrefixCallbacks(nsHttpHandler::PrefsChanged,
+                                        gCallbackPrefs, this);
    PrefsChanged(nullptr);
  
 -  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
@@ -316,7 +316,7 @@ index a692c6ed70..881a95346a 100644
        do_GetService("@mozilla.org/xre/app-info;1");
  
    mAppName.AssignLiteral(MOZ_APP_UA_NAME);
-@@ -929,22 +929,18 @@ void nsHttpHandler::BuildUserAgent() {
+@@ -912,22 +912,18 @@ void nsHttpHandler::BuildUserAgent() {
    mUserAgent += ' ';
    mUserAgent += mProduct;
    mUserAgent += '/';
@@ -348,7 +348,7 @@ index a692c6ed70..881a95346a 100644
  #ifdef XP_WIN
  #  define OSCPU_WINDOWS "Windows NT %ld.%ld"
 -- 
-2.23.0
+2.24.1
 
 From dc18d3c5ad26e6f284d6ce0f9e278d5bed99f4ad Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
@@ -384,78 +384,6 @@ index a251050feb..5aada7532e 100644
  
 -- 
 2.23.0
-
-From a846e16957cf3d89a01bbdb8f08dd413f2f66fe0 Mon Sep 17 00:00:00 2001
-From: torvic9 <torvic9@mailbox.org>
-Date: Wed, 4 Dec 2019 19:47:03 +0100
-Subject: [PATCH] bring back old about dialog
-
-Signed-off-by: torvic9 <torvic9@mailbox.org>
----
- .../unofficial/content/aboutDialog.css        | 34 ++-----------------
- 1 file changed, 3 insertions(+), 31 deletions(-)
-
-diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
-index 284c60f4ad..fe802d0538 100644
---- a/browser/branding/unofficial/content/aboutDialog.css
-+++ b/browser/branding/unofficial/content/aboutDialog.css
-@@ -1,34 +1,14 @@
- /* This Source Code Form is subject to the terms of the Mozilla Public
-  * License, v. 2.0. If a copy of the MPL was not distributed with this
-  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
- #aboutDialogContainer {
--  background-color: #130829;
--  color: #fff;
--}
--
--#clientBox {
--  padding: 10px 0 15px;
--}
--
--#leftBox {
--  background-image: url("chrome://branding/content/about-logo.png");
-+  background-image: url("chrome://branding/content/about-background.png");
-   background-repeat: no-repeat;
--  background-size: 192px auto;
--  background-position: center 20%;
--  /* min-width and min-height create room for the logo */
--  min-width: 210px;
--  min-height: 210px;
--  margin-top: 20px;
--  margin-inline-start: 30px;
--}
--
--@media (min-resolution: 2dppx) {
--  #leftBox {
--    background-image: url("chrome://branding/content/about-logo@2x.png");
--  }
-+  background-color: rgb(10,17,37);
-+  color: #fff;
- }
- 
- .text-link {
-   color: #fff !important;
-   text-decoration: underline;
-@@ -38,16 +18,8 @@
-   /* this margin prevents text from overlapping the planet image */
-   margin-left: 280px;
-   margin-right: 20px;
- }
- 
--#rightBox {
--  background-size: auto 64px;
--  margin-left: 30px;
--  margin-right: 30px;
--  padding-top: 64px;
--}
--
- #bottomBox {
-   background-color: rgba(10,17,37,.4);
--  padding: 15px 10px 15px;
- }
--- 
-2.24.0
 
 From e39397fe381a0abfc37493254cd3c416d3436776 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
@@ -511,11 +439,11 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
  browser/base/content/browser.css       | 65 --------------------------
  browser/base/content/browser.js        |  1 -
- browser/base/content/browser.xhtml     | 36 --------------
  browser/base/content/utilityOverlay.js |  6 ---
- browser/components/BrowserGlue.jsm     | 18 -------
  browser/components/moz.build           |  1 -
- 6 files changed, 127 deletions(-)
+ 4 files changed, 73 deletions(-)
+
+[manual dirty adaptations above for >= 72.0]
 
 diff --git a/browser/base/content/browser.css b/browser/base/content/browser.css
 index f5ffb29c93..db6e9acd3c 100644
@@ -609,55 +537,6 @@ index 160f569d1e..78acefd31f 100644
    UrlbarInput: "resource:///modules/UrlbarInput.jsm",
    UrlbarPrefs: "resource:///modules/UrlbarPrefs.jsm",
    UrlbarTokenizer: "resource:///modules/UrlbarTokenizer.jsm",
-diff --git a/browser/base/content/browser.xhtml b/browser/base/content/browser.xhtml
-index 0015cecc7a..e441578cdb 100644
---- a/browser/base/content/browser.xhtml
-+++ b/browser/base/content/browser.xhtml
-@@ -316,44 +316,8 @@
- #endif
-       </hbox>
-     </panel>
- 
--    <!-- UI tour experience -->
--    <panel id="UITourTooltip"
--           type="arrow"
--           hidden="true"
--           noautofocus="true"
--           noautohide="true"
--           align="start"
--           orient="vertical"
--           role="alert">
--     <vbox>
--      <hbox id="UITourTooltipBody">
--        <image id="UITourTooltipIcon"/>
--        <vbox flex="1">
--          <hbox id="UITourTooltipTitleContainer">
--            <label id="UITourTooltipTitle" flex="1"/>
--            <toolbarbutton id="UITourTooltipClose" class="close-icon"
--                           tooltiptext="&uiTour.infoPanel.close;"/>
--          </hbox>
--          <description id="UITourTooltipDescription" flex="1"/>
--        </vbox>
--      </hbox>
--      <hbox id="UITourTooltipButtons" flex="1" align="center"/>
--     </vbox>
--    </panel>
--    <!-- type="default" forces frames to be created so that the panel's size can be determined -->
--    <panel id="UITourHighlightContainer"
--           type="default"
--           hidden="true"
--           noautofocus="true"
--           noautohide="true"
--           flip="none"
--           consumeoutsideclicks="false"
--           mousethrough="always">
--      <box id="UITourHighlight"></box>
--    </panel>
--
-     <panel id="sidebarMenu-popup"
-            class="cui-widget-panel"
-            role="group"
-            type="arrow"
 diff --git a/browser/base/content/utilityOverlay.js b/browser/base/content/utilityOverlay.js
 index 7180d0829b..a6931738bb 100644
 --- a/browser/base/content/utilityOverlay.js
@@ -677,55 +556,6 @@ index 7180d0829b..a6931738bb 100644
    document.getElementById(
      "feedbackPage"
    ).disabled = !Services.policies.isAllowed("feedbackCommands");
-diff --git a/browser/components/BrowserGlue.jsm b/browser/components/BrowserGlue.jsm
-index c087ccb7eb..6c42d3a210 100644
---- a/browser/components/BrowserGlue.jsm
-+++ b/browser/components/BrowserGlue.jsm
-@@ -321,18 +321,8 @@ let LEGACY_ACTORS = {
-       matches: ["about:studies"],
-     },
-   },
- 
--  UITour: {
--    child: {
--      module: "resource:///modules/UITourChild.jsm",
--      events: {
--        mozUITour: { wantUntrusted: true },
--      },
--      permissions: ["uitour"],
--    },
--  },
--
-   URIFixup: {
-     child: {
-       module: "resource:///actors/URIFixupChild.jsm",
-       group: "browsers",
-@@ -507,9 +497,8 @@ XPCOMUtils.defineLazyModuleGetters(this, {
-   ShellService: "resource:///modules/ShellService.jsm",
-   TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
-   TabUnloader: "resource:///modules/TabUnloader.jsm",
-   UIState: "resource://services-sync/UIState.jsm",
--  UITour: "resource:///modules/UITour.jsm",
-   WebChannel: "resource://gre/modules/WebChannel.jsm",
-   WindowsRegistry: "resource://gre/modules/WindowsRegistry.jsm",
- });
- 
-@@ -4240,15 +4229,8 @@ var JawsScreenReaderVersionCheck = {
-     );
-   },
- };
- 
--// Listen for UITour messages.
--// Do it here instead of the UITour module itself so that the UITour module is lazy loaded
--// when the first message is received.
--Services.mm.addMessageListener("UITour:onPageEvent", function(aMessage) {
--  UITour.onPageEvent(aMessage, aMessage.data);
--});
--
- // Listen for HybridContentTelemetry messages.
- // Do it here instead of HybridContentTelemetry.init() so that
- // the module can be lazily loaded on the first message.
- Services.mm.addMessageListener(
 diff --git a/browser/components/moz.build b/browser/components/moz.build
 index 4195a30a5d..338ad508c0 100644
 --- a/browser/components/moz.build
@@ -742,82 +572,6 @@ index 4195a30a5d..338ad508c0 100644
  
 -- 
 2.23.0
-
-From c2e52f1b94fbed5847fea705b79aab78bf49ed56 Mon Sep 17 00:00:00 2001
-From: torvic9 <torvic9@mailbox.org>
-Date: Thu, 5 Dec 2019 20:56:07 +0100
-Subject: [PATCH] Revert "bring back old about dialog"
-
-This reverts commit a846e16957cf3d89a01bbdb8f08dd413f2f66fe0.
-
-Signed-off-by: torvic9 <torvic9@mailbox.org>
----
- .../unofficial/content/aboutDialog.css        | 34 +++++++++++++++++--
- 1 file changed, 31 insertions(+), 3 deletions(-)
-
-diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
-index fe802d0538..284c60f4ad 100644
---- a/browser/branding/unofficial/content/aboutDialog.css
-+++ b/browser/branding/unofficial/content/aboutDialog.css
-@@ -1,16 +1,36 @@
- /* This Source Code Form is subject to the terms of the Mozilla Public
-  * License, v. 2.0. If a copy of the MPL was not distributed with this
-  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
- 
- #aboutDialogContainer {
--  background-image: url("chrome://branding/content/about-background.png");
--  background-repeat: no-repeat;
--  background-color: rgb(10,17,37);
-+  background-color: #130829;
-   color: #fff;
- }
- 
-+#clientBox {
-+  padding: 10px 0 15px;
-+}
-+
-+#leftBox {
-+  background-image: url("chrome://branding/content/about-logo.png");
-+  background-repeat: no-repeat;
-+  background-size: 192px auto;
-+  background-position: center 20%;
-+  /* min-width and min-height create room for the logo */
-+  min-width: 210px;
-+  min-height: 210px;
-+  margin-top: 20px;
-+  margin-inline-start: 30px;
-+}
-+
-+@media (min-resolution: 2dppx) {
-+  #leftBox {
-+    background-image: url("chrome://branding/content/about-logo@2x.png");
-+  }
-+}
-+
- .text-link {
-   color: #fff !important;
-   text-decoration: underline;
- }
- 
-@@ -18,8 +38,16 @@
-   /* this margin prevents text from overlapping the planet image */
-   margin-left: 280px;
-   margin-right: 20px;
- }
- 
-+#rightBox {
-+  background-size: auto 64px;
-+  margin-left: 30px;
-+  margin-right: 30px;
-+  padding-top: 64px;
-+}
-+
- #bottomBox {
-   background-color: rgba(10,17,37,.4);
-+  padding: 15px 10px 15px;
- }
--- 
-2.24.0
 
 From 2d228c5075fa0292bb99866cf85ba78a06619bf3 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>

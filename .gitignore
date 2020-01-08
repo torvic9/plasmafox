@@ -1,3 +1,5 @@
 *.xz
 *.pkg
 working/*
+icon/*
+
