@@ -1,21 +1,12 @@
 # Maintainer: torvic9 AT mailbox DOT org
 # based on ideas by Waterfox and firefox-kde-opensuse
 
-# enable gcc build
-_usegcc=0
-
 # enable gtk3 wayland (experimental)
 _gtk3_wayland=0
 
-# globalmenu
-# to support globalmenu a patch from ubuntu is applied
-# source:
-# http://bazaar.launchpad.net/~mozillateam/firefox/firefox-trunk.head
-# /view/head:/debian/patches/unity-menubar.patch
-
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=72.0.1
+pkgver=72.0.2
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -43,14 +34,14 @@ options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
-	#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
+		#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
         mozconfig
         plasmafox.desktop
         vendor.js
         kde.js
-	user.js
-	0001-Use-remoting-name-for-GDK-application-names.patch
-	plasmafox-${_pfdate}.patch
+		user.js
+		0001-Use-remoting-name-for-GDK-application-names.patch
+		plasmafox-${_pfdate}.patch
         # Firefox patchset
         #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
         firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
@@ -59,23 +50,26 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
         unity-menubar-r2298.patch
         pgo_fix_missing_kdejs.patch
+		Bug_1584000_Migrate_glyph_to_character_association_code.patch
+		2000_system_harfbuzz_support.patch
+		2001_system_graphite2_support.patch
         7002_system_av1_support.patch
         # artwork
         #about-background.png
         about-logo.png
-	about-logo@2x.png
+		about-logo@2x.png
         about-wordmark.svg
         plasmafox-wordmark.svg
         about.png
         default{16,22,24,32,48,64,128,256}.png
-	# additions
-	plasmafox.profile
-	plasmafox.psd
+		# additions
+		plasmafox.profile
+		plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('1fa59aedc8469c3e6ffb12449ab7de2f93776f7679eedebfb74aa309b694956f'
+sha256sums=('77fd224bea885172d757aef587ad443f2171aa84e4297bca55df91a1951be389'
             'SKIP'
-            '72bbdd0c488285561cfc3f620c3c5d3151de1084bfc754afc1c76d6a6ab47f74'
+            '07f9fa1d76964ae597c559c56b3e3b67dc8048cfe5257a9725cc1d63d2c94428'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             'ee730839ed63469c7ab8309b26566db00d0ffeedbb70c87989660d9837bc9cb5'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -87,6 +81,9 @@ sha256sums=('1fa59aedc8469c3e6ffb12449ab7de2f93776f7679eedebfb74aa309b694956f'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
             '70b756e17d41f07c2160faa606c1b86f28ff07acc9b5d324d11bc7de300d6c82'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
+            '38cd1121267b49b2d04104ae1dfc61d4794b27dcc26f6c3710dc96bff21f2183'
+            '7e7cf4ea6ab4c47e382b8ccefd092553f103a7def295ae6c9f82f9989fa15778'
+            'ff34e784815583996c2f9576989178b2a5016bb4afe69771a08070a888fae2f7'
             '802e4c741ba503535a4df7bf03d21837d1c8e1d5f5c928028f869e23d202c1c0'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
@@ -106,11 +103,6 @@ sha256sums=('1fa59aedc8469c3e6ffb12449ab7de2f93776f7679eedebfb74aa309b694956f'
 
 validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
-if [[ $_usegcc == 1 ]] ; then
-  source+=('2004_fix_sandbox_lto.patch')
-  sha256sums+=('92ca2b138b29e3fbe18427c849a1e06bd4e7d8a4003e39278886ec8f5d01e831')
-fi
-
 prepare() {
   #cd mozilla-unified
   cd firefox-${pkgver}
@@ -123,29 +115,22 @@ prepare() {
   fi
 
   # ccache/sccache
-  #if in_array ccache ${BUILDENV[*]} ; then
-  #echo "ac_add_options --with-ccache" >> .mozconfig
-  #echo "mk_add_options 'export RUSTC_WRAPPER=sccache'" >> .mozconfig
-  #echo "mk_add_options 'export SCCACHE_VERBOSE_STATS=1'" >> .mozconfig
-  #fi
+  # if in_array ccache ${BUILDENV[*]} ; then
+  # echo "ac_add_options --with-ccache" >> .mozconfig
+  # echo "mk_add_options 'export RUSTC_WRAPPER=sccache'" >> .mozconfig
+  # echo "mk_add_options 'export SCCACHE_VERBOSE_STATS=1'" >> .mozconfig
+  # fi
 
-  if [[ $_usegcc == 1 ]] ; then
-    echo "ac_add_options --enable-gold" >> .mozconfig
-    echo "ac_add_options --enable-linker=gold" >> .mozconfig
-    echo "ac_add_options --enable-lto" >> .mozconfig
-    patch -Np1 -i "$srcdir/2004_fix_sandbox_lto.patch"
-  else
-    echo "ac_add_options --enable-linker=lld" >> .mozconfig
-  fi
-  
   echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-  #mkdir $srcdir/mozbuild
-  #ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
-  #echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
-  
+
+  # multilocale
+  # mkdir $srcdir/mozbuild
+  # ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
+  # echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
+
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-    
+
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
@@ -159,7 +144,11 @@ prepare() {
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo_fix_missing_kdejs.patch
 
+  patch -Rp1 -i ../Bug_1584000_Migrate_glyph_to_character_association_code.patch
+
   # use more system libs
+  patch -Np1 -i ../2000_system_harfbuzz_support.patch
+  patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
 
   # Plasmafox patches
@@ -171,7 +160,6 @@ prepare() {
   cp "$srcdir/plasmafox-wordmark.svg" ./browser/components/newtab/data/content/assets/
   cp "$srcdir/about-logo.png" ./browser/branding/unofficial/content/
   cp "$srcdir/about-logo@2x.png" ./browser/branding/unofficial/content/
-  #cp "$srcdir/about-background.png" ./browser/branding/unofficial/content/
   cp "$srcdir/about.png" ./browser/branding/unofficial/
   for i in 16 22 24 32 48 64 128 256; do
       cp "$srcdir/default$i.png" browser/branding/unofficial/
@@ -188,80 +176,63 @@ build() {
   #export CARGO_HOME="$srcdir/.cargo"
   ulimit -n 4096
 
-  if [[ $_usegcc == 1 ]] ; then
-	export MOZ_PGO=1
-	export CC=gcc
-	export CXX=g++
-	export AR=gcc-ar
-	export NM=gcc-nm
-	export RANLIB=gcc-ranlib
+  export CC='/opt/clang/bin/clang --target=x86_64-unknown-linux-gnu'
+  export CXX='/opt/clang/bin/clang++ --target=x86_64-unknown-linux-gnu'
+  export AR=/opt/clang/bin/llvm-ar
+  export NM=/opt/clang/bin/llvm-nm
+  export RANLIB=/opt/clang/bin/llvm-ranlib
+  #export RUSTC_WRAPPER=sccache
 
-	xvfb-run -a -n 97 -s "-extension GLX -screen 0 1600x1200x24" ./mach build
-	./mach buildsymbols
-	# repackage l10n test
-	#export MOZ_CHROME_MULTILOCALE="en-US de"
-	#for AB_CD in $MOZ_CHROME_MULTILOCALE; do
-	#	./mach build chrome-$AB_CD
-	#done
+  # -fno-plt with cross-LTO causes obscure LLVM errors
+  # LLVM ERROR: Function Import: link error
+  CFLAGS="${CFLAGS/-fno-plt/}"
+  CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 
-  else
-	export CC='clang --target=x86_64-unknown-linux-gnu'
-	export CXX='clang++ --target=x86_64-unknown-linux-gnu'
-	export AR=llvm-ar
-	export NM=llvm-nm
-	export RANLIB=llvm-ranlib
-	#export RUSTC_WRAPPER=sccache
-
-	# -fno-plt with cross-LTO causes obscure LLVM errors
-	# LLVM ERROR: Function Import: link error
-	CFLAGS="${CFLAGS/-fno-plt/}"
-	CXXFLAGS="${CXXFLAGS/-fno-plt/}"
-
-	# Do 3-tier PGO
-	msg2 "Building instrumented browser..."
-	cat >.mozconfig ../mozconfig - <<END
+  # Do 3-tier PGO
+  msg2 "Building instrumented browser..."
+  cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-profile-generate=cross
 END
-	./mach build
+  ./mach build
 
-	msg2 "Profiling instrumented browser..."
-	./mach package
-	LLVM_PROFDATA=llvm-profdata \
-		JARLOG_FILE="$PWD/jarlog" \
-		xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
-		./mach python build/pgo/profileserver.py
+  msg2 "Profiling instrumented browser..."
+  ./mach package
+  LLVM_PROFDATA=llvm-profdata \
+  	JARLOG_FILE="$PWD/jarlog" \
+  	xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
+  	./mach python build/pgo/profileserver.py
 
-	if [[ ! -s merged.profdata ]]; then
-		error "No profile data produced."
-		return 1
-	fi
+  if [[ ! -s merged.profdata ]]; then
+  	error "No profile data produced."
+  	return 1
+  fi
 
-	if [[ ! -s jarlog ]]; then
-		error "No jar log produced."
-		return 1
-	fi
+  if [[ ! -s jarlog ]]; then
+  	error "No jar log produced."
+  	return 1
+  fi
 
-	msg2 "Removing instrumented browser..."
-	./mach clobber
+  msg2 "Removing instrumented browser..."
+  ./mach clobber
 
-	msg2 "Building optimized browser..."
-	cat >.mozconfig ../mozconfig - <<END
+  msg2 "Building optimized browser..."
+  cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross
 ac_add_options --enable-profile-use=cross
 ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
 ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
-	./mach build
+  ./mach build
 
-	msg2 "Building symbol archive..."
-	./mach buildsymbols
-	./mach package
-	# repackage l10n test
-	#export MOZ_CHROME_MULTILOCALE="de fr pl"
-	#for AB_CD in $MOZ_CHROME_MULTILOCALE; do
-	#	./mach build chrome-$AB_CD
-	#done
-  fi
+  msg2 "Building symbol archive..."
+  ./mach buildsymbols
+  ./mach package
+
+  # multilocale
+  #export MOZ_CHROME_MULTILOCALE="de fr pl"
+  #for AB_CD in $MOZ_CHROME_MULTILOCALE; do
+  #	./mach build chrome-$AB_CD
+  #done
 }
 
 package() {
