@@ -2,11 +2,11 @@
 
 **Main differences between Plasmafox and Firefox:**
  - KDE integration with file dialogs and global menu
- - Compiled with clang-9, but gcc-9 remains an option
+ - Binaries built with custom clang-10
  - Uses many system libraries (e.g. libvpx, nspr, icu, zlib, harfbuzz, av1 etc.)
  - Some Mozilla services like Pocket, Telemetry, UI Tour and Sync disabled
  - Removed most of trademark-restricted marks like the name "Firefox" and the icons
- - (Currently) lacks some features like EME and WebRTC
+ - disabled EME and WebRTC
 
 
 **Credits go to Mozilla and:**
