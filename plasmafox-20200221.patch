@@ -1,31 +1,30 @@
-From ee0010c3a3bb28e2f98dac849e7c8a9c1ec0d60c Mon Sep 17 00:00:00 2001
+From 165d6e66a11cc3359681862faa79e55d6a694746 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Tue, 3 Dec 2019 21:08:26 +0100
+Date: Sat, 22 Feb 2020 11:32:10 +0100
 Subject: [PATCH] branding and dialogs
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
-browser/base/content/aboutDialog.css    |  6 +++---
-browser/base/content/aboutDialog.xul    |  8 ++++----
-browser/base/content/overrides/app-license.html  |  2 +-
-browser/branding/branding-common.mozbuild        |  3 +++
-browser/branding/unofficial/configure.sh         |  3 ++-
-browser/branding/unofficial/content/aboutDialog.css      |  2 +-
-browser/branding/unofficial/locales/en-US/brand.dtd      | 10 ++++++----
-browser/branding/unofficial/locales/en-US/brand.ftl      | 12 ++++++------
-browser/branding/unofficial/locales/en-US/brand.properties        | 10 +++++-----
-browser/branding/unofficial/pref/firefox-branding.js     |  6 +++---
-browser/installer/package-manifest.in   |  3 +++
-browser/locales/en-US/browser/aboutDialog.ftl    |  2 +-
-browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css  |  2 +-
- 13 files changed, 39 insertions(+), 30 deletions(-)
+ browser/base/content/aboutDialog.css                 |  6 +++---
+ browser/base/content/aboutDialog.xhtml               |  8 ++++----
+ browser/base/content/overrides/app-license.html      |  2 +-
+ browser/branding/branding-common.mozbuild            |  3 +++
+ browser/branding/unofficial/configure.sh             |  4 +++-
+ browser/branding/unofficial/content/aboutDialog.css  |  2 +-
+ browser/branding/unofficial/locales/en-US/brand.dtd  |  8 ++++----
+ browser/branding/unofficial/locales/en-US/brand.ftl  | 12 ++++++------
+ .../unofficial/locales/en-US/brand.properties        | 10 +++++-----
+ browser/branding/unofficial/pref/firefox-branding.js |  6 +++---
+ browser/installer/package-manifest.in                |  3 +++
+ browser/locales/en-US/browser/aboutDialog.ftl        |  2 +-
+ .../shared/privatebrowsing/aboutPrivateBrowsing.css  |  2 +-
+ 13 files changed, 38 insertions(+), 30 deletions(-)
 
 diff --git a/browser/base/content/aboutDialog.css b/browser/base/content/aboutDialog.css
-index c0435eac73..1597c26673 100644
+index 7dbb248c1f..7ce119d865 100644
 --- a/browser/base/content/aboutDialog.css
 +++ b/browser/base/content/aboutDialog.css
-@@ -12,14 +12,14 @@
- }
+@@ -13,12 +13,12 @@
  
  #rightBox {
    background-image: url("chrome://branding/content/about-wordmark.svg");
@@ -41,13 +40,11 @@ index c0435eac73..1597c26673 100644
  
  #rightBox:-moz-locale-dir(rtl) {
    background-position: 100% 0;
- }
-diff --git a/browser/base/content/aboutDialog.xul b/browser/base/content/aboutDialog.xul
-index 66733ffc03..5b29566c98 100644
---- a/browser/base/content/aboutDialog.xul
-+++ b/browser/base/content/aboutDialog.xul
-@@ -126,21 +126,21 @@
-           </description>
+diff --git a/browser/base/content/aboutDialog.xhtml b/browser/base/content/aboutDialog.xhtml
+index f7e10f2632..94418f97bc 100644
+--- a/browser/base/content/aboutDialog.xhtml
++++ b/browser/base/content/aboutDialog.xhtml
+@@ -127,19 +127,19 @@
  #endif
            <vbox id="experimental" hidden="true">
              <description class="text-blurb" id="warningDesc" data-l10n-id="warningDesc-version"></description>
@@ -71,7 +68,6 @@ index 66733ffc03..5b29566c98 100644
          </vbox>
        </vbox>
      </hbox>
-     <vbox id="bottomBox">
 diff --git a/browser/base/content/overrides/app-license.html b/browser/base/content/overrides/app-license.html
 index e7a158c792..2730e9af0c 100644
 --- a/browser/base/content/overrides/app-license.html
@@ -88,8 +84,7 @@ diff --git a/browser/branding/branding-common.mozbuild b/browser/branding/brandi
 index 908553b8b9..9fb2702eb2 100644
 --- a/browser/branding/branding-common.mozbuild
 +++ b/browser/branding/branding-common.mozbuild
-@@ -25,9 +25,12 @@ def FirefoxBranding():
-         ]
+@@ -26,8 +26,11 @@ def FirefoxBranding():
      elif CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
          FINAL_TARGET_FILES.chrome.icons.default += [
              'default128.png',
@@ -102,10 +97,10 @@ index 908553b8b9..9fb2702eb2 100644
              'default64.png',
          ]
 diff --git a/browser/branding/unofficial/configure.sh b/browser/branding/unofficial/configure.sh
-index edd3bd3e86..c20a3b626a 100644
+index edd3bd3e86..c61c85c56d 100644
 --- a/browser/branding/unofficial/configure.sh
 +++ b/browser/branding/unofficial/configure.sh
-@@ -1,5 +1,6 @@
+@@ -1,5 +1,7 @@
  # This Source Code Form is subject to the terms of the Mozilla Public
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -113,12 +108,12 @@ index edd3bd3e86..c20a3b626a 100644
 -MOZ_APP_DISPLAYNAME=Nightly
 +MOZ_APP_DISPLAYNAME=plasmafox
 +MOZ_APP_PROFILE=plasmafox
++
 diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
 index 229d7bcea1..284c60f4ad 100644
 --- a/browser/branding/unofficial/content/aboutDialog.css
 +++ b/browser/branding/unofficial/content/aboutDialog.css
-@@ -46,8 +46,8 @@
-   margin-right: 30px;
+@@ -47,7 +47,7 @@
    padding-top: 64px;
  }
  
@@ -128,10 +123,10 @@ index 229d7bcea1..284c60f4ad 100644
    padding: 15px 10px 15px;
  }
 diff --git a/browser/branding/unofficial/locales/en-US/brand.dtd b/browser/branding/unofficial/locales/en-US/brand.dtd
-index 0b781d49a3..229cb5717c 100644
+index 0b781d49a3..fdca5731a9 100644
 --- a/browser/branding/unofficial/locales/en-US/brand.dtd
 +++ b/browser/branding/unofficial/locales/en-US/brand.dtd
-@@ -1,11 +1,13 @@
+@@ -1,11 +1,11 @@
  <!-- This Source Code Form is subject to the terms of the Mozilla Public
     - License, v. 2.0. If a copy of the MPL was not distributed with this
     - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
@@ -147,14 +142,11 @@ index 0b781d49a3..229cb5717c 100644
     remain unchanged across different versions (Nightly, Beta, etc.). -->
 -<!ENTITY  brandProductName      "Firefox">
 +<!ENTITY  brandProductName      "Plasmafox">
-+<!ENTITY  vendorShortName       "Plasmafox">
-+<!ENTITY  trademarkInfo.part1   "Plasmafox is not associated with Mozilla">
 diff --git a/browser/branding/unofficial/locales/en-US/brand.ftl b/browser/branding/unofficial/locales/en-US/brand.ftl
 index ef268375fe..cb9ed00d1c 100644
 --- a/browser/branding/unofficial/locales/en-US/brand.ftl
 +++ b/browser/branding/unofficial/locales/en-US/brand.ftl
-@@ -10,13 +10,13 @@
- ## - Transliterated.
+@@ -11,12 +11,12 @@
  ## - Translated.
  ##
  ## Reference: https://www.mozilla.org/styleguide/communications/translation/
@@ -198,11 +190,10 @@ index 7c86db3f43..e7dfa02951 100644
  
  syncBrandShortName=Sync
 diff --git a/browser/branding/unofficial/pref/firefox-branding.js b/browser/branding/unofficial/pref/firefox-branding.js
-index 3f907f1b31..969f39dd9e 100644
+index f22dd0a51c..a98f7e3ecb 100644
 --- a/browser/branding/unofficial/pref/firefox-branding.js
 +++ b/browser/branding/unofficial/pref/firefox-branding.js
-@@ -3,22 +3,22 @@
-  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+@@ -4,20 +4,20 @@
  
  // This file contains branding-specific prefs.
  
@@ -226,13 +217,11 @@ index 3f907f1b31..969f39dd9e 100644
  // The number of days a binary is permitted to be old
  // without checking for an update.  This assumes that
  // app.update.checkInstallTime is true.
- pref("app.update.checkInstallTime.days", 2);
 diff --git a/browser/installer/package-manifest.in b/browser/installer/package-manifest.in
-index 0efb8c4210..8f15549036 100644
+index 7054749357..ce49fd65cc 100644
 --- a/browser/installer/package-manifest.in
 +++ b/browser/installer/package-manifest.in
-@@ -249,14 +249,17 @@
- @RESPATH@/chrome/toolkit.manifest
+@@ -253,12 +253,15 @@
  @RESPATH@/chrome/recording.manifest
  @RESPATH@/chrome/recording/*
  #ifdef MOZ_GTK
@@ -248,13 +237,11 @@ index 0efb8c4210..8f15549036 100644
  @RESPATH@/browser/features/*
  
  ; [DevTools Startup Files]
- @RESPATH@/browser/chrome/devtools-startup@JAREXT@
 diff --git a/browser/locales/en-US/browser/aboutDialog.ftl b/browser/locales/en-US/browser/aboutDialog.ftl
 index 5737302831..5b8aeb7a8f 100644
 --- a/browser/locales/en-US/browser/aboutDialog.ftl
 +++ b/browser/locales/en-US/browser/aboutDialog.ftl
-@@ -37,11 +37,11 @@ channel-description = You are currently on the <label data-l10n-name="current-ch
- 
+@@ -38,9 +38,9 @@ channel-description = You are currently on the <label data-l10n-name="current-ch
  warningDesc-version = { -brand-short-name } is experimental and may be unstable.
  
  community-exp = <label data-l10n-name="community-exp-mozillaLink">{ -vendor-short-name }</label> is a <label data-l10n-name="community-exp-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
@@ -265,26 +252,23 @@ index 5737302831..5b8aeb7a8f 100644
  helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
  
  bottomLinks-license = Licensing Information
- bottomLinks-rights = End-User Rights
 diff --git a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-index 2d1aca30f6..e618fe5b7f 100644
+index 0318311294..f371e8c02b 100644
 --- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
 +++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-@@ -61,11 +61,11 @@ p {
-   height: 96px;
+@@ -62,9 +62,9 @@ p {
    width: 96px;
  }
  
  .wordmark {
--  background: url("resource://activity-stream/data/content/assets/firefox-wordmark.svg") no-repeat center center;
-+  background: url("resource://activity-stream/data/content/assets/plasmafox-wordmark.svg") no-repeat center center;
+-  background: url("chrome://branding/content/firefox-wordmark.svg") no-repeat center center;
++  background: url("chrome://branding/content/plasmafox-wordmark.svg") no-repeat center center;
    background-size: 172px;
    -moz-context-properties: fill;
    display: inline-block;
    fill: #fff;
-   height: 96px;
 -- 
-2.24.0
+2.25.1
 
 From 4ebc8ab1412817231c691b52c173d369a645e74c Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
@@ -561,15 +545,15 @@ index 4195a30a5d..338ad508c0 100644
 --- a/browser/components/moz.build
 +++ b/browser/components/moz.build
 @@ -50,9 +50,8 @@ DIRS += [
-     'search',
      'sessionstore',
      'shell',
+     'ssb',
      'syncedtabs',
 -    'uitour',
      'urlbar',
      'translation',
+     'webshare',
  ]
- 
 -- 
 2.23.0
 

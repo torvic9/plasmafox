@@ -6,7 +6,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=72.0.2
+pkgver=73.0.1
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -27,8 +27,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
-_patchrev=4c5d44d40a03
-_pfdate=20200107
+_patchrev=004e4b1efb26
+_pfdate=20200221
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -43,14 +43,12 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 		0001-Use-remoting-name-for-GDK-application-names.patch
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
-        #firefox-branded-icons-$_patchrev.patch::$_patchurl/firefox-branded-icons.patch
         firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
         # Gecko/toolkit patchset
         mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-        unity-menubar-r2298.patch
+        unity-menubar-r2302.patch
         pgo_fix_missing_kdejs.patch
-		Bug_1584000_Migrate_glyph_to_character_association_code.patch
 		2000_system_harfbuzz_support.patch
 		2001_system_graphite2_support.patch
         7002_system_av1_support.patch
@@ -67,24 +65,23 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 		plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('77fd224bea885172d757aef587ad443f2171aa84e4297bca55df91a1951be389'
+sha256sums=('53415180e74da60fc91700ce1ff33bf5b6f51e65353017a98270899a08e0c3d2'
             'SKIP'
             '07f9fa1d76964ae597c559c56b3e3b67dc8048cfe5257a9725cc1d63d2c94428'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
-            'ee730839ed63469c7ab8309b26566db00d0ffeedbb70c87989660d9837bc9cb5'
+            '366139a38c73f4a2e029c162e75729b37f14a26b200cca2cc9ec33770e4a3242'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            'c5171b082942d83cb9901717e15bd6829e67157bdc1ae2a55d8020b334da5fc5'
-            'bceea99966ac9cf7d23091fef0cef660c512a6ecd038483fb2d612c8ad7c22be'
-            'c819d1777e4cb4a069e33c6b56fbb2da0d49107b8fc536c260a9a652cac9f31e'
+            '7fe59c2cd5e7c32098225e6f4f0346ca26002db05e4efd8313b5c0cf6d480936'
+            '6420d64af0beeebbee058bb7eca307dabd7b56d833c329e28381a9c65ab920c2'
+            'a868807d2a9a6f75730417be962d709ad32f51bab89f0b1e4af85b9eef847be4'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
-            '70b756e17d41f07c2160faa606c1b86f28ff07acc9b5d324d11bc7de300d6c82'
+            'd158e8559a8f683cf4e3eb8cd2c0b1ccfd307ca48d6f3fa9b00dcfc6f951a310'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
-            '38cd1121267b49b2d04104ae1dfc61d4794b27dcc26f6c3710dc96bff21f2183'
-            '7e7cf4ea6ab4c47e382b8ccefd092553f103a7def295ae6c9f82f9989fa15778'
-            'ff34e784815583996c2f9576989178b2a5016bb4afe69771a08070a888fae2f7'
-            '802e4c741ba503535a4df7bf03d21837d1c8e1d5f5c928028f869e23d202c1c0'
+            'a7943f5ee4f61dbe1d3bdeaa30a52e10c9b664d6e9a05c3a1a3c34d4d5b1ba63'
+            'b57535e11bbb37141c7dda9e50a529722e3a385d9dfed5726432b3beb5107d7f'
+            '7fee677f2f6e3c8cc63f4fb5007c034f53fc42c1bd9ae24c95ec14afd79fad5a'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -139,12 +136,10 @@ prepare() {
 
   # add globalmenu support
   msg "Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r2298.patch
+  patch -Np1 -i ../unity-menubar-r2302.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo_fix_missing_kdejs.patch
-
-  patch -Rp1 -i ../Bug_1584000_Migrate_glyph_to_character_association_code.patch
 
   # use more system libs
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
@@ -170,17 +165,19 @@ build() {
   #cd mozilla-unified
   cd firefox-${pkgver}
   #export MOZ_SOURCE_REPO="$_repo"
+  #export CARGO_HOME="$srcdir/.cargo"
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
-  #export CARGO_HOME="$srcdir/.cargo"
+
   ulimit -n 4096
 
-  export CC='/opt/clang/bin/clang --target=x86_64-unknown-linux-gnu'
-  export CXX='/opt/clang/bin/clang++ --target=x86_64-unknown-linux-gnu'
-  export AR=/opt/clang/bin/llvm-ar
-  export NM=/opt/clang/bin/llvm-nm
-  export RANLIB=/opt/clang/bin/llvm-ranlib
+  export CC='/opt/clang10/bin/clang --target=x86_64-unknown-linux-gnu'
+  export CXX='/opt/clang10/bin/clang++ --target=x86_64-unknown-linux-gnu'
+  export AR=/opt/clang10/bin/llvm-ar
+  export NM=/opt/clang10/bin/llvm-nm
+  export RANLIB=/opt/clang10/bin/llvm-ranlib
+  export STRIP=/opt/clang10/bin/llvm-strip
   #export RUSTC_WRAPPER=sccache
 
   # -fno-plt with cross-LTO causes obscure LLVM errors
@@ -197,9 +194,9 @@ END
 
   msg2 "Profiling instrumented browser..."
   ./mach package
-  LLVM_PROFDATA=llvm-profdata \
+  LLVM_PROFDATA=/opt/clang10/bin/llvm-profdata \
   	JARLOG_FILE="$PWD/jarlog" \
-  	xvfb-run -a -n 92 -s "-screen 0 1600x1200x24" \
+  	xvfb-run -a -n 92 -s "-screen 0 1920x1080x24 -nolisten tcp" \
   	./mach python build/pgo/profileserver.py
 
   if [[ ! -s merged.profdata ]]; then

@@ -129,15 +129,15 @@ index 4195a30a5d..338ad508c0 100644
 --- a/browser/components/moz.build
 +++ b/browser/components/moz.build
 @@ -50,9 +50,8 @@ DIRS += [
-     'search',
      'sessionstore',
      'shell',
+     'ssb',
      'syncedtabs',
 -    'uitour',
      'urlbar',
      'translation',
+     'webshare',
  ]
- 
 -- 
 2.23.0
 
