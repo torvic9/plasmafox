@@ -6,7 +6,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=73.0.1
+pkgver=74.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -27,7 +27,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
-_patchrev=004e4b1efb26
+_patchrev=a9cd24eaa361
 _pfdate=20200221
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
@@ -47,7 +47,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         # Gecko/toolkit patchset
         mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
         mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-        unity-menubar-r2302.patch
+        unity-menubar-r2305.patch
         pgo_fix_missing_kdejs.patch
 		2000_system_harfbuzz_support.patch
 		2001_system_graphite2_support.patch
@@ -65,7 +65,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 		plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('53415180e74da60fc91700ce1ff33bf5b6f51e65353017a98270899a08e0c3d2'
+sha256sums=('74589c2836d7c30134636823c3caefbcaed0ea7c3abb2def9e3ddd9f86d9440a'
             'SKIP'
             '07f9fa1d76964ae597c559c56b3e3b67dc8048cfe5257a9725cc1d63d2c94428'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
@@ -77,7 +77,7 @@ sha256sums=('53415180e74da60fc91700ce1ff33bf5b6f51e65353017a98270899a08e0c3d2'
             '6420d64af0beeebbee058bb7eca307dabd7b56d833c329e28381a9c65ab920c2'
             'a868807d2a9a6f75730417be962d709ad32f51bab89f0b1e4af85b9eef847be4'
             'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
-            'd158e8559a8f683cf4e3eb8cd2c0b1ccfd307ca48d6f3fa9b00dcfc6f951a310'
+            '364e5c59a5a55d0be43bcb090dec51476580d0c35b63c0974a25bfeba212a1fc'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
             'a7943f5ee4f61dbe1d3bdeaa30a52e10c9b664d6e9a05c3a1a3c34d4d5b1ba63'
             'b57535e11bbb37141c7dda9e50a529722e3a385d9dfed5726432b3beb5107d7f'
@@ -136,7 +136,7 @@ prepare() {
 
   # add globalmenu support
   msg "Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r2302.patch
+  patch -Np1 -i ../unity-menubar-r2305.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo_fix_missing_kdejs.patch
@@ -172,12 +172,12 @@ build() {
 
   ulimit -n 4096
 
-  export CC='/opt/clang10/bin/clang --target=x86_64-unknown-linux-gnu'
-  export CXX='/opt/clang10/bin/clang++ --target=x86_64-unknown-linux-gnu'
-  export AR=/opt/clang10/bin/llvm-ar
-  export NM=/opt/clang10/bin/llvm-nm
-  export RANLIB=/opt/clang10/bin/llvm-ranlib
-  export STRIP=/opt/clang10/bin/llvm-strip
+  export CC='/opt/clang10-ff/bin/clang --target=x86_64-unknown-linux-gnu'
+  export CXX='/opt/clang10-ff/bin/clang++ --target=x86_64-unknown-linux-gnu'
+  export AR=/opt/clang10-ff/bin/llvm-ar
+  export NM=/opt/clang10-ff/bin/llvm-nm
+  export RANLIB=/opt/clang10-ff/bin/llvm-ranlib
+  export STRIP=/opt/clang10-ff/bin/llvm-strip
   #export RUSTC_WRAPPER=sccache
 
   # -fno-plt with cross-LTO causes obscure LLVM errors
@@ -194,7 +194,7 @@ END
 
   msg2 "Profiling instrumented browser..."
   ./mach package
-  LLVM_PROFDATA=/opt/clang10/bin/llvm-profdata \
+  LLVM_PROFDATA=/opt/clang10-ff/bin/llvm-profdata \
   	JARLOG_FILE="$PWD/jarlog" \
   	xvfb-run -a -n 92 -s "-screen 0 1920x1080x24 -nolisten tcp" \
   	./mach python build/pgo/profileserver.py
