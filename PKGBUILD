@@ -6,7 +6,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=74.0
+pkgver=74.0.1
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -21,13 +21,13 @@ depends=('libxt' 'startup-notification' 'mime-types'
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
 			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2'
-			 'nodejs' 'cbindgen' 'nasm' 'zlib')
+			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
 conflicts=('plasmafox-esr')
-_patchrev=a9cd24eaa361
+_patchrev=7fa561e5d7c7
 _pfdate=20200221
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
@@ -41,6 +41,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
         kde.js
 		user.js
 		0001-Use-remoting-name-for-GDK-application-names.patch
+		bug1625457-fix-privacy-pane.patch
 		plasmafox-${_pfdate}.patch
         # Firefox patchset
         firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
@@ -65,18 +66,19 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 		plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('74589c2836d7c30134636823c3caefbcaed0ea7c3abb2def9e3ddd9f86d9440a'
+sha256sums=('62e4297b682fad1ea50d8e32fc51c811169f8edec8d12d2aab0ea60b3197f011'
             'SKIP'
-            '07f9fa1d76964ae597c559c56b3e3b67dc8048cfe5257a9725cc1d63d2c94428'
+            '808b4c635d741576611136c5fc5f271276846f6bdf09e40d3e215b34062f5bb2'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             '366139a38c73f4a2e029c162e75729b37f14a26b200cca2cc9ec33770e4a3242'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '7fe59c2cd5e7c32098225e6f4f0346ca26002db05e4efd8313b5c0cf6d480936'
-            '6420d64af0beeebbee058bb7eca307dabd7b56d833c329e28381a9c65ab920c2'
-            'a868807d2a9a6f75730417be962d709ad32f51bab89f0b1e4af85b9eef847be4'
-            'ffa9d71bd6dd60eaaef70ba67444c75b6ce0313a107b5b086fd3d30df865ccbf'
+            'c36ba5532b34c6647a6f1b1dc58dc34f419b1ffee7db279dd006b0bb87557d63'
+            'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
+            '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
+            'b4414c3371ffa0d603e4f8ed077ba766c1bc683d22d7d496c68d76f510fd237e'
+            '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '364e5c59a5a55d0be43bcb090dec51476580d0c35b63c0974a25bfeba212a1fc'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
             'a7943f5ee4f61dbe1d3bdeaa30a52e10c9b664d6e9a05c3a1a3c34d4d5b1ba63'
@@ -127,6 +129,9 @@ prepare() {
 
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1625457
+  patch -Np1 -i ../bug1625457-fix-privacy-pane.patch
 
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"

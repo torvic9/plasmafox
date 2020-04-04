@@ -106,8 +106,8 @@ index edd3bd3e86..c61c85c56d 100644
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
  
 -MOZ_APP_DISPLAYNAME=Nightly
-+MOZ_APP_DISPLAYNAME=plasmafox
-+MOZ_APP_PROFILE=plasmafox
++MOZ_APP_DISPLAYNAME=Plasmafox
++MOZ_APP_PROFILE=Plasmafox
 +
 diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
 index 229d7bcea1..284c60f4ad 100644

@@ -1,0 +1,58 @@
+
+# HG changeset patch
+# User Gijs Kruitbosch <gijskruitbosch@gmail.com>
+# Date 1585409172 0
+# Node ID 897ce05e3c9e1ce18c6f050e0781895f80788ca9
+# Parent  23d9f2db83a9814f9d98c269cc1743e1d3acfa0f
+Bug 1625457 - fix privacy pane when MOZ_DATA_REPORTING=false, r=jaws, a=jcristau
+
+Differential Revision: https://phabricator.services.mozilla.com/D68559
+
+diff --git a/browser/components/preferences/in-content/privacy.js b/browser/components/preferences/in-content/privacy.js
+--- a/browser/components/preferences/in-content/privacy.js
++++ b/browser/components/preferences/in-content/privacy.js
+@@ -487,21 +487,16 @@ var gPrivacyPane = {
+       "command",
+       gPrivacyPane.showCertificates
+     );
+     setEventListener(
+       "viewSecurityDevicesButton",
+       "command",
+       gPrivacyPane.showSecurityDevices
+     );
+-    setEventListener(
+-      "telemetryDataDeletionLearnMore",
+-      "command",
+-      gPrivacyPane.showDataDeletion
+-    );
+ 
+     this._pane = document.getElementById("panePrivacy");
+ 
+     this._initPasswordGenerationUI();
+     this._initMasterPasswordUI();
+     // set up the breach alerts Learn More link with the correct URL
+     const breachAlertsLearnMoreLink = document.getElementById(
+       "breachAlertsLearnMoreLink"
+@@ -628,16 +623,21 @@ var gPrivacyPane = {
+         this.initSubmitCrashes();
+       }
+       this.initSubmitHealthReport();
+       setEventListener(
+         "submitHealthReportBox",
+         "command",
+         gPrivacyPane.updateSubmitHealthReport
+       );
++      setEventListener(
++        "telemetryDataDeletionLearnMore",
++        "command",
++        gPrivacyPane.showDataDeletion
++      );
+       if (AppConstants.MOZ_NORMANDY) {
+         this.initOptOutStudyCheckbox();
+       }
+       this.initAddonRecommendationsCheckbox();
+     }
+     this._initA11yState();
+     let signonBundle = document.getElementById("signonBundle");
+     let pkiBundle = document.getElementById("pkiBundle");
+

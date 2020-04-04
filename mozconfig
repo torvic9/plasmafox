@@ -14,19 +14,20 @@ ac_add_options --with-app-name=plasmafox
 ac_add_options --with-app-basename=plasmafox
 ac_add_options --with-distribution-id=org.plasmafox
 ac_add_options --with-unsigned-addon-scopes=app,system
+ac_add_options --allow-addon-sideload
 # ac_add_options --enable-ui-locale=en-US
 
 # export MOZILLA_OFFICIAL=1
 # export BUILD_OFFICIAL=1
 # export MOZ_SOURCE_REPO=https://hg.mozilla.org/mozilla-unified
 
-export MOZ_APP_NAME=plasmafox
-export MOZ_APP_DISPLAYNAME=plasmafox
-export MOZ_APP_VENDOR=plasmafox
-export MOZ_APP_REMOTINGNAME=plasmafox
+export MOZ_APP_NAME=Plasmafox
+export MOZ_APP_DISPLAYNAME=Plasmafox
+export MOZ_APP_VENDOR=Plasmafox
+export MOZ_APP_REMOTINGNAME=Plasmafox
 
-# export MOZ_TELEMETRY_REPORTING=0
-# export MOZ_DATA_REPORTING=0
+# export MOZ_TELEMETRY_REPORTING=false
+# export MOZ_DATA_REPORTING=false
 # export MOZ_CRASHREPORTER=0
 
 export MOZ_UPDATE_CHANNEL=release
