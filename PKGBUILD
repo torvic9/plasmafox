@@ -6,7 +6,7 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=74.0.1
+pkgver=75.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -15,8 +15,7 @@ url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 depends=('libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
          'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3'
-         'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent'
-	 'kplasmafoxhelper')
+         'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent' 'kplasmafoxhelper')
 
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
@@ -26,63 +25,65 @@ makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech')
 provides=("plasmafox=${pkgver}")
-conflicts=('plasmafox-esr')
+#conflicts=('plasmafox-esr')
 _patchrev=7fa561e5d7c7
+_patchrevsuse=06fa6ff893b0d132078874c384e25c59
 _pfdate=20200221
 _cpus=$(nproc)
 options=('!emptydirs' '!makeflags' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
-		#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
-        mozconfig
-        plasmafox.desktop
-        vendor.js
-        kde.js
-		user.js
-		0001-Use-remoting-name-for-GDK-application-names.patch
-		bug1625457-fix-privacy-pane.patch
-		plasmafox-${_pfdate}.patch
-        # Firefox patchset
-        firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
-        # Gecko/toolkit patchset
-        mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
-        mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-        unity-menubar-r2305.patch
-        pgo_fix_missing_kdejs.patch
-		2000_system_harfbuzz_support.patch
-		2001_system_graphite2_support.patch
-        7002_system_av1_support.patch
-        # artwork
-        #about-background.png
-        about-logo.png
-		about-logo@2x.png
-        about-wordmark.svg
-        plasmafox-wordmark.svg
-        about.png
-        default{16,22,24,32,48,64,128,256}.png
-		# additions
-		plasmafox.profile
-		plasmafox.psd
+	#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
+	mozconfig
+	plasmafox.desktop
+	vendor.js
+	kde.js
+	user.js
+	0001-Use-remoting-name-for-GDK-application-names.patch
+	plasmafox-${_pfdate}.patch
+	# Firefox patchset
+	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
+	# Gecko/toolkit patchset
+	#mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
+	mozilla-kde-$_patchrevsuse.patch
+	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
+	unity-menubar-r2305.patch
+	pgo_fix_missing_kdejs.patch
+	2000_system_harfbuzz_support.patch
+	2001_system_graphite2_support.patch
+	2012_allow-non-ascii-chars.patch
+	7002_system_av1_support.patch
+	# artwork
+	#about-background.png
+	about-logo.png
+	about-logo@2x.png
+	about-wordmark.svg
+	plasmafox-wordmark.svg
+	about.png
+	default{16,22,24,32,48,64,128,256}.png
+	# additions
+	plasmafox{,-common}.profile
+	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('62e4297b682fad1ea50d8e32fc51c811169f8edec8d12d2aab0ea60b3197f011'
+sha256sums=('bbb1054d8f2717c634480556d3753a8483986af7360e023bb6232df80b746b0f'
             'SKIP'
-            '808b4c635d741576611136c5fc5f271276846f6bdf09e40d3e215b34062f5bb2'
+            '9d24a136ad7eeb7c418d34d30524e9d0d463acfe9d48d174c4e668f51fbe4598'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             '366139a38c73f4a2e029c162e75729b37f14a26b200cca2cc9ec33770e4a3242'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            'c36ba5532b34c6647a6f1b1dc58dc34f419b1ffee7db279dd006b0bb87557d63'
             'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
             '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
-            'b4414c3371ffa0d603e4f8ed077ba766c1bc683d22d7d496c68d76f510fd237e'
+            '04164ce2362956ca889fe4d63e474c0dd43ac4bb75d2fe9124dcd75eb895b3f3'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '364e5c59a5a55d0be43bcb090dec51476580d0c35b63c0974a25bfeba212a1fc'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
-            'a7943f5ee4f61dbe1d3bdeaa30a52e10c9b664d6e9a05c3a1a3c34d4d5b1ba63'
+            '596f5eef2bce0db5baf235c94536e9410e36bf47d1a4200e3a13d61f813223ea'
             'b57535e11bbb37141c7dda9e50a529722e3a385d9dfed5726432b3beb5107d7f'
+            '3d53cfbd4e62b7513027c034857da152d54efdcbed752f40697ecc22bcb2756e'
             '7fee677f2f6e3c8cc63f4fb5007c034f53fc42c1bd9ae24c95ec14afd79fad5a'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
@@ -97,7 +98,8 @@ sha256sums=('62e4297b682fad1ea50d8e32fc51c811169f8edec8d12d2aab0ea60b3197f011'
             'ad4aadfe095ad46d43b66fc6e686511c7c4a81d452fb71f2eb4775936fb0179e'
             '7e2062a8df9e9e28c51ff6435872a688cff040fdfa38ef93bf92e52d676e6dbc'
             '0a646abac6405b2e5d3bd0f13dc003e0ed45e1ad5856079274eb2936fa6d321b'
-            '7d544704f4acf50f437299ed4025e429a104758bc3af5007e933d67b00c1151b'
+            '83e3f72eb8220a9962791487faa399e7f1fe19e3863cab5f28e83416e6ac2374'
+            '022e47dece0dcc8a593a17958fc89bd135af9aa0e4e7f2c1e27dc2573b3949aa'
             '22d33cd66a1e1a8ff2ae086de145490b22c8cc1cb748f0273462a70c563e0b91')
 
 validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
@@ -113,15 +115,6 @@ prepare() {
            >> .mozconfig
   fi
 
-  # ccache/sccache
-  # if in_array ccache ${BUILDENV[*]} ; then
-  # echo "ac_add_options --with-ccache" >> .mozconfig
-  # echo "mk_add_options 'export RUSTC_WRAPPER=sccache'" >> .mozconfig
-  # echo "mk_add_options 'export SCCACHE_VERBOSE_STATS=1'" >> .mozconfig
-  # fi
-
-  echo "mk_add_options MOZ_MAKE_FLAGS="\"-j$_cpus\""" >> .mozconfig
-
   # multilocale
   # mkdir $srcdir/mozbuild
   # ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
@@ -130,13 +123,10 @@ prepare() {
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
 
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1625457
-  patch -Np1 -i ../bug1625457-fix-privacy-pane.patch
-
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
-  patch -Np1 -i ../mozilla-kde-$_patchrev.patch
+  patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
   patch -Np1 -i ../firefox-kde-$_patchrev.patch
 
   # add globalmenu support
@@ -150,6 +140,9 @@ prepare() {
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
   patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
+
+  # fix python ascii encode
+  patch -Np1 -i ../2012_allow-non-ascii-chars.patch
 
   # Plasmafox patches
   msg "Plasmafox patches"
@@ -167,10 +160,7 @@ prepare() {
 }
 
 build() {
-  #cd mozilla-unified
   cd firefox-${pkgver}
-  #export MOZ_SOURCE_REPO="$_repo"
-  #export CARGO_HOME="$srcdir/.cargo"
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
@@ -251,7 +241,8 @@ package() {
   install -Dvm644 "$srcdir/kde.js" "$pkgdir/usr/lib/plasmafox/browser/defaults/preferences/kde.js"
 
   install -Dvm644 "$srcdir/user.js" "$pkgdir/usr/lib/plasmafox/distribution/user.js"
-  install -Dvm644 "$srcdir/plasmafox.profile" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.firejail-profile"
+  install -Dvm644 "$srcdir/plasmafox.profile" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.profile"
+  install -Dvm644 "$srcdir/plasmafox-common.profile" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox-common.profile"
   install -Dvm644 "$srcdir/plasmafox.psd" "$pkgdir/usr/lib/plasmafox/distribution/plasmafox.psd"
 
   _distini="$pkgdir/usr/lib/plasmafox/distribution/distribution.ini"

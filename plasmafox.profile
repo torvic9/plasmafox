@@ -14,10 +14,13 @@ mkdir ${HOME}/.plasmafox
 whitelist ${HOME}/.cache/mozilla/plasmafox
 whitelist ${HOME}/.plasmafox
 
+whitelist /usr/share/mozilla
+include whitelist-usr-share-common.inc
+
 # firefox requires a shell to launch on Arch.
 #private-bin firefox,which,sh,dbus-launch,dbus-send,env,bash
 # private-etc must first be enabled in firefox-common.profile
 #private-etc firefox
 
 # Redirect
-include firefox-common.profile
+include plasmafox-common.profile

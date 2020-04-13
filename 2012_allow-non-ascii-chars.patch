@@ -1,0 +1,15 @@
+https://bugs.gentoo.org/666948
+
+and required for rust-1.33 patch
+
+--- a/python/mozbuild/mozbuild/controller/building.py
++++ b/python/mozbuild/mozbuild/controller/building.py
+@@ -571,7 +571,7 @@ class TerminalLoggingHandler(logging.Handler):
+             if self.footer:
+                 self.footer.clear()
+ 
+-            self.fh.write(msg)
++            self.fh.write(msg.encode("utf-8"))
+             self.fh.write('\n')
+ 
+             if self.footer:

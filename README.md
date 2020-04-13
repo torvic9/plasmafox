@@ -2,12 +2,15 @@
 
 **Main differences between Plasmafox and Firefox:**
  - KDE integration with file dialogs and global menu
- - Binaries built with custom clang-10
+ - Binaries built with custom clang-10 as we're waiting for clang-10 to hit the repos
  - Uses many system libraries (e.g. libvpx, nspr, icu, zlib, harfbuzz, av1 etc.)
  - Some Mozilla services like Pocket, Telemetry, UI Tour and Sync disabled
  - Removed most of trademark-restricted marks like the name "Firefox" and the icons
- - disabled EME and WebRTC
+ - disabled WebRTC and WebSpeech
 
+**Additions:**
+- includes profiles for `profile-sync-daemon` and `firejail`
+- requires [kplasmafoxhelper](https://github.com/torvic9/kplasmafoxhelper)
 
 **Credits go to Mozilla and:**
 - [Waterfox project](https://github.com/MrAlex94/Waterfox/) for the inspiration
@@ -16,4 +19,5 @@
 - [firefox-kde-opensuse](https://aur.archlinux.org/packages/firefox-kde-opensuse/)
 - [Gentoo](https://dev.gentoo.org/~anarchy/mozilla/patchsets/)
 - [Ubuntu](https://bazaar.launchpad.net/~mozillateam/firefox/firefox-trunk.head/files/head:/debian/patches/)
-- [openSUSE/W.Rosenauer](http://www.rosenauer.org/hg/mozilla/)
+- [openSUSE / Wolfgang Rosenauer](http://www.rosenauer.org/hg/mozilla/)
+
