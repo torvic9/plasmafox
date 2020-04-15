@@ -7,7 +7,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=75.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -167,12 +167,12 @@ build() {
 
   ulimit -n 4096
 
-  export CC='/opt/clang10-ff/bin/clang --target=x86_64-unknown-linux-gnu'
-  export CXX='/opt/clang10-ff/bin/clang++ --target=x86_64-unknown-linux-gnu'
-  export AR=/opt/clang10-ff/bin/llvm-ar
-  export NM=/opt/clang10-ff/bin/llvm-nm
-  export RANLIB=/opt/clang10-ff/bin/llvm-ranlib
-  export STRIP=/opt/clang10-ff/bin/llvm-strip
+  export CC='clang --target=x86_64-unknown-linux-gnu'
+  export CXX='clang++ --target=x86_64-unknown-linux-gnu'
+  export AR=llvm-ar
+  export NM=llvm-nm
+  export RANLIB=llvm-ranlib
+  export STRIP=llvm-strip
   #export RUSTC_WRAPPER=sccache
 
   # -fno-plt with cross-LTO causes obscure LLVM errors
@@ -189,7 +189,7 @@ END
 
   msg2 "Profiling instrumented browser..."
   ./mach package
-  LLVM_PROFDATA=/opt/clang10-ff/bin/llvm-profdata \
+  LLVM_PROFDATA=llvm-profdata \
   	JARLOG_FILE="$PWD/jarlog" \
   	xvfb-run -a -n 92 -s "-screen 0 1920x1080x24 -nolisten tcp" \
   	./mach python build/pgo/profileserver.py
