@@ -34,6 +34,8 @@ export MOZ_UPDATE_CHANNEL=release
 export MOZ_ADDON_SIGNING=1
 export MOZ_REQUIRE_SIGNING=1
 
+# mk_add_options "export CARGO_BUILD_JOBS=12"
+# mk_add_options MOZ_MAKE_FLAGS="-j12"
 
 # System libraries
 ac_add_options --with-system-nspr
@@ -52,7 +54,6 @@ ac_add_options --enable-system-pixman
 ac_add_options --disable-libproxy
 
 # Features
-# ac_add_options --enable-jack
 ac_add_options --enable-alsa
 ac_add_options --enable-startup-notification
 ac_add_options --disable-crashreporter

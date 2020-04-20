@@ -12,6 +12,7 @@ pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
+
 depends=('libxt' 'startup-notification' 'mime-types'
          'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
          'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3'
@@ -23,14 +24,15 @@ makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
-            'speech-dispatcher: Text-to-Speech')
+            'speech-dispatcher: Text-to-Speech'
+            'libdbusmenu-gtk3: global menu support')
+
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=7fa561e5d7c7
-_patchrevsuse=06fa6ff893b0d132078874c384e25c59
+_patchrev=f890ebd6b627
+#_patchrevsuse=06fa6ff893b0d132078874c384e25c59
 _pfdate=20200221
-_cpus=$(nproc)
-options=('!emptydirs' '!makeflags' '!strip')
+options=('!emptydirs' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
@@ -45,8 +47,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
-	#mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
-	mozilla-kde-$_patchrevsuse.patch
+	mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	unity-menubar-r2305.patch
 	pgo_fix_missing_kdejs.patch
@@ -69,7 +70,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('bbb1054d8f2717c634480556d3753a8483986af7360e023bb6232df80b746b0f'
             'SKIP'
-            '9d24a136ad7eeb7c418d34d30524e9d0d463acfe9d48d174c4e668f51fbe4598'
+            '2d0f64d6fe2f02f6f7c38c6302f8c8ffd6df3c29d67f035db26d077f56c36c9c'
             'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
             '366139a38c73f4a2e029c162e75729b37f14a26b200cca2cc9ec33770e4a3242'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -77,7 +78,7 @@ sha256sums=('bbb1054d8f2717c634480556d3753a8483986af7360e023bb6232df80b746b0f'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
             'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
             '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
-            '04164ce2362956ca889fe4d63e474c0dd43ac4bb75d2fe9124dcd75eb895b3f3'
+            '2f8c2ecefc52973d830baaea946f11bf01656d52d634391e1e1eb5ce0ef39544'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '364e5c59a5a55d0be43bcb090dec51476580d0c35b63c0974a25bfeba212a1fc'
             '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
@@ -126,7 +127,7 @@ prepare() {
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
-  patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
+  patch -Np1 -i ../mozilla-kde-$_patchrev.patch
   patch -Np1 -i ../firefox-kde-$_patchrev.patch
 
   # add globalmenu support
