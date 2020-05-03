@@ -7,7 +7,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=75.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -43,6 +43,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
+	0001-Bug-1623885-Add-subsystem-to-Mesa-sandbox-policy-to-.patch
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
@@ -76,6 +77,7 @@ sha256sums=('bbb1054d8f2717c634480556d3753a8483986af7360e023bb6232df80b746b0f'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
+            'ebb169804750ddc10a4801ed6ddb37356331bbf76615f58eb29de2e6e15ee930'
             'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
             '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
             '2f8c2ecefc52973d830baaea946f11bf01656d52d634391e1e1eb5ce0ef39544'
@@ -123,6 +125,8 @@ prepare() {
 
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+
+  patch -Np1 -i ../0001-Bug-1623885-Add-subsystem-to-Mesa-sandbox-policy-to-.patch
 
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
