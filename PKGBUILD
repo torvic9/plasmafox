@@ -6,8 +6,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=75.0
-pkgrel=3
+pkgver=76.0
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -29,7 +29,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=f890ebd6b627
+_patchrev=3fd9346c90a6
+_mbrev=2317
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
 _pfdate=20200221
 options=('!emptydirs' '!strip')
@@ -43,15 +44,14 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	0001-Bug-1623885-Add-subsystem-to-Mesa-sandbox-policy-to-.patch
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
 	mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
-	unity-menubar-r2305.patch
-	pgo_fix_missing_kdejs.patch
+	unity-menubar-r${_mbrev}.patch
+	pgo-fix-missing-kdejs.patch
 	2000_system_harfbuzz_support.patch
 	2001_system_graphite2_support.patch
 	2012_allow-non-ascii-chars.patch
@@ -69,25 +69,24 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('bbb1054d8f2717c634480556d3753a8483986af7360e023bb6232df80b746b0f'
+sha256sums=('3b7b97b0b0625fc6ec23ee28d425988c679d3a56f362d62fd3b225a5d50afdc8'
             'SKIP'
-            '2d0f64d6fe2f02f6f7c38c6302f8c8ffd6df3c29d67f035db26d077f56c36c9c'
-            'b4552aac033d9712ec72c4c59871f711ecfdaad93a05543263bfedf47eb79205'
-            '366139a38c73f4a2e029c162e75729b37f14a26b200cca2cc9ec33770e4a3242'
+            '80036f9daac9a579421e97c421eaa2746af640292849d7c623c93695c460ed2e'
+            '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
+            '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            'ebb169804750ddc10a4801ed6ddb37356331bbf76615f58eb29de2e6e15ee930'
             'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
             '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
-            '2f8c2ecefc52973d830baaea946f11bf01656d52d634391e1e1eb5ce0ef39544'
+            '81099be35d97862a34e6c26a1f8bdb81aa3f10ba36b1fe5809aa617448291a7b'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
-            '364e5c59a5a55d0be43bcb090dec51476580d0c35b63c0974a25bfeba212a1fc'
-            '2797d1e61031d24ee24bf682c9447b3b9c1bca10f8e6cbd597b854af2de1ec54'
+            '3e5e34b8d45b9cc48e78e9c474f2450cc597451bbb331fb5a4e8f3a3ba5e3a70'
+            '8b09d32099e83370af8dc10899a98e9c101526f0c943a118d4c0d914ef9aa582'
             '596f5eef2bce0db5baf235c94536e9410e36bf47d1a4200e3a13d61f813223ea'
             'b57535e11bbb37141c7dda9e50a529722e3a385d9dfed5726432b3beb5107d7f'
             '3d53cfbd4e62b7513027c034857da152d54efdcbed752f40697ecc22bcb2756e'
-            '7fee677f2f6e3c8cc63f4fb5007c034f53fc42c1bd9ae24c95ec14afd79fad5a'
+            '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -126,8 +125,6 @@ prepare() {
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
 
-  patch -Np1 -i ../0001-Bug-1623885-Add-subsystem-to-Mesa-sandbox-policy-to-.patch
-
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
@@ -136,10 +133,10 @@ prepare() {
 
   # add globalmenu support
   msg "Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r2305.patch
+  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
 
   # add missing file Makefile for pgo builds
-  patch -Np1 -i ../pgo_fix_missing_kdejs.patch
+  patch -Np1 -i ../pgo-fix-missing-kdejs.patch
 
   # use more system libs
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
@@ -223,7 +220,6 @@ END
 
   msg2 "Building symbol archive..."
   ./mach buildsymbols
-  ./mach package
 
   # multilocale
   #export MOZ_CHROME_MULTILOCALE="de fr pl"
@@ -291,6 +287,5 @@ END
 
   find . -name '*crashreporter-symbols-full.zip' -exec \
 	cp -fvt "$startdir" {} +
-  ./mach clobber
 }
 

@@ -2,12 +2,12 @@ ac_add_options --enable-application=browser
 
 ac_add_options --prefix=/usr
 ac_add_options --enable-hardening
-ac_add_options --enable-optimize="-O3"
+ac_add_options --enable-optimize
 ac_add_options --enable-rust-simd
 ac_add_options --enable-release
 ac_add_options --enable-linker=lld
-ac_add_options --disable-elf-hack
-# ac_add_options --disable-official-branding
+# ac_add_options --disable-elf-hack
+# ac_add_options --disable-official-branding/--enable-official-branding
 ac_add_options --with-branding=browser/branding/unofficial
 ac_add_options --enable-update-channel=release
 ac_add_options --with-app-name=plasmafox
@@ -44,11 +44,11 @@ ac_add_options --with-system-icu
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-zlib
 ac_add_options --with-system-bz2
-ac_add_options --with-system-libvpx
+ac_add_options --with-system-libevent
+# ac_add_options --with-system-libvpx
 ac_add_options --with-system-harfbuzz
 ac_add_options --with-system-graphite2
 ac_add_options --with-system-av1
-# ac_add_options --enable-system-hunspell
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
 ac_add_options --disable-libproxy
@@ -56,6 +56,7 @@ ac_add_options --disable-libproxy
 # Features
 ac_add_options --enable-alsa
 ac_add_options --enable-startup-notification
+ac_add_options --enable-strip
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-wmf
@@ -79,4 +80,3 @@ ac_add_options --disable-webspeech
 ac_add_options --disable-webspeechtestbackend
 
 STRIP_FLAGS="--strip-debug"
-

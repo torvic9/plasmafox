@@ -1,0 +1,10 @@
+--- a/browser/app/Makefile.in	2020-05-04 19:59:36.356868458 +0200
++++ b/browser/app/Makefile.in	2020-05-04 20:03:02.565089742 +0200
+@@ -57,6 +57,7 @@
+ libs:: $(srcdir)/profile/channel-prefs.js
+ 	$(NSINSTALL) -D $(DIST)/bin/defaults/pref
+ 	$(call py3_action,preprocessor,-Fsubstitution $(PREF_PPFLAGS) $(ACDEFINES) $^ -o $(DIST)/bin/defaults/pref/channel-prefs.js)
++	cp -v $(topsrcdir)/../kde.js $(DIST)/bin/defaults/pref/kde.js
+ 
+ ifeq (cocoa,$(MOZ_WIDGET_TOOLKIT))
+ 
