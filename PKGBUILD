@@ -7,7 +7,7 @@ _gtk3_wayland=0
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=76.0
-pkgrel=1
+pkgrel=1.1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -71,7 +71,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('3b7b97b0b0625fc6ec23ee28d425988c679d3a56f362d62fd3b225a5d50afdc8'
             'SKIP'
-            '930d14248035ede44c37d4fb1363c9f93df1d30a2fe441d35a3c27636a1edcd4'
+            '44a7e1f4aaa391dcd4fd4a6b533e7552be0af1e403da916f45839a71c3558891'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -123,7 +123,7 @@ prepare() {
   # echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
 
   # Arch patches
-  patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+  #patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
 
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
@@ -256,6 +256,7 @@ about=Plasmafox for Manjaro
 
 [Preferences]
 app.distributor=$pkgname
+app.distributor.channel=$pkgname
 END
 
   for i in 16 22 24 32 48 64 128 256; do
