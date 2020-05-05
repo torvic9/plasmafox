@@ -48,7 +48,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
+	mozilla-kde-$_patchrev.patch
 	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	unity-menubar-r${_mbrev}.patch
 	pgo-fix-missing-kdejs.patch
@@ -71,7 +71,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('3b7b97b0b0625fc6ec23ee28d425988c679d3a56f362d62fd3b225a5d50afdc8'
             'SKIP'
-            '80036f9daac9a579421e97c421eaa2746af640292849d7c623c93695c460ed2e'
+            '930d14248035ede44c37d4fb1363c9f93df1d30a2fe441d35a3c27636a1edcd4'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -79,7 +79,7 @@ sha256sums=('3b7b97b0b0625fc6ec23ee28d425988c679d3a56f362d62fd3b225a5d50afdc8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
             'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
             '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
-            '81099be35d97862a34e6c26a1f8bdb81aa3f10ba36b1fe5809aa617448291a7b'
+            'ccae0aeae09631335aac2219fe3142598cee26f7ef440ec8740088e70cb70a79'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '3e5e34b8d45b9cc48e78e9c474f2450cc597451bbb331fb5a4e8f3a3ba5e3a70'
             '8b09d32099e83370af8dc10899a98e9c101526f0c943a118d4c0d914ef9aa582'
@@ -139,6 +139,7 @@ prepare() {
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
 
   # use more system libs
+  msg "Patching for system libs"
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
   patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
