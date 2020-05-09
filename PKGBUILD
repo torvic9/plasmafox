@@ -6,8 +6,8 @@ _gtk3_wayland=0
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=76.0
-pkgrel=1.1
+pkgver=76.0.1
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -44,6 +44,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
+	0001-Bug-1624128-Update-CK_GCM_PARAMS-uses-for-PKCS11-v3..patch
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
@@ -69,14 +70,15 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('3b7b97b0b0625fc6ec23ee28d425988c679d3a56f362d62fd3b225a5d50afdc8'
+sha256sums=('f61761e32774a6bdfedd5937c4992fbe5e24c3df057c2b9a559fcd0d038777c3'
             'SKIP'
-            '44a7e1f4aaa391dcd4fd4a6b533e7552be0af1e403da916f45839a71c3558891'
+            '71b8b62639d9a037f2fb3c36bbf18c86c1e90a0049054d74cdec862a5ce2f5d2'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
+            '215ca2cd2994d787c4748b8e76acdc21932700ab43fa6a32aa8de3ce4b380111'
             'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
             '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
             'ccae0aeae09631335aac2219fe3142598cee26f7ef440ec8740088e70cb70a79'
@@ -123,7 +125,9 @@ prepare() {
   # echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
 
   # Arch patches
-  #patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+  patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+
+  patch -Np1 -i ../0001-Bug-1624128-Update-CK_GCM_PARAMS-uses-for-PKCS11-v3..patch
 
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
