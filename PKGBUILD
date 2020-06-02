@@ -1,22 +1,19 @@
 # Maintainer: torvic9 AT mailbox DOT org
 # based on ideas by Waterfox and firefox-kde-opensuse
 
-# enable gtk3 wayland (experimental)
-_gtk3_wayland=0
-
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=76.0.1
+pkgver=77.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 
-depends=('libxt' 'startup-notification' 'mime-types'
+depends=('libxt' 'mime-types' 'kplasmafoxhelper'
          'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
          'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3'
-         'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent' 'kplasmafoxhelper')
+         'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent')
 
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
@@ -29,10 +26,10 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=3fd9346c90a6
-_mbrev=2317
+_patchrev=d5b284f833d5
+_mbrev=2327
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
-_pfdate=20200221
+_pfdate=20200601
 options=('!emptydirs' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
@@ -44,18 +41,17 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	0001-Bug-1624128-Update-CK_GCM_PARAMS-uses-for-PKCS11-v3..patch
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-$_patchrev.patch
+	mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	unity-menubar-r${_mbrev}.patch
 	pgo-fix-missing-kdejs.patch
 	2000_system_harfbuzz_support.patch
 	2001_system_graphite2_support.patch
-	2012_allow-non-ascii-chars.patch
+	#2012_allow-non-ascii-chars.patch
 	7002_system_av1_support.patch
 	# artwork
 	#about-background.png
@@ -70,24 +66,22 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('f61761e32774a6bdfedd5937c4992fbe5e24c3df057c2b9a559fcd0d038777c3'
+sha256sums=('b534794c493d8698dfb6c852af52b49540afdf88dc50451f42d6591de93291e8'
             'SKIP'
-            '71b8b62639d9a037f2fb3c36bbf18c86c1e90a0049054d74cdec862a5ce2f5d2'
+            '90219bef4b146fa80954acdedaa30f577f85a9eeb9c041e0eaf1643ccd30009e'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
-            'ab07ab26617ff76fce68e07c66b8aa9b96c2d3e5b5517e51a3c3eac2edd88894'
-            '215ca2cd2994d787c4748b8e76acdc21932700ab43fa6a32aa8de3ce4b380111'
-            'e32da7a3553710a33150076447c7c7eafde6fc407154a425cd5e8a3e06b77c1a'
-            '791a0e2b28ea07aef4acb900f4a923b8551b5965967850497a5bcf3f74719289'
-            'ccae0aeae09631335aac2219fe3142598cee26f7ef440ec8740088e70cb70a79'
+            '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
+            '659d23d6cb4d26df977a6adefa126af74362c3096690a73e8a7bc6366b9b5c5c'
+            'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
+            '72e75edec0b925933e5674399a624f36bc818cb8dc96005ac8a5694e597affb8'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
-            '3e5e34b8d45b9cc48e78e9c474f2450cc597451bbb331fb5a4e8f3a3ba5e3a70'
+            'c87e9df0fa2ba96989b70403e412aae54de9e29a56c7872f155cfd8a1e0b9a33'
             '8b09d32099e83370af8dc10899a98e9c101526f0c943a118d4c0d914ef9aa582'
-            '596f5eef2bce0db5baf235c94536e9410e36bf47d1a4200e3a13d61f813223ea'
-            'b57535e11bbb37141c7dda9e50a529722e3a385d9dfed5726432b3beb5107d7f'
-            '3d53cfbd4e62b7513027c034857da152d54efdcbed752f40697ecc22bcb2756e'
+            '3077567f8b6dbf77c3673126ae39f79d0a0cde62f01dba62fc11f3238a29946a'
+            '2fc8a9ab0cc31d24eeea39569005a0d6b6486b44cb677b07790bf6dedf2caa38'
             '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
@@ -114,11 +108,6 @@ prepare() {
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
 
-  if [ $_gtk3_wayland == 1 ] ; then
-      echo "ac_add_options --enable-default-toolkit=cairo-gtk3-wayland" \
-           >> .mozconfig
-  fi
-
   # multilocale
   # mkdir $srcdir/mozbuild
   # ln -sf /mnt/sparelin/l10n-base $srcdir/mozbuild/l10n-central || exit 4
@@ -126,8 +115,6 @@ prepare() {
 
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-
-  patch -Np1 -i ../0001-Bug-1624128-Update-CK_GCM_PARAMS-uses-for-PKCS11-v3..patch
 
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
@@ -149,7 +136,7 @@ prepare() {
   patch -Np1 -i ../7002_system_av1_support.patch
 
   # fix python ascii encode
-  patch -Np1 -i ../2012_allow-non-ascii-chars.patch
+  #patch -Np1 -i ../2012_allow-non-ascii-chars.patch
 
   # Plasmafox patches
   msg "Plasmafox patches"

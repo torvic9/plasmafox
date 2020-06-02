@@ -95,16 +95,16 @@ diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
 index 160f569d1e..78acefd31f 100644
 --- a/browser/base/content/browser.js
 +++ b/browser/base/content/browser.js
-@@ -72,9 +72,8 @@ XPCOMUtils.defineLazyModuleGetters(this, {
+@@ -76,9 +76,8 @@
    TabModalPrompt: "chrome://global/content/tabprompts.jsm",
    TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
    TelemetryEnvironment: "resource://gre/modules/TelemetryEnvironment.jsm",
-   Translation: "resource:///modules/translation/Translation.jsm",
+   Translation: "resource:///modules/translation/TranslationParent.jsm",
 -  UITour: "resource:///modules/UITour.jsm",
    UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
    UrlbarInput: "resource:///modules/UrlbarInput.jsm",
    UrlbarPrefs: "resource:///modules/UrlbarPrefs.jsm",
-   UrlbarTokenizer: "resource:///modules/UrlbarTokenizer.jsm",
+   UrlbarProviderSearchTips: "resource:///modules/UrlbarProviderSearchTips.jsm",
 diff --git a/browser/base/content/utilityOverlay.js b/browser/base/content/utilityOverlay.js
 index 7180d0829b..a6931738bb 100644
 --- a/browser/base/content/utilityOverlay.js

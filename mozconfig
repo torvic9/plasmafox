@@ -6,7 +6,7 @@ ac_add_options --enable-optimize
 ac_add_options --enable-rust-simd
 ac_add_options --enable-release
 ac_add_options --enable-linker=lld
-# ac_add_options --disable-elf-hack
+ac_add_options --disable-elf-hack
 # ac_add_options --disable-official-branding/--enable-official-branding
 ac_add_options --with-branding=browser/branding/unofficial
 ac_add_options --enable-update-channel=release
@@ -16,10 +16,6 @@ ac_add_options --with-distribution-id=org.plasmafox
 ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --allow-addon-sideload
 # ac_add_options --enable-ui-locale=en-US
-
-# export MOZILLA_OFFICIAL=1
-# export BUILD_OFFICIAL=1
-# export MOZ_SOURCE_REPO=https://hg.mozilla.org/mozilla-unified
 
 export MOZ_APP_NAME=Plasmafox
 export MOZ_APP_DISPLAYNAME=Plasmafox
@@ -41,7 +37,6 @@ export MOZ_REQUIRE_SIGNING=1
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-icu
-#ac_add_options --with-system-jpeg
 ac_add_options --with-system-zlib
 ac_add_options --with-system-bz2
 ac_add_options --with-system-libevent
@@ -49,23 +44,21 @@ ac_add_options --with-system-libvpx
 ac_add_options --with-system-harfbuzz
 ac_add_options --with-system-graphite2
 ac_add_options --with-system-av1
+ac_add_options --with-system-ffi
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
 #ac_add_options --enable-libproxy
 
 # Features
+ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
 ac_add_options --enable-alsa
-ac_add_options --enable-startup-notification
 ac_add_options --enable-strip
 ac_add_options --disable-crashreporter
 ac_add_options --disable-updater
 ac_add_options --disable-wmf
-ac_add_options --disable-gconf
 ac_add_options --disable-tests
-# ac_add_options --disable-eme
 ac_add_options --disable-gpsd
 ac_add_options --disable-synth-speechd
-# ac_add_options --disable-synth-pico
 ac_add_options --disable-nfc
 ac_add_options --disable-debug
 ac_add_options --disable-debug-symbols
