@@ -3,17 +3,16 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=77.0
+pkgver=77.0.1
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://build.opensuse.org/package/show/mozilla:Factory/MozillaFirefox"
 
-depends=('libxt' 'mime-types' 'kplasmafoxhelper'
-         'dbus-glib' 'libvpx' 'icu' 'libevent' 'ttf-font' 'libpulse'
-         'nss' 'nspr' 'sqlite' 'libnotify' 'ffmpeg' 'gtk3'
-         'dav1d' 'aom' 'harfbuzz' 'graphite' 'libwebp' 'libevent')
+depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse
+		kplasmafoxhelper libvpx icu nspr dav1d aom harfbuzz graphite
+		libwebp)
 
 makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
@@ -42,6 +41,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	plasmafox-${_pfdate}.patch
+	0007-allow-webrender-on-release.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
@@ -66,15 +66,16 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('b534794c493d8698dfb6c852af52b49540afdf88dc50451f42d6591de93291e8'
+sha256sums=('54256fc5f8e9c2e8129ef84773fae31fcfdaf95da6d4d03151f3939e9f749640'
             'SKIP'
-            '90219bef4b146fa80954acdedaa30f577f85a9eeb9c041e0eaf1643ccd30009e'
+            '9d0ae77d578bfd9d53dc19fee2d362d0524759eea1bb035b22c52fd3849fc62d'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             '659d23d6cb4d26df977a6adefa126af74362c3096690a73e8a7bc6366b9b5c5c'
+            '312083de2849346dd370896ef4d8a6bb7b3c5fa7e39d5a8870ac64043607bdb6'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
             '72e75edec0b925933e5674399a624f36bc818cb8dc96005ac8a5694e597affb8'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
@@ -141,6 +142,7 @@ prepare() {
   # Plasmafox patches
   msg "Plasmafox patches"
   patch -Np1 -i ../plasmafox-${_pfdate}.patch
+  patch -Np1 -i ../0007-allow-webrender-on-release.patch
 
   # Artwork
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
