@@ -77,4 +77,6 @@ pref("identity.fxaccounts.toolbar.enabled", false);
 pref("network.IDN_show_punycode", true);
 pref("dom.enable_performance", false);
 pref("webgl.enable-debug-renderer-info", false);
+pref("browser.privatebrowsing.forceMediaMemoryCache", true); 
+pref("permissions.delegation.enabled", false);
 

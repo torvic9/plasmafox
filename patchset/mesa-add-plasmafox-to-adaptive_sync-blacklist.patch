@@ -1,0 +1,14 @@
+diff --git a/src/util/00-mesa-defaults.conf b/src/util/00-mesa-defaults.conf
+index dc7fb30a3f9..67507b24c73 100644
+--- a/src/util/00-mesa-defaults.conf
++++ b/src/util/00-mesa-defaults.conf
+@@ -546,6 +546,9 @@ TODO: document the other workarounds.
+         <application name="Waterfox" executable="waterfox">
+             <option name="adaptive_sync" value="false" />
+         </application>
++        <application name="Plasmafox" executable="plasmafox">
++            <option name="adaptive_sync" value="false" />
++        </application>
+         <application name="VLC Media Player" executable="vlc">
+             <option name="adaptive_sync" value="false" />
+         </application>

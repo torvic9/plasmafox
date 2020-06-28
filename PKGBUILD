@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=77.0.1
+pkgver=78.0b9
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -25,10 +25,10 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=d5b284f833d5
-_mbrev=2327
+_patchrev=909f866430ee
+_mbrev=2334
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
-_pfdate=20200601
+_pfdate=20200628
 options=('!emptydirs' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 #_repo=https://hg.mozilla.org/mozilla-unified #_RELEASE
@@ -41,7 +41,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	user.js
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	plasmafox-${_pfdate}.patch
-	0007-allow-webrender-on-release.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
@@ -66,21 +65,20 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('54256fc5f8e9c2e8129ef84773fae31fcfdaf95da6d4d03151f3939e9f749640'
+sha256sums=('46b339cc5f737cbaa112a318665c21ee4509299db005bf0ff6f0d4e6314c26f6'
             'SKIP'
-            '9d0ae77d578bfd9d53dc19fee2d362d0524759eea1bb035b22c52fd3849fc62d'
+            '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
-            '32480c5cf8b28e52f5e3789fff111fba8096ad2e08641f8283ef7393f5807008'
+            '6076c7236e9e1106a8d08942e84d17e4c1de6f03c2208ee05968292f098bc362'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '8aa2adbefc8579f0c4405d1c8d7da220caeaea2f096244c1bca4305592fa44e8'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
-            '659d23d6cb4d26df977a6adefa126af74362c3096690a73e8a7bc6366b9b5c5c'
-            '312083de2849346dd370896ef4d8a6bb7b3c5fa7e39d5a8870ac64043607bdb6'
+            'aca4fcd1efdaab528ad7f43c7d40875236158fa98d4fd6ac1e6d9810201b7cf3'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
-            '72e75edec0b925933e5674399a624f36bc818cb8dc96005ac8a5694e597affb8'
+            '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
-            'c87e9df0fa2ba96989b70403e412aae54de9e29a56c7872f155cfd8a1e0b9a33'
-            '8b09d32099e83370af8dc10899a98e9c101526f0c943a118d4c0d914ef9aa582'
+            '411f1580801f7b1484575d38f5967cf3d8c68efbba8dd4e2950e13a763bd09d8'
+            '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3077567f8b6dbf77c3673126ae39f79d0a0cde62f01dba62fc11f3238a29946a'
             '2fc8a9ab0cc31d24eeea39569005a0d6b6486b44cb677b07790bf6dedf2caa38'
             '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
@@ -105,7 +103,7 @@ validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 prepare() {
   #cd mozilla-unified
-  cd firefox-${pkgver}
+  cd firefox-${pkgver/b9/}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
 
@@ -142,7 +140,6 @@ prepare() {
   # Plasmafox patches
   msg "Plasmafox patches"
   patch -Np1 -i ../plasmafox-${_pfdate}.patch
-  patch -Np1 -i ../0007-allow-webrender-on-release.patch
 
   # Artwork
   cp "$srcdir/about-wordmark.svg" ./browser/branding/unofficial/content/
@@ -156,7 +153,7 @@ prepare() {
 }
 
 build() {
-  cd firefox-${pkgver}
+  cd firefox-${pkgver/b9/}
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
@@ -224,7 +221,7 @@ END
 
 package() {
   #cd mozilla-unified
-  cd firefox-${pkgver}
+  cd firefox-${pkgver/b9/}
 
   cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 

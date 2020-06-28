@@ -391,8 +391,8 @@ index d023e0a0e5..daea92519e 100644
 +    "searchDefault": "DuckDuckGo",
 +    "searchOrder": ["DuckDuckGo", "Ecosia"],
      "visibleDefaultEngines": [
--      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
-+      "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "twitter", "wikipedia"
+-      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"
++      "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "wikipedia"
      ]
    },
    "regionOverrides": {
@@ -404,13 +404,13 @@ index d023e0a0e5..daea92519e 100644
      "en-US": {
        "default": {
          "visibleDefaultEngines": [
--          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
-+          "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "twitter", "wikipedia"
+-          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"
++          "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "wikipedia"
          ]
        },
        "KZ": {
          "visibleDefaultEngines": [
-           "amazondotcom", "bing", "google", "twitter", "wikipedia", "ddg", "yandex-en"
+           "amazondotcom", "bing", "google", "wikipedia", "ddg", "yandex-en"
 -- 
 2.23.0
 
@@ -587,3 +587,41 @@ index 284c60f4ad..bde9a1fdda 100644
 -- 
 2.24.0
 
+--- a/widget/GfxInfoX11.cpp	2020-05-29 08:02:46.000000000 +0200
++++ b/widget/GfxInfoX11.cpp	2020-06-02 21:13:59.320481724 +0200
+@@ -509,9 +509,8 @@
+ 
+     ////////////////////////////////////
+     // FEATURE_WEBRENDER - ALLOWLIST
+ 
+-#ifdef NIGHTLY_BUILD
+     // Intel Mesa baseline, chosen arbitrarily.
+     APPEND_TO_DRIVER_BLOCKLIST_EXT(
+         OperatingSystem::Linux, ScreenSizeStatus::SmallAndMedium,
+         BatteryStatus::All, DesktopEnvironment::All, WindowProtocol::All,
+@@ -534,9 +533,8 @@
+         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
+         DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
+         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
+         V(18, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 18.0.0.0");
+-#endif
+   }
+   return *sDriverInfo;
+ }
+ 
+--- a/gfx/thebes/gfxPlatform.cpp	2020-05-29 08:02:42.000000000 +0200
++++ b/gfx/thebes/gfxPlatform.cpp	2020-06-03 01:15:12.178047747 +0200
+@@ -2800,13 +2800,8 @@
+ 
+ void gfxPlatform::InitWebGPUConfig() {
+   FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
+   feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
+-#ifndef NIGHTLY_BUILD
+-  feature.ForceDisable(FeatureStatus::Blocked,
+-                       "WebGPU can only be enabled in nightly",
+-                       NS_LITERAL_CSTRING("WEBGPU_DISABLE_NON_NIGHTLY"));
+-#endif
+ }
+ 
+ void gfxPlatform::InitOMTPConfig() {
+   ScopedGfxFeatureReporter reporter("OMTP");

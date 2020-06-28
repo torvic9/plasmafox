@@ -20,8 +20,8 @@ index d023e0a0e5..daea92519e 100644
 +    "searchDefault": "DuckDuckGo",
 +    "searchOrder": ["DuckDuckGo", "Ecosia"],
      "visibleDefaultEngines": [
--      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
-+      "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "twitter", "wikipedia"
+-      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"
++      "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "wikipedia"
      ]
    },
    "regionOverrides": {
@@ -33,13 +33,13 @@ index d023e0a0e5..daea92519e 100644
      "en-US": {
        "default": {
          "visibleDefaultEngines": [
--          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "twitter", "wikipedia"
-+          "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "twitter", "wikipedia"
+-          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"
++          "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "wikipedia"
          ]
        },
        "KZ": {
          "visibleDefaultEngines": [
-           "amazondotcom", "bing", "google", "twitter", "wikipedia", "ddg", "yandex-en"
+           "amazondotcom", "bing", "google", "wikipedia", "ddg", "yandex-en"
 -- 
 2.23.0
 
