@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=78.0b9
+pkgver=78.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -14,7 +14,7 @@ depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse
 		kplasmafoxhelper libvpx icu nspr dav1d aom harfbuzz graphite
 		libwebp)
 
-makedepends=('unzip' 'zip' 'diffutils' 'python2-setuptools' 'python2-psutil'
+makedepends=('unzip' 'zip' 'diffutils' 'python-setuptools' 'python-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
 			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2'
 			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld')
@@ -65,7 +65,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('46b339cc5f737cbaa112a318665c21ee4509299db005bf0ff6f0d4e6314c26f6'
+sha256sums=('291a593151e476e6c4b61e48a3bdd5a11896fbde6261dcad347d5b7df265a058'
             'SKIP'
             '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -103,7 +103,7 @@ validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 prepare() {
   #cd mozilla-unified
-  cd firefox-${pkgver/b9/}
+  cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
 
@@ -153,7 +153,7 @@ prepare() {
 }
 
 build() {
-  cd firefox-${pkgver/b9/}
+  cd firefox-${pkgver}
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
@@ -221,7 +221,7 @@ END
 
 package() {
   #cd mozilla-unified
-  cd firefox-${pkgver/b9/}
+  cd firefox-${pkgver}
 
   cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 
