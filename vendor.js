@@ -79,4 +79,8 @@ pref("dom.enable_performance", false);
 pref("webgl.enable-debug-renderer-info", false);
 pref("browser.privatebrowsing.forceMediaMemoryCache", true); 
 pref("permissions.delegation.enabled", false);
+pref("captivedetect.canonicalURL", "");
+pref("network.captive-portal-service.enabled", false); 
+pref("network.dns.disablePrefetch", true);
+pref("beacon.enabled", false);
 
