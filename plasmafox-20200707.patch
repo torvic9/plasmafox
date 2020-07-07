@@ -253,11 +253,27 @@ index 5737302831..5b8aeb7a8f 100644
  
  bottomLinks-license = Licensing Information
 diff --git a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-index 0318311294..f371e8c02b 100644
+index a24a3e8225..6b653ad95f 100644
 --- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
 +++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-@@ -62,9 +62,9 @@ p {
-   width: 96px;
+@@ -55,12 +55,12 @@ p {
+ }
+ 
+ .logo {
+   background: url("chrome://branding/content/about-logo.png") no-repeat center center;
+-  background-size: 96px;
++  background-size: 128px;
+   display: inline-block;
+-  height: 96px;
+-  width: 96px;
++  height: 128px;
++  width: 128px;
+ }
+ 
+ @media (min-resolution: 2x) {
+   .logo {
+@@ -68,14 +68,14 @@ p {
+   }
  }
  
  .wordmark {
@@ -267,9 +283,14 @@ index 0318311294..f371e8c02b 100644
    -moz-context-properties: fill;
    display: inline-block;
    fill: #fff;
+-  height: 96px;
++  height: 128px;
+   margin-inline-start: 15px;
+   width: 172px;
+ }
+
 -- 
 2.25.1
-
 From 4ebc8ab1412817231c691b52c173d369a645e74c Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Tue, 7 Jan 2020 21:51:02 +0100
