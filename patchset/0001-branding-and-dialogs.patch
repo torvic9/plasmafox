@@ -252,11 +252,26 @@ index 5737302831..5b8aeb7a8f 100644
  helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
  
  bottomLinks-license = Licensing Information
+diff --git a/browser/branding/unofficial/content/jar.mn b/browser/branding/unofficial/content/jar.mn
+index 68b2bfd8e5..b2e8b2369c 100644
+--- a/browser/branding/unofficial/content/jar.mn
++++ b/browser/branding/unofficial/content/jar.mn
+@@ -7,9 +7,9 @@ browser.jar:
+   content/branding/about.png
+   content/branding/about-logo.png
+   content/branding/about-logo@2x.png
+   content/branding/about-wordmark.svg
+-  content/branding/firefox-wordmark.svg
++  content/branding/plasmafox-wordmark.svg
+   content/branding/aboutlogins.svg
+   content/branding/icon16.png                    (../default16.png)
+   content/branding/icon32.png                    (../default32.png)
+   content/branding/icon48.png                    (../default48.png)
 diff --git a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-index a24a3e8225..6b653ad95f 100644
+index a24a3e8225..3d2da0faeb 100644
 --- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
 +++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
-@@ -55,12 +55,12 @@ p {
+@@ -55,27 +55,21 @@ p {
  }
  
  .logo {
@@ -266,14 +281,14 @@ index a24a3e8225..6b653ad95f 100644
    display: inline-block;
 -  height: 96px;
 -  width: 96px;
+-}
+-
+-@media (min-resolution: 2x) {
+-  .logo {
+-    background-image: url('chrome://branding/content/about-logo@2x.png');
+-  }
 +  height: 128px;
 +  width: 128px;
- }
- 
- @media (min-resolution: 2x) {
-   .logo {
-@@ -68,14 +68,14 @@ p {
-   }
  }
  
  .wordmark {
@@ -282,8 +297,9 @@ index a24a3e8225..6b653ad95f 100644
    background-size: 172px;
    -moz-context-properties: fill;
    display: inline-block;
-   fill: #fff;
+-  fill: #fff;
 -  height: 96px;
++  fill: #bfd;
 +  height: 128px;
    margin-inline-start: 15px;
    width: 172px;
