@@ -305,6 +305,36 @@ index a24a3e8225..3d2da0faeb 100644
    width: 172px;
  }
 
+diff --git a/browser/components/newtab/content-src/components/Search/_Search.scss b/browser/components/newtab/content-src/components/Search/_Search.scss
+index fdbf52f299..f33600c76e 100644
+--- a/browser/components/newtab/content-src/components/Search/_Search.scss
++++ b/browser/components/newtab/content-src/components/Search/_Search.scss
+@@ -32,9 +32,9 @@ $glyph-forward: url('chrome://browser/skin/forward.svg');
+       width: $logo-size;
+     }
+ 
+     .wordmark {
+-      background: url('chrome://branding/content/firefox-wordmark.svg') no-repeat center center;
++      background: url('chrome://branding/content/plasmafox-wordmark.svg') no-repeat center center;
+       background-size: $wordmark-size;
+       -moz-context-properties: fill;
+       display: inline-block;
+       fill: var(--newtab-search-wordmark-color);
+diff --git a/browser/components/newtab/css/activity-stream-linux.css b/browser/components/newtab/css/activity-stream-linux.css
+index 71b7b788cd..439994e895 100644
+--- a/browser/components/newtab/css/activity-stream-linux.css
++++ b/browser/components/newtab/css/activity-stream-linux.css
+@@ -1042,9 +1042,9 @@ main {
+       @media (min-resolution: 2x) {
+         .search-wrapper .logo-and-wordmark .logo {
+           background-image: url("chrome://branding/content/about-logo@2x.png"); } }
+     .search-wrapper .logo-and-wordmark .wordmark {
+-      background: url("chrome://branding/content/firefox-wordmark.svg") no-repeat center center;
++      background: url("chrome://branding/content/plasmafox-wordmark.svg") no-repeat center center;
+       background-size: 172px;
+       -moz-context-properties: fill;
+       display: inline-block;
+       fill: var(--newtab-search-wordmark-color);
 -- 
 2.25.1
 From 4ebc8ab1412817231c691b52c173d369a645e74c Mon Sep 17 00:00:00 2001
