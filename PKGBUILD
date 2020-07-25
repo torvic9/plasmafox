@@ -4,7 +4,7 @@
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=78.0.2
-pkgrel=2
+pkgrel=3
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -26,7 +26,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=909f866430ee
+_patchrev=4ac678bd2a26
 _mbrev=2334
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
 _pfdate=20200710
@@ -39,15 +39,19 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	vendor.js
 	kde.js
 	#user.js
+	pgo-fix-missing-kdejs.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
+	fix-lto-in-gkrust-with-rust145.patch
+	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
 	mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
+	# Menubar
 	unity-menubar-r${_mbrev}.patch
-	pgo-fix-missing-kdejs.patch
+	# System Libs
 	2000_system_harfbuzz_support.patch
 	2001_system_graphite2_support.patch
 	#2012_allow-non-ascii-chars.patch
@@ -71,13 +75,14 @@ sha256sums=('1aa00ec6d40a771d525b867b175be28eda096becc745875bcceb133a985750fc'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '84e7309bcbb984b10e3ca11f85af7eb41fee1681c3564f98ff4a5469a93604a4'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
+            '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
+            '7d814171222ce37177c507622fd0509796c3bd997ee963b7882585b6dc8f3266'
             '26a927f1be2c7efe376f318ef7b4b2418d61c6a27d1e6b940e04250c01df3ae3'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
             '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '411f1580801f7b1484575d38f5967cf3d8c68efbba8dd4e2950e13a763bd09d8'
-            '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3077567f8b6dbf77c3673126ae39f79d0a0cde62f01dba62fc11f3238a29946a'
             '2fc8a9ab0cc31d24eeea39569005a0d6b6486b44cb677b07790bf6dedf2caa38'
             '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
@@ -113,6 +118,9 @@ prepare() {
 
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+
+  # fix rust 1.45 issue with LTO
+  patch -Np1 -i ../fix-lto-in-gkrust-with-rust145.patch
 
   # KDE patches (W. Rosenauer)
   msg "Patching for KDE"
