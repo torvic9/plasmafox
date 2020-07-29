@@ -1,7 +1,7 @@
 # Maintainer: torvic9 AT mailbox DOT org
 # based on ideas by Waterfox and firefox-kde-opensuse
 
-pkgname=plasmafox-esr
+pkgname=plasmafox
 _pkgname=firefox
 pkgver=78.1.0esr
 pkgrel=1
@@ -25,11 +25,11 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'libdbusmenu-gtk3: global menu support')
 
 provides=("plasmafox-esr=${pkgver}")
-conflicts=('plasmafox')
-_patchrev=4fd43e0d4a8f
+#conflicts=('plasmafox')
+_patchrev=909f866430ee
 _mbrev=2334
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
-_pfdate=20200710
+_pfdate=20200729
 options=('!emptydirs' '!strip')
 _patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
@@ -77,7 +77,7 @@ sha256sums=('3600a396d9312c5e9f637b267926ca4771d84a56b26b960cc7d72e98683b64a2'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             'e577f7e5636deda0026b0e385186f3ecb2212c9b84b6a2949a1811dab3e410d6'
-            '26a927f1be2c7efe376f318ef7b4b2418d61c6a27d1e6b940e04250c01df3ae3'
+            'cd9ffebfa855b83aae4c073596704cad357869db6bb0ac7b36d5612f85d788aa'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
             '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
@@ -106,7 +106,7 @@ validpgpkeys=(14F26682D0916CDD81E37B6D61B7B526D98F0353)
 
 prepare() {
   #cd mozilla-unified
-  cd firefox-${pkgver}
+  cd firefox-${pkgver%esr}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
 
@@ -116,32 +116,32 @@ prepare() {
   # echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
 
   # Arch patches
+  echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-
   # fix rust
   patch -Np1 -i ../bug1654465.diff
 
   # KDE patches (W. Rosenauer)
-  echo "Patching for KDE"
+  echo "---- Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
   patch -Np1 -i ../mozilla-kde-$_patchrev.patch
   patch -Np1 -i ../firefox-kde-$_patchrev.patch
 
   # add globalmenu support
-  echo "Ubuntu global menu"
+  echo "---- Ubuntu global menu"
   patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
 
   # use more system libs
-  echo "Patching for system libs"
+  echo "---- Patching for system libs"
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
   patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
 
   # Plasmafox patches
-  echo "Plasmafox patches"
+  echo "---- Plasmafox patches"
   patch -Np1 -i ../plasmafox-${_pfdate}.patch
 
   # Artwork
@@ -156,7 +156,7 @@ prepare() {
 }
 
 build() {
-  cd firefox-${pkgver}
+  cd firefox-${pkgver%esr}
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
   export STRIP=/bin/true
@@ -220,7 +220,7 @@ END
 
 package() {
   #cd mozilla-unified
-  cd firefox-${pkgver}
+  cd firefox-${pkgver%esr}
 
   cp "$srcdir/kde.js" obj-x86_64-pc-linux-gnu/dist/bin/defaults/pref
 
@@ -243,8 +243,8 @@ version=1.0
 about=Plasmafox ESR for Manjaro
 
 [Preferences]
-app.distributor=${pkgname%-esr}
-app.distributor.channel=${pkgname%-esr}
+app.distributor=${pkgname}
+app.distributor.channel=${pkgname}
 END
 
   for i in 16 22 24 32 48 64 128 256; do
@@ -260,17 +260,17 @@ END
   install -Dvm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
 
   # Install a wrapper to avoid confusion about binary path
-  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/${pkgname%-esr}" <<END
+  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/${pkgname}" <<END
 #!/bin/sh
-exec /usr/lib/${pkgname%-esr}/plasmafox "\$@"
+exec /usr/lib/${pkgname}/plasmafox "\$@"
 END
 
   # Replace duplicate binary with wrapper
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-  ln -srfv "$pkgdir/usr/bin/${pkgname%-esr}" "$pkgdir/usr/lib/${pkgname%-esr}/plasmafox-bin"
+  ln -srfv "$pkgdir/usr/bin/${pkgname}" "$pkgdir/usr/lib/${pkgname}/plasmafox-bin"
 
   # Use system certificates
-  local nssckbi="$pkgdir/usr/lib/${pkgname%-esr}/libnssckbi.so"
+  local nssckbi="$pkgdir/usr/lib/${pkgname}/libnssckbi.so"
   if [[ -e $nssckbi ]]; then
     ln -srfv "$pkgdir/usr/lib/libnssckbi.so" "$nssckbi"
   fi

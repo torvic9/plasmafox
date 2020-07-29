@@ -654,31 +654,22 @@ index 284c60f4ad..bde9a1fdda 100644
 -- 
 2.24.0
 
---- a/widget/GfxInfoX11.cpp	2020-05-29 08:02:46.000000000 +0200
-+++ b/widget/GfxInfoX11.cpp	2020-06-02 21:13:59.320481724 +0200
-@@ -509,9 +509,8 @@
- 
-     ////////////////////////////////////
-     // FEATURE_WEBRENDER - ALLOWLIST
- 
--#ifdef NIGHTLY_BUILD
-     // Intel Mesa baseline, chosen arbitrarily.
-     APPEND_TO_DRIVER_BLOCKLIST_EXT(
-         OperatingSystem::Linux, ScreenSizeStatus::SmallAndMedium,
-         BatteryStatus::All, DesktopEnvironment::All, WindowProtocol::All,
-@@ -534,9 +533,8 @@
-         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
-         DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
-         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
-         V(18, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 18.0.0.0");
--#endif
-   }
-   return *sDriverInfo;
- }
- 
---- a/gfx/thebes/gfxPlatform.cpp	2020-05-29 08:02:42.000000000 +0200
-+++ b/gfx/thebes/gfxPlatform.cpp	2020-06-03 01:15:12.178047747 +0200
-@@ -2800,13 +2800,8 @@
+From 14716c5b1e940fb53ee3435bbf2494e8f35f1d80 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Wed, 29 Jul 2020 20:34:54 +0200
+Subject: [PATCH] allow webrender on release
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ gfx/thebes/gfxPlatform.cpp |  5 -----
+ widget/GfxInfoX11.cpp      | 25 ++++++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
+index 96b53c1059..72d57d3ffa 100644
+--- a/gfx/thebes/gfxPlatform.cpp
++++ b/gfx/thebes/gfxPlatform.cpp
+@@ -2805,13 +2805,8 @@ void gfxPlatform::InitWebRenderConfig() {
  
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
@@ -692,3 +683,44 @@ index 284c60f4ad..bde9a1fdda 100644
  
  void gfxPlatform::InitOMTPConfig() {
    ScopedGfxFeatureReporter reporter("OMTP");
+diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
+index c6463bfa41..b718995366 100644
+--- a/widget/GfxInfoX11.cpp
++++ b/widget/GfxInfoX11.cpp
+@@ -509,9 +509,32 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+ 
+     ////////////////////////////////////
+     // FEATURE_WEBRENDER - ALLOWLIST
+ 
+-    // Empty on ESR.
++    // Intel Mesa baseline, chosen arbitrarily.
++    APPEND_TO_DRIVER_BLOCKLIST_EXT(
++        OperatingSystem::Linux, ScreenSizeStatus::SmallAndMedium,
++        BatteryStatus::All, DesktopEnvironment::All, WindowProtocol::All,
++        DriverVendor::MesaAll, DeviceFamily::IntelRolloutWebRender,
++        nsIGfxInfo::FEATURE_WEBRENDER, nsIGfxInfo::FEATURE_ALLOW_QUALIFIED,
++        DRIVER_GREATER_THAN_OR_EQUAL, V(18, 0, 0, 0),
++        "FEATURE_ROLLOUT_INTEL_MESA", "Mesa 18.0.0.0");
++
++    // Nvidia Mesa baseline, see bug 1563859.
++    APPEND_TO_DRIVER_BLOCKLIST_EXT(
++        OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
++        DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
++        DeviceFamily::NvidiaRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
++        nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
++        V(18, 2, 0, 0), "FEATURE_ROLLOUT_NVIDIA_MESA", "Mesa 18.2.0.0");
++
++    // ATI Mesa baseline, chosen arbitrarily.
++    APPEND_TO_DRIVER_BLOCKLIST_EXT(
++        OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
++        DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
++        DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
++        nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
++        V(18, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 18.0.0.0");
+   }
+   return *sDriverInfo;
+ }
+ 
+-- 
+2.27.0
+
