@@ -1,9 +1,9 @@
 # Maintainer: torvic9 AT mailbox DOT org
 # based on ideas by Waterfox and firefox-kde-opensuse
 
-pkgname=plasmafox
+pkgname=plasmafox-esr
 _pkgname=firefox
-pkgver=79.0
+pkgver=78.1.0esr
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -24,8 +24,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'libnotify: Notification integration'
             'libdbusmenu-gtk3: global menu support')
 
-provides=("plasmafox=${pkgver}")
-#conflicts=('plasmafox-esr')
+provides=("plasmafox-esr=${pkgver}")
+conflicts=('plasmafox')
 _patchrev=4fd43e0d4a8f
 _mbrev=2334
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
@@ -54,7 +54,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# System Libs
 	2000_system_harfbuzz_support.patch
 	2001_system_graphite2_support.patch
-	#2012_allow-non-ascii-chars.patch
 	7002_system_av1_support.patch
 	# artwork
 	#about-background.png
@@ -69,7 +68,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
+sha256sums=('3600a396d9312c5e9f637b267926ca4771d84a56b26b960cc7d72e98683b64a2'
             'SKIP'
             '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -140,9 +139,6 @@ prepare() {
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
   patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
-
-  # fix python ascii encode
-  #patch -Np1 -i ../2012_allow-non-ascii-chars.patch
 
   # Plasmafox patches
   echo "Plasmafox patches"
@@ -244,11 +240,11 @@ package() {
 [Global]
 id=plasmafox
 version=1.0
-about=Plasmafox for Manjaro
+about=Plasmafox ESR for Manjaro
 
 [Preferences]
-app.distributor=$pkgname
-app.distributor.channel=$pkgname
+app.distributor=${pkgname#esr}
+app.distributor.channel=${pkgname#esr}
 END
 
   for i in 16 22 24 32 48 64 128 256; do
@@ -264,17 +260,17 @@ END
   install -Dvm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
 
   # Install a wrapper to avoid confusion about binary path
-  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$pkgname" <<END
+  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/${pkgname#esr}" <<END
 #!/bin/sh
-exec /usr/lib/$pkgname/plasmafox "\$@"
+exec /usr/lib/${pkgname#esr}/plasmafox "\$@"
 END
 
   # Replace duplicate binary with wrapper
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-  ln -srfv "$pkgdir/usr/bin/$pkgname" "$pkgdir/usr/lib/$pkgname/plasmafox-bin"
+  ln -srfv "$pkgdir/usr/bin/${pkgname#esr}" "$pkgdir/usr/lib/${pkgname#esr}/plasmafox-bin"
 
   # Use system certificates
-  local nssckbi="$pkgdir/usr/lib/$pkgname/libnssckbi.so"
+  local nssckbi="$pkgdir/usr/lib/${pkgname#esr}/libnssckbi.so"
   if [[ -e $nssckbi ]]; then
     ln -srfv "$pkgdir/usr/lib/libnssckbi.so" "$nssckbi"
   fi
