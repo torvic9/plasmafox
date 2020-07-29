@@ -243,8 +243,8 @@ version=1.0
 about=Plasmafox ESR for Manjaro
 
 [Preferences]
-app.distributor=${pkgname#esr}
-app.distributor.channel=${pkgname#esr}
+app.distributor=${pkgname%-esr}
+app.distributor.channel=${pkgname%-esr}
 END
 
   for i in 16 22 24 32 48 64 128 256; do
@@ -260,17 +260,17 @@ END
   install -Dvm644 "$srcdir/plasmafox.desktop" "$pkgdir/usr/share/applications/plasmafox.desktop"
 
   # Install a wrapper to avoid confusion about binary path
-  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/${pkgname#esr}" <<END
+  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/${pkgname%-esr}" <<END
 #!/bin/sh
-exec /usr/lib/${pkgname#esr}/plasmafox "\$@"
+exec /usr/lib/${pkgname%-esr}/plasmafox "\$@"
 END
 
   # Replace duplicate binary with wrapper
   # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-  ln -srfv "$pkgdir/usr/bin/${pkgname#esr}" "$pkgdir/usr/lib/${pkgname#esr}/plasmafox-bin"
+  ln -srfv "$pkgdir/usr/bin/${pkgname%-esr}" "$pkgdir/usr/lib/${pkgname%-esr}/plasmafox-bin"
 
   # Use system certificates
-  local nssckbi="$pkgdir/usr/lib/${pkgname#esr}/libnssckbi.so"
+  local nssckbi="$pkgdir/usr/lib/${pkgname%-esr}/libnssckbi.so"
   if [[ -e $nssckbi ]]; then
     ln -srfv "$pkgdir/usr/lib/libnssckbi.so" "$nssckbi"
   fi
