@@ -47,10 +47,10 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Firefox patchset
 	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-$_patchrev.patch::$_patchurl/mozilla-kde.patch
+	mozilla-kde-${_patchrev}+vd.patch
 	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Menubar
-	unity-menubar-r${_mbrev}.patch
+	unity-menubar-r${_mbrev}+vd.patch
 	# System Libs
 	2000_system_harfbuzz_support.patch
 	2001_system_graphite2_support.patch
@@ -71,7 +71,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
             'SKIP'
-            '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
+            'fa9d041b0f722da68bfc4d56a4c20a7e6cb3eaa0dd5796b853bc363e40246fa2'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '84e7309bcbb984b10e3ca11f85af7eb41fee1681c3564f98ff4a5469a93604a4'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -80,9 +80,9 @@ sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
             'e577f7e5636deda0026b0e385186f3ecb2212c9b84b6a2949a1811dab3e410d6'
             '26a927f1be2c7efe376f318ef7b4b2418d61c6a27d1e6b940e04250c01df3ae3'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
-            '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
+            'e2342e20b7e344cb420ea7fcf8f602549d654a26477ceacdabea0aa21e34711e'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
-            '411f1580801f7b1484575d38f5967cf3d8c68efbba8dd4e2950e13a763bd09d8'
+            '6592a0ffa2d29ad14ae78a6be339686f90fb73a52adf6c63065dc200d78f108b'
             '3077567f8b6dbf77c3673126ae39f79d0a0cde62f01dba62fc11f3238a29946a'
             '2fc8a9ab0cc31d24eeea39569005a0d6b6486b44cb677b07790bf6dedf2caa38'
             '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
@@ -125,12 +125,12 @@ prepare() {
   # KDE patches (W. Rosenauer)
   echo "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
-  patch -Np1 -i ../mozilla-kde-$_patchrev.patch
+  patch -Np1 -i ../mozilla-kde-${_patchrev}+vd.patch
   patch -Np1 -i ../firefox-kde-$_patchrev.patch
 
   # add globalmenu support
   echo "Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  patch -Np1 -i ../unity-menubar-r${_mbrev}+vd.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
