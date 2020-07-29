@@ -3,8 +3,8 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=78.0.2
-pkgrel=3
+pkgver=79.0
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -26,7 +26,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=4ac678bd2a26
+_patchrev=4fd43e0d4a8f
 _mbrev=2334
 #_patchrevsuse=06fa6ff893b0d132078874c384e25c59
 _pfdate=20200710
@@ -41,7 +41,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	#user.js
 	pgo-fix-missing-kdejs.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	fix-lto-in-gkrust-with-rust145.patch
+	bug1654465.diff
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
@@ -69,7 +69,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('1aa00ec6d40a771d525b867b175be28eda096becc745875bcceb133a985750fc'
+sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
             'SKIP'
             '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -77,7 +77,7 @@ sha256sums=('1aa00ec6d40a771d525b867b175be28eda096becc745875bcceb133a985750fc'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
-            '7d814171222ce37177c507622fd0509796c3bd997ee963b7882585b6dc8f3266'
+            'e577f7e5636deda0026b0e385186f3ecb2212c9b84b6a2949a1811dab3e410d6'
             '26a927f1be2c7efe376f318ef7b4b2418d61c6a27d1e6b940e04250c01df3ae3'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
             '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
@@ -119,24 +119,24 @@ prepare() {
   # Arch patches
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
 
-  # fix rust 1.45 issue with LTO
-  patch -Np1 -i ../fix-lto-in-gkrust-with-rust145.patch
+  # fix rust
+  patch -Np1 -i ../bug1654465.diff
 
   # KDE patches (W. Rosenauer)
-  msg "Patching for KDE"
+  echo "Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
   patch -Np1 -i ../mozilla-kde-$_patchrev.patch
   patch -Np1 -i ../firefox-kde-$_patchrev.patch
 
   # add globalmenu support
-  msg "Ubuntu global menu"
+  echo "Ubuntu global menu"
   patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
 
   # use more system libs
-  msg "Patching for system libs"
+  echo "Patching for system libs"
   patch -Np1 -i ../2000_system_harfbuzz_support.patch
   patch -Np1 -i ../2001_system_graphite2_support.patch
   patch -Np1 -i ../7002_system_av1_support.patch
@@ -145,7 +145,7 @@ prepare() {
   #patch -Np1 -i ../2012_allow-non-ascii-chars.patch
 
   # Plasmafox patches
-  msg "Plasmafox patches"
+  echo "Plasmafox patches"
   patch -Np1 -i ../plasmafox-${_pfdate}.patch
 
   # Artwork
@@ -181,33 +181,29 @@ build() {
   CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 
   # Do 3-tier PGO
-  msg2 "Building instrumented browser..."
+  echo "Building instrumented browser..."
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-profile-generate=cross
 END
   ./mach build
 
-  msg2 "Profiling instrumented browser..."
+  echo "Profiling instrumented browser..."
   ./mach package
   LLVM_PROFDATA=llvm-profdata \
   	JARLOG_FILE="$PWD/jarlog" \
   	xvfb-run -a -n 92 -s "-screen 0 1920x1080x24 -nolisten tcp" \
   	./mach python build/pgo/profileserver.py
 
-  if [[ ! -s merged.profdata ]]; then
-  	error "No profile data produced."
-  	return 1
-  fi
+  stat -c "Profile data found (%s bytes)" merged.profdata
+  test -s merged.profdata
 
-  if [[ ! -s jarlog ]]; then
-  	error "No jar log produced."
-  	return 1
-  fi
+  stat -c "Jar log found (%s bytes)" jarlog
+  test -s jarlog
 
-  msg2 "Removing instrumented browser..."
+  echo "Removing instrumented browser..."
   ./mach clobber
 
-  msg2 "Building optimized browser..."
+  echo "Building optimized browser..."
   cat >.mozconfig ../mozconfig - <<END
 ac_add_options --enable-lto=cross
 ac_add_options --enable-profile-use=cross
@@ -216,7 +212,7 @@ ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
 END
   ./mach build
 
-  msg2 "Building symbol archive..."
+  echo "Building symbol archive..."
   ./mach buildsymbols
 
   # multilocale
