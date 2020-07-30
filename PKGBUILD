@@ -26,12 +26,13 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
-_patchrev=4fd43e0d4a8f
+#_patchrev=4fd43e0d4a8f
 _mbrev=2334
-#_patchrevsuse=06fa6ff893b0d132078874c384e25c59
+_patchrevsuse=15e73dbe1b5290bb8c4a36a4e808199c07de3d83
 _pfdate=20200710
-options=('!emptydirs' '!strip')
-_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
+options=('!emptydirs')
+#_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
+_patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
 	#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
 	mozconfig
@@ -39,25 +40,24 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	vendor.js
 	kde.js
 	#user.js
+    #fix-webgl2.patch
 	pgo-fix-missing-kdejs.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	bug1654465.diff
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
-	firefox-kde-$_patchrev.patch::$_patchurl/firefox-kde.patch
+	firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-${_patchrev}+vd.patch
-	mozilla-nongnome-proxies-$_patchrev.patch::$_patchurl/mozilla-nongnome-proxies.patch
+	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
+	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Menubar
 	unity-menubar-r${_mbrev}+vd.patch
 	# System Libs
-	2000_system_harfbuzz_support.patch
-	2001_system_graphite2_support.patch
-	#2012_allow-non-ascii-chars.patch
-	7002_system_av1_support.patch
+	0005-bmo-847568-Support-system-harfbuzz.patch
+	0006-bmo-847568-Support-system-graphite2.patch
+	0007-bmo-1559213-Support-system-av1.patch
 	# artwork
-	#about-background.png
 	about-logo.png
 	about-logo@2x.png
 	about-wordmark.svg
@@ -71,7 +71,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
             'SKIP'
-            'fa9d041b0f722da68bfc4d56a4c20a7e6cb3eaa0dd5796b853bc363e40246fa2'
+            'bbc623ea3347759630f56538c86ec114e00f414a105452c70afa3d5649cd5112'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '84e7309bcbb984b10e3ca11f85af7eb41fee1681c3564f98ff4a5469a93604a4'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -80,12 +80,12 @@ sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
             'e577f7e5636deda0026b0e385186f3ecb2212c9b84b6a2949a1811dab3e410d6'
             '26a927f1be2c7efe376f318ef7b4b2418d61c6a27d1e6b940e04250c01df3ae3'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
-            'e2342e20b7e344cb420ea7fcf8f602549d654a26477ceacdabea0aa21e34711e'
+            '424dc57f2943e750aeee6abd9df8b6beb8837e534c23724c2a04d21fb45ed57c'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '6592a0ffa2d29ad14ae78a6be339686f90fb73a52adf6c63065dc200d78f108b'
-            '3077567f8b6dbf77c3673126ae39f79d0a0cde62f01dba62fc11f3238a29946a'
-            '2fc8a9ab0cc31d24eeea39569005a0d6b6486b44cb677b07790bf6dedf2caa38'
-            '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
+            '9563276744f9fa95556bf4772c793b123fd8e789402e0efe1edd7ca92cf7988f'
+            '06d641f1868a5b34885116ebf97e8af25c62fec4116980a75ceb460f2d62e187'
+            '01b57a48c03527ccfe4304a0988c8b7dccf515e34d5c80b55f05757c2333e41e'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -109,7 +109,7 @@ prepare() {
   #cd mozilla-unified
   cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
-  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
+  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrevsuse.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -117,35 +117,35 @@ prepare() {
   # echo "ac_add_options --with-l10n-base=${srcdir}/mozbuild/l10n-central" >> .mozconfig
 
   # Arch patches
+  echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-
   # fix rust
   patch -Np1 -i ../bug1654465.diff
 
+  # fix webgl
+  # patch -Np1 -i ../fix-webgl2.patch
+
   # KDE patches (W. Rosenauer)
-  echo "Patching for KDE"
-  patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrev.patch
-  patch -Np1 -i ../mozilla-kde-${_patchrev}+vd.patch
-  patch -Np1 -i ../firefox-kde-$_patchrev.patch
+  echo "---- Patching for KDE"
+  patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
+  patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
+  patch -Np1 -i ../firefox-kde-$_patchrevsuse.patch
 
   # add globalmenu support
-  echo "Ubuntu global menu"
+  echo "---- Ubuntu global menu"
   patch -Np1 -i ../unity-menubar-r${_mbrev}+vd.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
 
   # use more system libs
-  echo "Patching for system libs"
-  patch -Np1 -i ../2000_system_harfbuzz_support.patch
-  patch -Np1 -i ../2001_system_graphite2_support.patch
-  patch -Np1 -i ../7002_system_av1_support.patch
-
-  # fix python ascii encode
-  #patch -Np1 -i ../2012_allow-non-ascii-chars.patch
+  echo "---- Patching for system libs"
+  patch -Np1 -i ../0005-bmo-847568-Support-system-harfbuzz.patch
+  patch -Np1 -i ../0006-bmo-847568-Support-system-graphite2.patch
+  patch -Np1 -i ../0007-bmo-1559213-Support-system-av1.patch
 
   # Plasmafox patches
-  echo "Plasmafox patches"
+  echo "---- Plasmafox patches"
   patch -Np1 -i ../plasmafox-${_pfdate}.patch
 
   # Artwork

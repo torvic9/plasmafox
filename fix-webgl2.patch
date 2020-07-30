@@ -1,0 +1,1503 @@
+diff --git a/docshell/base/BrowsingContext.h b/docshell/base/BrowsingContext.h
+--- a/docshell/base/BrowsingContext.h
++++ b/docshell/base/BrowsingContext.h
+@@ -517,8 +517,6 @@
+ 
+   Nullable<WindowProxyHolder> GetWindow();
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(BrowsingContext)
+-
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(BrowsingContext)
+   NS_DECL_NSILOADCONTEXT
+diff --git a/docshell/base/nsDocShell.h b/docshell/base/nsDocShell.h
+--- a/docshell/base/nsDocShell.h
++++ b/docshell/base/nsDocShell.h
+@@ -120,7 +120,7 @@
+                          public nsILoadContext,
+                          public nsINetworkInterceptController,
+                          public nsIDeprecationWarner,
+-                         public mozilla::SupportsWeakPtr<nsDocShell> {
++                         public mozilla::SupportsWeakPtr {
+  public:
+   enum InternalLoad : uint32_t {
+     INTERNAL_LOAD_FLAGS_NONE = 0x0,
+@@ -179,7 +179,6 @@
+     nsWeakPtr mWeakPtr;
+   };
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(nsDocShell)
+   NS_DECL_ISUPPORTS_INHERITED
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(nsDocShell, nsDocLoader)
+   NS_DECL_NSIDOCSHELL
+diff --git a/dom/base/Document.h b/dom/base/Document.h
+--- a/dom/base/Document.h
++++ b/dom/base/Document.h
+@@ -487,7 +487,7 @@
+                  public nsIApplicationCacheContainer,
+                  public nsStubMutationObserver,
+                  public DispatcherTrait,
+-                 public SupportsWeakPtr<Document> {
++                 public SupportsWeakPtr {
+   friend class DocumentOrShadowRoot;
+ 
+  protected:
+@@ -512,8 +512,6 @@
+    */
+   static void Shutdown();
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(Document)
+-
+   NS_DECLARE_STATIC_IID_ACCESSOR(NS_IDOCUMENT_IID)
+ 
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+diff --git a/dom/base/PlacesWeakCallbackWrapper.h b/dom/base/PlacesWeakCallbackWrapper.h
+--- a/dom/base/PlacesWeakCallbackWrapper.h
++++ b/dom/base/PlacesWeakCallbackWrapper.h
+@@ -14,11 +14,9 @@
+ namespace mozilla {
+ namespace dom {
+ 
+-class PlacesWeakCallbackWrapper final
+-    : public nsWrapperCache,
+-      public SupportsWeakPtr<PlacesWeakCallbackWrapper> {
++class PlacesWeakCallbackWrapper final : public nsWrapperCache,
++                                        public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(PlacesWeakCallbackWrapper)
+   NS_INLINE_DECL_CYCLE_COLLECTING_NATIVE_REFCOUNTING(PlacesWeakCallbackWrapper)
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_NATIVE_CLASS(PlacesWeakCallbackWrapper)
+ 
+diff --git a/dom/base/Selection.h b/dom/base/Selection.h
+--- a/dom/base/Selection.h
++++ b/dom/base/Selection.h
+@@ -55,7 +55,7 @@
+ // is never deleted before its Selections.
+ class Selection final : public nsSupportsWeakReference,
+                         public nsWrapperCache,
+-                        public SupportsWeakPtr<Selection> {
++                        public SupportsWeakPtr {
+  protected:
+   virtual ~Selection();
+ 
+@@ -66,8 +66,6 @@
+   explicit Selection(SelectionType aSelectionType,
+                      nsFrameSelection* aFrameSelection);
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(Selection)
+-
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(Selection)
+ 
+diff --git a/dom/canvas/ClientWebGLContext.h b/dom/canvas/ClientWebGLContext.h
+--- a/dom/canvas/ClientWebGLContext.h
++++ b/dom/canvas/ClientWebGLContext.h
+@@ -693,14 +693,11 @@
+  */
+ class ClientWebGLContext final : public nsICanvasRenderingContextInternal,
+                                  public nsWrapperCache,
+-                                 public SupportsWeakPtr<ClientWebGLContext> {
++                                 public SupportsWeakPtr {
+   friend class webgl::ObjectJS;
+   friend class webgl::ProgramKeepAlive;
+   friend class webgl::ShaderKeepAlive;
+ 
+- public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(ClientWebGLContext)
+-
+   // ----------------------------- Lifetime and DOM ---------------------------
+  public:
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+diff --git a/dom/canvas/HostWebGLContext.h b/dom/canvas/HostWebGLContext.h
+--- a/dom/canvas/HostWebGLContext.h
++++ b/dom/canvas/HostWebGLContext.h
+@@ -66,7 +66,7 @@
+  * nsICanvasRenderingContextInternal DOM class.  That is the
+  * ClientWebGLContext.
+  */
+-class HostWebGLContext final : public SupportsWeakPtr<HostWebGLContext> {
++class HostWebGLContext final : public SupportsWeakPtr {
+   friend class WebGLContext;
+   friend class WebGLMemoryTracker;
+ 
+@@ -77,8 +77,6 @@
+   }
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(HostWebGLContext)
+-
+   struct RemotingData final {
+     dom::WebGLParent& mParent;
+     UniquePtr<HostWebGLCommandSinkP> mCommandSinkP;
+diff --git a/dom/canvas/IpdlQueue.h b/dom/canvas/IpdlQueue.h
+--- a/dom/canvas/IpdlQueue.h
++++ b/dom/canvas/IpdlQueue.h
+@@ -309,13 +309,12 @@
+ };
+ 
+ template <typename _Actor>
+-class IpdlProducer final : public SupportsWeakPtr<IpdlProducer<_Actor>> {
++class IpdlProducer final : public SupportsWeakPtr {
+   nsTArray<uint8_t> mSerializedData;
+   WeakPtr<_Actor> mActor;
+   uint64_t mId;
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(IpdlProducer<_Actor>)
+   using Actor = _Actor;
+   using SelfType = IpdlProducer<Actor>;
+ 
+@@ -451,9 +450,8 @@
+ };
+ 
+ template <typename _Actor>
+-class IpdlConsumer final : public SupportsWeakPtr<IpdlConsumer<_Actor>> {
++class IpdlConsumer final : public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(IpdlConsumer<_Actor>)
+   using Actor = _Actor;
+   using SelfType = IpdlConsumer<Actor>;
+ 
+diff --git a/dom/canvas/ProducerConsumerQueue.h b/dom/canvas/ProducerConsumerQueue.h
+--- a/dom/canvas/ProducerConsumerQueue.h
++++ b/dom/canvas/ProducerConsumerQueue.h
+@@ -51,7 +51,7 @@
+  * }
+  * Implementations of abstract methods will typically just forward to IProtocol.
+  */
+-class PcqActor : public SupportsWeakPtr<PcqActor> {
++class PcqActor : public SupportsWeakPtr {
+   // The IProtocol part of `this`.
+   IProtocol* mProtocol;
+ 
+@@ -82,8 +82,6 @@
+   }
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(PcqActor)
+-
+   Shmem::SharedMemory* LookupSharedMemory(int32_t aId) {
+     return mProtocol->LookupSharedMemory(aId);
+   }
+diff --git a/dom/canvas/WebGLChild.h b/dom/canvas/WebGLChild.h
+--- a/dom/canvas/WebGLChild.h
++++ b/dom/canvas/WebGLChild.h
+@@ -30,10 +30,8 @@
+ class WebGLChild final : public PWebGLChild,
+                          public SyncProducerActor<WebGLChild>,
+                          public AsyncConsumerActor<WebGLChild>,
+-                         public SupportsWeakPtr<WebGLChild>,
+                          public mozilla::webgl::PcqActor {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebGLChild)
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING(WebGLChild, override);
+   using OtherSideActor = WebGLParent;
+ 
+diff --git a/dom/canvas/WebGLContext.h b/dom/canvas/WebGLContext.h
+--- a/dom/canvas/WebGLContext.h
++++ b/dom/canvas/WebGLContext.h
+@@ -204,7 +204,7 @@
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+-class WebGLContext : public VRefCounted, public SupportsWeakPtr<WebGLContext> {
++class WebGLContext : public VRefCounted, public SupportsWeakPtr {
+   friend class ScopedDrawCallWrapper;
+   friend class ScopedDrawWithTransformFeedback;
+   friend class ScopedFakeVertexAttrib0;
+@@ -319,8 +319,6 @@
+   mutable FuncScope* mFuncScope = nullptr;
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebGLContext)
+-
+   static RefPtr<WebGLContext> Create(HostWebGLContext&,
+                                      const webgl::InitContextDesc&,
+                                      webgl::InitContextResult* out);
+diff --git a/dom/canvas/WebGLContextLossHandler.h b/dom/canvas/WebGLContextLossHandler.h
+--- a/dom/canvas/WebGLContextLossHandler.h
++++ b/dom/canvas/WebGLContextLossHandler.h
+@@ -14,14 +14,11 @@
+ namespace mozilla {
+ class WebGLContext;
+ 
+-class WebGLContextLossHandler final
+-    : public SupportsWeakPtr<WebGLContextLossHandler> {
++class WebGLContextLossHandler final : public SupportsWeakPtr {
+   RefPtr<Runnable> mRunnable;
+   Atomic<bool> mTimerIsScheduled;
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebGLContextLossHandler)
+-
+   explicit WebGLContextLossHandler(WebGLContext* webgl);
+   ~WebGLContextLossHandler();
+ 
+diff --git a/dom/canvas/WebGLFramebuffer.h b/dom/canvas/WebGLFramebuffer.h
+--- a/dom/canvas/WebGLFramebuffer.h
++++ b/dom/canvas/WebGLFramebuffer.h
+@@ -129,11 +129,10 @@
+ };
+ 
+ class WebGLFramebuffer final : public WebGLContextBoundObject,
+-                               public SupportsWeakPtr<WebGLFramebuffer>,
++                               public SupportsWeakPtr,
+                                public CacheInvalidator {
+  public:
+   MOZ_DECLARE_REFCOUNTED_VIRTUAL_TYPENAME(WebGLFramebuffer, override)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebGLFramebuffer)
+ 
+   const GLuint mGLName;
+   bool mHasBeenBound = false;
+diff --git a/dom/canvas/WebGLParent.h b/dom/canvas/WebGLParent.h
+--- a/dom/canvas/WebGLParent.h
++++ b/dom/canvas/WebGLParent.h
+@@ -24,13 +24,11 @@
+ class WebGLParent : public PWebGLParent,
+                     public AsyncProducerActor<WebGLParent>,
+                     public SyncConsumerActor<WebGLParent>,
+-                    public SupportsWeakPtr<WebGLParent>,
+                     public mozilla::webgl::PcqActor {
+   friend PWebGLParent;
+ 
+  public:
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING(WebGLParent, override);
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebGLParent)
+   using OtherSideActor = WebGLChild;
+ 
+   mozilla::ipc::IPCResult RecvInitialize(
+diff --git a/dom/canvas/WebGLProgram.h b/dom/canvas/WebGLProgram.h
+--- a/dom/canvas/WebGLProgram.h
++++ b/dom/canvas/WebGLProgram.h
+@@ -89,12 +89,11 @@
+ // -
+ 
+ struct LinkedProgramInfo final : public RefCounted<LinkedProgramInfo>,
+-                                 public SupportsWeakPtr<LinkedProgramInfo>,
++                                 public SupportsWeakPtr,
+                                  public CacheInvalidator {
+   friend class mozilla::WebGLProgram;
+ 
+   MOZ_DECLARE_REFCOUNTED_TYPENAME(LinkedProgramInfo)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(LinkedProgramInfo)
+ 
+   //////
+ 
+diff --git a/dom/geolocation/Geolocation.cpp b/dom/geolocation/Geolocation.cpp
+--- a/dom/geolocation/Geolocation.cpp
++++ b/dom/geolocation/Geolocation.cpp
+@@ -64,10 +64,9 @@
+ using namespace mozilla;
+ using namespace mozilla::dom;
+ 
+-class nsGeolocationRequest final
+-    : public ContentPermissionRequestBase,
+-      public nsIGeolocationUpdate,
+-      public SupportsWeakPtr<nsGeolocationRequest> {
++class nsGeolocationRequest final : public ContentPermissionRequestBase,
++                                   public nsIGeolocationUpdate,
++                                   public SupportsWeakPtr {
+  public:
+   NS_DECL_ISUPPORTS_INHERITED
+   NS_DECL_NSIGEOLOCATIONUPDATE
+@@ -86,8 +85,6 @@
+   MOZ_CAN_RUN_SCRIPT NS_IMETHOD Cancel(void) override;
+   MOZ_CAN_RUN_SCRIPT NS_IMETHOD Allow(JS::HandleValue choices) override;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(nsGeolocationRequest)
+-
+   void Shutdown();
+ 
+   // MOZ_CAN_RUN_SCRIPT_BOUNDARY is OK here because we're always called from a
+diff --git a/dom/html/HTMLCanvasElement.h b/dom/html/HTMLCanvasElement.h
+--- a/dom/html/HTMLCanvasElement.h
++++ b/dom/html/HTMLCanvasElement.h
+@@ -88,10 +88,8 @@
+  * will be given a copy of the just-painted canvas.
+  * All FrameCaptureListeners get the same copy.
+  */
+-class FrameCaptureListener : public SupportsWeakPtr<FrameCaptureListener> {
++class FrameCaptureListener : public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(FrameCaptureListener)
+-
+   FrameCaptureListener() : mFrameCaptureRequested(false) {}
+ 
+   /*
+@@ -119,7 +117,7 @@
+ 
+ class HTMLCanvasElement final : public nsGenericHTMLElement,
+                                 public CanvasRenderingContextHelper,
+-                                public SupportsWeakPtr<HTMLCanvasElement> {
++                                public SupportsWeakPtr {
+   enum { DEFAULT_CANVAS_WIDTH = 300, DEFAULT_CANVAS_HEIGHT = 150 };
+ 
+   typedef layers::CanvasRenderer CanvasRenderer;
+@@ -141,9 +139,6 @@
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(HTMLCanvasElement,
+                                            nsGenericHTMLElement)
+ 
+-  // WeakPtr
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(HTMLCanvasElement)
+-
+   // WebIDL
+   uint32_t Height() {
+     return GetUnsignedIntAttr(nsGkAtoms::height, DEFAULT_CANVAS_HEIGHT);
+diff --git a/dom/html/HTMLMediaElement.h b/dom/html/HTMLMediaElement.h
+--- a/dom/html/HTMLMediaElement.h
++++ b/dom/html/HTMLMediaElement.h
+@@ -103,7 +103,7 @@
+ class HTMLMediaElement : public nsGenericHTMLElement,
+                          public MediaDecoderOwner,
+                          public PrincipalChangeObserver<MediaStreamTrack>,
+-                         public SupportsWeakPtr<HTMLMediaElement>,
++                         public SupportsWeakPtr,
+                          public nsStubMutationObserver {
+  public:
+   typedef mozilla::TimeStamp TimeStamp;
+@@ -134,7 +134,6 @@
+     RefPtr<DOMMediaStream> mFinishWhenEndedAttrStream;
+   };
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(HTMLMediaElement)
+   NS_DECL_NSIMUTATIONOBSERVER_CONTENTREMOVED
+ 
+   CORSMode GetCORSMode() { return mCORSMode; }
+diff --git a/dom/html/TextControlState.h b/dom/html/TextControlState.h
+--- a/dom/html/TextControlState.h
++++ b/dom/html/TextControlState.h
+@@ -131,13 +131,11 @@
+ 
+ class RestoreSelectionState;
+ 
+-class TextControlState final : public SupportsWeakPtr<TextControlState> {
++class TextControlState final : public SupportsWeakPtr {
+  public:
+   typedef dom::Element Element;
+   typedef dom::HTMLInputElement HTMLInputElement;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(TextControlState)
+-
+   static TextControlState* Construct(TextControlElement* aOwningElement);
+ 
+   // Note that this does not run script actually because of `sHasShutDown`
+diff --git a/dom/ipc/ProcessHangMonitor.cpp b/dom/ipc/ProcessHangMonitor.cpp
+--- a/dom/ipc/ProcessHangMonitor.cpp
++++ b/dom/ipc/ProcessHangMonitor.cpp
+@@ -233,13 +233,11 @@
+ };
+ 
+ class HangMonitorParent : public PProcessHangMonitorParent,
+-                          public SupportsWeakPtr<HangMonitorParent> {
++                          public SupportsWeakPtr {
+  public:
+   explicit HangMonitorParent(ProcessHangMonitor* aMonitor);
+   ~HangMonitorParent() override;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(HangMonitorParent)
+-
+   void Bind(Endpoint<PProcessHangMonitorParent>&& aEndpoint);
+ 
+   mozilla::ipc::IPCResult RecvHangEvidence(const HangData& aHangData) override;
+diff --git a/dom/media/DOMMediaStream.h b/dom/media/DOMMediaStream.h
+--- a/dom/media/DOMMediaStream.h
++++ b/dom/media/DOMMediaStream.h
+@@ -49,7 +49,7 @@
+  */
+ class DOMMediaStream : public DOMEventTargetHelper,
+                        public RelativeTimeline,
+-                       public SupportsWeakPtr<DOMMediaStream> {
++                       public SupportsWeakPtr {
+   typedef dom::MediaStreamTrack MediaStreamTrack;
+   typedef dom::AudioStreamTrack AudioStreamTrack;
+   typedef dom::VideoStreamTrack VideoStreamTrack;
+@@ -58,8 +58,6 @@
+  public:
+   typedef dom::MediaTrackConstraints MediaTrackConstraints;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(DOMMediaStream)
+-
+   class TrackListener {
+    public:
+     virtual ~TrackListener() = default;
+diff --git a/dom/media/MediaManager.cpp b/dom/media/MediaManager.cpp
+--- a/dom/media/MediaManager.cpp
++++ b/dom/media/MediaManager.cpp
+@@ -292,12 +292,11 @@
+  * only from main thread, to ensure that garbage- and cycle-collected objects
+  * don't hold a reference to it during late shutdown.
+  */
+-class SourceListener : public SupportsWeakPtr<SourceListener> {
++class SourceListener : public SupportsWeakPtr {
+  public:
+   typedef MozPromise<bool /* aIgnored */, RefPtr<MediaMgrError>, true>
+       SourceListenerPromise;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(SourceListener)
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING_WITH_MAIN_THREAD_DESTRUCTION(
+       SourceListener)
+ 
+diff --git a/dom/media/MediaStreamTrack.h b/dom/media/MediaStreamTrack.h
+--- a/dom/media/MediaStreamTrack.h
++++ b/dom/media/MediaStreamTrack.h
+@@ -54,10 +54,8 @@
+   NS_DECL_CYCLE_COLLECTION_CLASS(MediaStreamTrackSource)
+ 
+  public:
+-  class Sink : public SupportsWeakPtr<Sink> {
++  class Sink : public SupportsWeakPtr {
+    public:
+-    MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MediaStreamTrackSource::Sink)
+-
+     /**
+      * Must be constant throughout the Sink's lifetime.
+      *
+@@ -345,11 +343,8 @@
+  * Base class that consumers of a MediaStreamTrack can use to get notifications
+  * about state changes in the track.
+  */
+-class MediaStreamTrackConsumer
+-    : public SupportsWeakPtr<MediaStreamTrackConsumer> {
++class MediaStreamTrackConsumer : public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MediaStreamTrackConsumer)
+-
+   /**
+    * Called when the track's readyState transitions to "ended".
+    * Unlike the "ended" event exposed to script this is called for any reason,
+@@ -400,8 +395,7 @@
+  *   (*) is a copy of A's mInputTrack
+  */
+ // clang-format on
+-class MediaStreamTrack : public DOMEventTargetHelper,
+-                         public SupportsWeakPtr<MediaStreamTrack> {
++class MediaStreamTrack : public DOMEventTargetHelper, public SupportsWeakPtr {
+   // PeerConnection and friends need to know our owning DOMStream and track id.
+   friend class mozilla::PeerConnectionImpl;
+   friend class mozilla::PeerConnectionMedia;
+@@ -423,8 +417,6 @@
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(MediaStreamTrack,
+                                            DOMEventTargetHelper)
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MediaStreamTrack)
+-
+   nsPIDOMWindowInner* GetParentObject() const { return mWindow; }
+   JSObject* WrapObject(JSContext* aCx,
+                        JS::Handle<JSObject*> aGivenProto) override;
+diff --git a/dom/media/eme/MediaKeys.h b/dom/media/eme/MediaKeys.h
+--- a/dom/media/eme/MediaKeys.h
++++ b/dom/media/eme/MediaKeys.h
+@@ -50,14 +50,13 @@
+ // Note: its addref/release is not (and can't be) thread safe!
+ class MediaKeys final : public nsIDocumentActivity,
+                         public nsWrapperCache,
+-                        public SupportsWeakPtr<MediaKeys>,
++                        public SupportsWeakPtr,
+                         public DecoderDoctorLifeLogger<MediaKeys> {
+   ~MediaKeys();
+ 
+  public:
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(MediaKeys)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MediaKeys)
+   // We want to listen to the owning document so we can shutdown if it goes
+   // inactive.
+   NS_DECL_NSIDOCUMENTACTIVITY
+diff --git a/dom/media/webaudio/MediaStreamTrackAudioSourceNode.h b/dom/media/webaudio/MediaStreamTrackAudioSourceNode.h
+--- a/dom/media/webaudio/MediaStreamTrackAudioSourceNode.h
++++ b/dom/media/webaudio/MediaStreamTrackAudioSourceNode.h
+@@ -42,14 +42,13 @@
+ class MediaStreamTrackAudioSourceNode
+     : public AudioNode,
+       public PrincipalChangeObserver<MediaStreamTrack>,
+-      public SupportsWeakPtr<MediaStreamTrackAudioSourceNode> {
++      public SupportsWeakPtr {
+  public:
+   static already_AddRefed<MediaStreamTrackAudioSourceNode> Create(
+       AudioContext& aContext,
+       const MediaStreamTrackAudioSourceOptions& aOptions, ErrorResult& aRv);
+ 
+   NS_DECL_ISUPPORTS_INHERITED
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MediaStreamTrackAudioSourceNode)
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(MediaStreamTrackAudioSourceNode,
+                                            AudioNode)
+ 
+diff --git a/dom/media/webspeech/recognition/SpeechRecognition.h b/dom/media/webspeech/recognition/SpeechRecognition.h
+--- a/dom/media/webspeech/recognition/SpeechRecognition.h
++++ b/dom/media/webspeech/recognition/SpeechRecognition.h
+@@ -53,9 +53,8 @@
+ class SpeechRecognition final : public DOMEventTargetHelper,
+                                 public nsIObserver,
+                                 public DOMMediaStream::TrackListener,
+-                                public SupportsWeakPtr<SpeechRecognition> {
++                                public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(SpeechRecognition)
+   explicit SpeechRecognition(nsPIDOMWindowInner* aOwnerWindow);
+ 
+   NS_DECL_ISUPPORTS_INHERITED
+diff --git a/dom/plugins/base/nsNPAPIPluginInstance.h b/dom/plugins/base/nsNPAPIPluginInstance.h
+--- a/dom/plugins/base/nsNPAPIPluginInstance.h
++++ b/dom/plugins/base/nsNPAPIPluginInstance.h
+@@ -77,16 +77,14 @@
+   bool needUnschedule;
+ };
+ 
+-class nsNPAPIPluginInstance final
+-    : public nsIAudioChannelAgentCallback,
+-      public mozilla::SupportsWeakPtr<nsNPAPIPluginInstance> {
++class nsNPAPIPluginInstance final : public nsIAudioChannelAgentCallback,
++                                    public mozilla::SupportsWeakPtr {
+  private:
+   typedef mozilla::PluginLibrary PluginLibrary;
+ 
+  public:
+   typedef mozilla::gfx::DrawTarget DrawTarget;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(nsNPAPIPluginInstance)
+   NS_DECL_THREADSAFE_ISUPPORTS
+   NS_DECL_NSIAUDIOCHANNELAGENTCALLBACK
+ 
+diff --git a/dom/plugins/base/nsPluginNativeWindowWin.cpp b/dom/plugins/base/nsPluginNativeWindowWin.cpp
+--- a/dom/plugins/base/nsPluginNativeWindowWin.cpp
++++ b/dom/plugins/base/nsPluginNativeWindowWin.cpp
+@@ -93,11 +93,9 @@
+  *  nsPluginNativeWindow Windows specific class declaration
+  */
+ 
+-class nsPluginNativeWindowWin
+-    : public nsPluginNativeWindow,
+-      public SupportsWeakPtr<nsPluginNativeWindowWin> {
++class nsPluginNativeWindowWin : public nsPluginNativeWindow,
++                                public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(nsPluginNativeWindowWin)
+   nsPluginNativeWindowWin();
+ 
+   virtual nsresult CallSetWindow(
+diff --git a/dom/presentation/PresentationAvailability.h b/dom/presentation/PresentationAvailability.h
+--- a/dom/presentation/PresentationAvailability.h
++++ b/dom/presentation/PresentationAvailability.h
+@@ -19,13 +19,12 @@
+ class PresentationAvailability final
+     : public DOMEventTargetHelper,
+       public nsIPresentationAvailabilityListener,
+-      public SupportsWeakPtr<PresentationAvailability> {
++      public SupportsWeakPtr {
+  public:
+   NS_DECL_ISUPPORTS_INHERITED
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(PresentationAvailability,
+                                            DOMEventTargetHelper)
+   NS_DECL_NSIPRESENTATIONAVAILABILITYLISTENER
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(PresentationAvailability)
+ 
+   static already_AddRefed<PresentationAvailability> Create(
+       nsPIDOMWindowInner* aWindow, const nsTArray<nsString>& aUrls,
+diff --git a/dom/presentation/PresentationConnection.h b/dom/presentation/PresentationConnection.h
+--- a/dom/presentation/PresentationConnection.h
++++ b/dom/presentation/PresentationConnection.h
+@@ -22,18 +22,16 @@
+ class Blob;
+ class PresentationConnectionList;
+ 
+-class PresentationConnection final
+-    : public DOMEventTargetHelper,
+-      public nsIPresentationSessionListener,
+-      public nsIRequest,
+-      public SupportsWeakPtr<PresentationConnection> {
++class PresentationConnection final : public DOMEventTargetHelper,
++                                     public nsIPresentationSessionListener,
++                                     public nsIRequest,
++                                     public SupportsWeakPtr {
+  public:
+   NS_DECL_ISUPPORTS_INHERITED
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(PresentationConnection,
+                                            DOMEventTargetHelper)
+   NS_DECL_NSIPRESENTATIONSESSIONLISTENER
+   NS_DECL_NSIREQUEST
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(PresentationConnection)
+ 
+   static already_AddRefed<PresentationConnection> Create(
+       nsPIDOMWindowInner* aWindow, const nsAString& aId, const nsAString& aUrl,
+diff --git a/dom/promise/Promise.h b/dom/promise/Promise.h
+index 431bd8effe..86780007e4 100644
+--- a/dom/promise/Promise.h
++++ b/dom/promise/Promise.h
+@@ -41,18 +41,17 @@ class PromiseDebugging;
+       0x8a, 0xf9, 0x31, 0x5e, 0x8f, 0xce, 0x75, 0x65 \
+     }                                                \
+   }
+ 
+-class Promise : public nsISupports, public SupportsWeakPtr<Promise> {
++class Promise : public nsISupports, public SupportsWeakPtr {
+   friend class PromiseTask;
+   friend class PromiseWorkerProxy;
+   friend class PromiseWorkerProxyRunnable;
+ 
+  public:
+   NS_DECLARE_STATIC_IID_ACCESSOR(NS_PROMISE_IID)
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS_FINAL
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(Promise)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(Promise)
+ 
+   enum PropagateUserInteraction {
+     eDontPropagateUserInteraction,
+     ePropagateUserInteraction
+diff --git a/dom/webgpu/ipc/WebGPUChild.h b/dom/webgpu/ipc/WebGPUChild.h
+--- a/dom/webgpu/ipc/WebGPUChild.h
++++ b/dom/webgpu/ipc/WebGPUChild.h
+@@ -25,8 +25,7 @@
+ struct TextureInfo;
+ typedef MozPromise<RawId, Maybe<ipc::ResponseRejectReason>, true> RawIdPromise;
+ 
+-class WebGPUChild final : public PWebGPUChild,
+-                          public SupportsWeakPtr<WebGPUChild> {
++class WebGPUChild final : public PWebGPUChild {
+  public:
+   friend class layers::CompositorBridgeChild;
+ 
+diff --git a/dom/workers/Worker.h b/dom/workers/Worker.h
+--- a/dom/workers/Worker.h
++++ b/dom/workers/Worker.h
+@@ -24,13 +24,11 @@
+ struct WorkerOptions;
+ class WorkerPrivate;
+ 
+-class Worker : public DOMEventTargetHelper, public SupportsWeakPtr<Worker> {
++class Worker : public DOMEventTargetHelper, public SupportsWeakPtr {
+  public:
+   NS_DECL_ISUPPORTS_INHERITED
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS_INHERITED(Worker,
+                                                          DOMEventTargetHelper)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(Worker)
+-
+   static already_AddRefed<Worker> Constructor(const GlobalObject& aGlobal,
+                                               const nsAString& aScriptURL,
+                                               const WorkerOptions& aOptions,
+diff --git a/editor/libeditor/CompositionTransaction.h b/editor/libeditor/CompositionTransaction.h
+--- a/editor/libeditor/CompositionTransaction.h
++++ b/editor/libeditor/CompositionTransaction.h
+@@ -29,9 +29,8 @@
+  * composition string, modifying the composition string or its IME selection
+  * ranges and commit or cancel the composition.
+  */
+-class CompositionTransaction final
+-    : public EditTransactionBase,
+-      public SupportsWeakPtr<CompositionTransaction> {
++class CompositionTransaction final : public EditTransactionBase,
++                                     public SupportsWeakPtr {
+  protected:
+   CompositionTransaction(EditorBase& aEditorBase,
+                          const nsAString& aStringToInsert,
+@@ -54,8 +53,6 @@
+       EditorBase& aEditorBase, const nsAString& aStringToInsert,
+       const EditorDOMPointInText& aPointToInsert);
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(CompositionTransaction)
+-
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(CompositionTransaction,
+                                            EditTransactionBase)
+ 
+diff --git a/editor/libeditor/PlaceholderTransaction.h b/editor/libeditor/PlaceholderTransaction.h
+--- a/editor/libeditor/PlaceholderTransaction.h
++++ b/editor/libeditor/PlaceholderTransaction.h
+@@ -22,9 +22,8 @@
+  * transactions it has absorbed.
+  */
+ 
+-class PlaceholderTransaction final
+-    : public EditAggregateTransaction,
+-      public SupportsWeakPtr<PlaceholderTransaction> {
++class PlaceholderTransaction final : public EditAggregateTransaction,
++                                     public SupportsWeakPtr {
+  protected:
+   PlaceholderTransaction(EditorBase& aEditorBase, nsStaticAtom& aName,
+                          Maybe<SelectionState>&& aSelState);
+@@ -48,8 +47,6 @@
+     return transaction.forget();
+   }
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(PlaceholderTransaction)
+-
+   NS_DECL_ISUPPORTS_INHERITED
+ 
+   NS_DECL_CYCLE_COLLECTION_CLASS_INHERITED(PlaceholderTransaction,
+diff --git a/gfx/gl/GLContext.h b/gfx/gl/GLContext.h
+--- a/gfx/gl/GLContext.h
++++ b/gfx/gl/GLContext.h
+@@ -189,10 +189,8 @@
+   Other
+ };
+ 
+-class GLContext : public GenericAtomicRefCounted,
+-                  public SupportsWeakPtr<GLContext> {
++class GLContext : public GenericAtomicRefCounted, public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(GLContext)
+   static MOZ_THREAD_LOCAL(uintptr_t) sCurrentContext;
+ 
+   const GLContextDesc mDesc;
+diff --git a/gfx/gl/MozFramebuffer.h b/gfx/gl/MozFramebuffer.h
+--- a/gfx/gl/MozFramebuffer.h
++++ b/gfx/gl/MozFramebuffer.h
+@@ -15,14 +15,12 @@
+ namespace mozilla {
+ namespace gl {
+ 
+-class DepthAndStencilBuffer final
+-    : public SupportsWeakPtr<DepthAndStencilBuffer> {
++class DepthAndStencilBuffer final : public SupportsWeakPtr {
+   const WeakPtr<GLContext> mWeakGL;
+   const gfx::IntSize mSize;
+ 
+  public:
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING(DepthAndStencilBuffer)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(DepthAndStencilBuffer)
+ 
+   const GLuint mDepthRB;
+   const GLuint mStencilRB;
+diff --git a/gfx/layers/ImageContainer.h b/gfx/layers/ImageContainer.h
+--- a/gfx/layers/ImageContainer.h
++++ b/gfx/layers/ImageContainer.h
+@@ -363,14 +363,12 @@
+  * synchronously updates the shared state to point to the new image and the old
+  * image is immediately released (not true in Normal or Asynchronous modes).
+  */
+-class ImageContainer final : public SupportsWeakPtr<ImageContainer> {
++class ImageContainer final : public SupportsWeakPtr {
+   friend class ImageContainerChild;
+ 
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING(ImageContainer)
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(ImageContainer)
+-
+   enum Mode { SYNCHRONOUS = 0x0, ASYNCHRONOUS = 0x01 };
+ 
+   static const uint64_t sInvalidAsyncContainerId = 0;
+diff --git a/gfx/layers/wr/WebRenderBridgeParent.h b/gfx/layers/wr/WebRenderBridgeParent.h
+--- a/gfx/layers/wr/WebRenderBridgeParent.h
++++ b/gfx/layers/wr/WebRenderBridgeParent.h
+@@ -98,14 +98,12 @@
+   nsTArray<uint64_t> mIds;
+ };
+ 
+-class WebRenderBridgeParent final
+-    : public PWebRenderBridgeParent,
+-      public CompositorVsyncSchedulerOwner,
+-      public CompositableParentManager,
+-      public layers::FrameRecorder,
+-      public SupportsWeakPtr<WebRenderBridgeParent> {
++class WebRenderBridgeParent final : public PWebRenderBridgeParent,
++                                    public CompositorVsyncSchedulerOwner,
++                                    public CompositableParentManager,
++                                    public layers::FrameRecorder,
++                                    public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebRenderBridgeParent)
+   WebRenderBridgeParent(CompositorBridgeParentBase* aCompositorBridge,
+                         const wr::PipelineId& aPipelineId,
+                         widget::CompositorWidget* aWidget,
+diff --git a/image/IProgressObserver.h b/image/IProgressObserver.h
+--- a/image/IProgressObserver.h
++++ b/image/IProgressObserver.h
+@@ -27,10 +27,8 @@
+  * possible.  In the long term, it would be ideal to get to a place where we can
+  * just use the imgINotificationObserver interface internally as well.
+  */
+-class IProgressObserver : public SupportsWeakPtr<IProgressObserver> {
++class IProgressObserver : public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(IProgressObserver)
+-
+   // Subclasses may or may not be XPCOM classes, so we just require that they
+   // implement AddRef and Release.
+   NS_INLINE_DECL_PURE_VIRTUAL_REFCOUNTING
+diff --git a/image/ProgressTracker.h b/image/ProgressTracker.h
+--- a/image/ProgressTracker.h
++++ b/image/ProgressTracker.h
+@@ -99,11 +99,10 @@
+  * argument, and the notifications will be replayed to the observer
+  * asynchronously.
+  */
+-class ProgressTracker : public mozilla::SupportsWeakPtr<ProgressTracker> {
++class ProgressTracker : public mozilla::SupportsWeakPtr {
+   virtual ~ProgressTracker() {}
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(ProgressTracker)
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING(ProgressTracker)
+ 
+   ProgressTracker();
+diff --git a/image/RasterImage.h b/image/RasterImage.h
+--- a/image/RasterImage.h
++++ b/image/RasterImage.h
+@@ -158,7 +158,7 @@
+ class SourceBuffer;
+ 
+ class RasterImage final : public ImageResource,
+-                          public SupportsWeakPtr<RasterImage>
++                          public SupportsWeakPtr
+ #ifdef DEBUG
+     ,
+                           public imgIContainerDebug
+@@ -168,7 +168,6 @@
+   virtual ~RasterImage();
+ 
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(RasterImage)
+   NS_DECL_THREADSAFE_ISUPPORTS
+   NS_DECL_IMGICONTAINER
+ #ifdef DEBUG
+diff --git a/ipc/ipdl/ipdl/lower.py b/ipc/ipdl/ipdl/lower.py
+--- a/ipc/ipdl/ipdl/lower.py
++++ b/ipc/ipdl/ipdl/lower.py
+@@ -3298,8 +3298,7 @@
+             inherits.append(Inherit(p.managerInterfaceType(), viz='public'))
+ 
+         if hasAsyncReturns:
+-            inherits.append(Inherit(Type('SupportsWeakPtr', T=ExprVar(self.clsname)),
+-                                    viz='public'))
++            inherits.append(Inherit(Type('SupportsWeakPtr'), viz='public'))
+             self.hdrfile.addthing(CppDirective('include', '"mozilla/WeakPtr.h"'))
+ 
+         if ptype.isToplevel() and self.side == 'parent':
+@@ -3313,15 +3312,6 @@
+             inherits=inherits,
+             abstract=True)
+ 
+-        if hasAsyncReturns:
+-            self.cls.addstmts([
+-                Label.PUBLIC,
+-                Whitespace('', indent=True),
+-                ExprCall(ExprVar('MOZ_DECLARE_WEAKREFERENCE_TYPENAME'),
+-                         [ExprVar(self.clsname)]),
+-                Whitespace.NL
+-            ])
+-
+         self.cls.addstmt(Label.PRIVATE)
+         friends = _FindFriends().findFriends(ptype)
+         if ptype.isManaged():
+diff --git a/js/xpconnect/src/SandboxPrivate.h b/js/xpconnect/src/SandboxPrivate.h
+--- a/js/xpconnect/src/SandboxPrivate.h
++++ b/js/xpconnect/src/SandboxPrivate.h
+@@ -19,10 +19,9 @@
+ class SandboxPrivate : public nsIGlobalObject,
+                        public nsIScriptObjectPrincipal,
+                        public nsSupportsWeakReference,
+-                       public mozilla::SupportsWeakPtr<SandboxPrivate>,
++                       public mozilla::SupportsWeakPtr,
+                        public nsWrapperCache {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(SandboxPrivate);
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS_AMBIGUOUS(SandboxPrivate,
+                                                          nsIGlobalObject)
+diff --git a/layout/base/nsPresContext.h b/layout/base/nsPresContext.h
+--- a/layout/base/nsPresContext.h
++++ b/layout/base/nsPresContext.h
+@@ -126,8 +126,7 @@
+ // An interface for presentation contexts. Presentation contexts are
+ // objects that provide an outer context for a presentation shell.
+ 
+-class nsPresContext : public nsISupports,
+-                      public mozilla::SupportsWeakPtr<nsPresContext> {
++class nsPresContext : public nsISupports, public mozilla::SupportsWeakPtr {
+  public:
+   using Encoding = mozilla::Encoding;
+   template <typename T>
+@@ -140,7 +139,6 @@
+ 
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS_FINAL
+   NS_DECL_CYCLE_COLLECTION_CLASS(nsPresContext)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(nsPresContext)
+ 
+   enum nsPresContextType {
+     eContext_Galley,        // unpaginated screen presentation
+diff --git a/layout/base/nsRefreshDriver.h b/layout/base/nsRefreshDriver.h
+--- a/layout/base/nsRefreshDriver.h
++++ b/layout/base/nsRefreshDriver.h
+@@ -333,7 +333,7 @@
+   /**
+    * Return the prescontext we were initialized with
+    */
+-  nsPresContext* GetPresContext() const { return mPresContext; }
++  nsPresContext* GetPresContext() const;
+ 
+   /**
+    * PBackgroundChild actor is created asynchronously in content process.
+diff --git a/layout/base/nsRefreshDriver.cpp b/layout/base/nsRefreshDriver.cpp
+--- a/layout/base/nsRefreshDriver.cpp
++++ b/layout/base/nsRefreshDriver.cpp
+@@ -2460,6 +2460,8 @@
+   }
+ }
+ 
++nsPresContext* nsRefreshDriver::GetPresContext() const { return mPresContext; }
++
+ /*static*/
+ void nsRefreshDriver::PVsyncActorCreated(VsyncChild* aVsyncChild) {
+   MOZ_ASSERT(NS_IsMainThread());
+diff --git a/layout/style/CSSStyleRule.h b/layout/style/CSSStyleRule.h
+--- a/layout/style/CSSStyleRule.h
++++ b/layout/style/CSSStyleRule.h
+@@ -51,8 +51,7 @@
+   RefPtr<DeclarationBlock> mDecls;
+ };
+ 
+-class CSSStyleRule final : public BindingStyleRule,
+-                           public SupportsWeakPtr<CSSStyleRule> {
++class CSSStyleRule final : public BindingStyleRule, public SupportsWeakPtr {
+  public:
+   CSSStyleRule(already_AddRefed<RawServoStyleRule> aRawRule, StyleSheet* aSheet,
+                css::Rule* aParentRule, uint32_t aLine, uint32_t aColumn);
+@@ -62,8 +61,6 @@
+                                                          css::Rule)
+   bool IsCCLeaf() const final MOZ_MUST_OVERRIDE;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(CSSStyleRule)
+-
+   uint32_t GetSelectorCount() override;
+   nsresult GetSelectorText(uint32_t aSelectorIndex, nsAString& aText) override;
+   nsresult GetSpecificity(uint32_t aSelectorIndex,
+diff --git a/layout/style/SheetLoadData.h b/layout/style/SheetLoadData.h
+--- a/layout/style/SheetLoadData.h
++++ b/layout/style/SheetLoadData.h
+@@ -39,8 +39,6 @@
+               "in SheetLoadData::mParsingMode");
+ 
+ class SheetLoadData final : public PreloaderBase,
+-                            // FIXME(bug 1653011): This is a bit unfortunate.
+-                            public SupportsWeakPtr<SheetLoadData>,
+                             public nsIRunnable,
+                             public nsIThreadObserver {
+   using MediaMatched = dom::LinkStyle::MediaMatched;
+diff --git a/mfbt/WeakPtr.h b/mfbt/WeakPtr.h
+--- a/mfbt/WeakPtr.h
++++ b/mfbt/WeakPtr.h
+@@ -16,10 +16,6 @@
+  *
+  * PLEASE NOTE: This weak pointer implementation is not thread-safe.
+  *
+- * Note that when deriving from SupportsWeakPtr you should add
+- * MOZ_DECLARE_WEAKREFERENCE_TYPENAME(ClassName) to the public section of your
+- * class, where ClassName is the name of your class.
+- *
+  * The overhead of WeakPtr is that accesses to 'Foo' becomes an additional
+  * dereference, and an additional heap allocated pointer sized object shared
+  * between all of the WeakPtrs.
+@@ -27,11 +23,10 @@
+  * Example of usage:
+  *
+  *   // To have a class C support weak pointers, inherit from
+- *   // SupportsWeakPtr<C>.
+- *   class C : public SupportsWeakPtr<C>
++ *   // SupportsWeakPtr
++ *   class C : public SupportsWeakPtr
+  *   {
+  *   public:
+- *     MOZ_DECLARE_WEAKREFERENCE_TYPENAME(C)
+  *     int mNum;
+  *     void act();
+  *   };
+@@ -62,6 +57,9 @@
+  *
+  * The API was loosely inspired by Chromium's weak_ptr.h:
+  * http://src.chromium.org/svn/trunk/src/base/memory/weak_ptr.h
++ *
++ * Note that multiple base classes inheriting from SupportsWeakPtr is not
++ * currently supported. We could support it if needed though.
+  */
+ 
+ #ifndef mozilla_WeakPtr_h
+@@ -85,7 +83,7 @@
+ #if defined(MOZILLA_INTERNAL_API) && \
+     defined(MOZ_THREAD_SAFETY_OWNERSHIP_CHECKS_SUPPORTED)
+ 
+-// Weak referencing is not implemeted as thread safe.  When a WeakPtr
++// Weak referencing is not implemented as thread safe.  When a WeakPtr
+ // is created or dereferenced on thread A but the real object is just
+ // being Released() on thread B, there is a possibility of a race
+ // when the proxy object (detail::WeakReference) is notified about
+@@ -110,11 +108,11 @@
+         _owningThread.emplace();                 \
+       }                                          \
+     } while (false)
+-#  define MOZ_WEAKPTR_ASSERT_THREAD_SAFETY()                                  \
+-    do {                                                                      \
+-      if (_owningThread.isSome() && !_owningThread.ref().IsCurrentThread()) { \
+-        WeakPtrTraits<T>::AssertSafeToAccessFromNonOwningThread();            \
+-      }                                                                       \
++#  define MOZ_WEAKPTR_ASSERT_THREAD_SAFETY()                  \
++    do {                                                      \
++      MOZ_DIAGNOSTIC_ASSERT(                                  \
++          !_owningThread || _owningThread->IsCurrentThread(), \
++          "WeakPtr accessed from multiple threads");          \
+     } while (false)
+ #  define MOZ_WEAKPTR_ASSERT_THREAD_SAFETY_DELEGATED(that) \
+     (that)->AssertThreadSafety();
+@@ -149,47 +147,26 @@
+ 
+ template <typename T>
+ class WeakPtr;
+-template <typename T>
+ class SupportsWeakPtr;
+ 
+-#ifdef MOZ_REFCOUNTED_LEAK_CHECKING
+-#  define MOZ_DECLARE_WEAKREFERENCE_TYPENAME(T)  \
+-    static const char* weakReferenceTypeName() { \
+-      return "WeakReference<" #T ">";            \
+-    }
+-#else
+-#  define MOZ_DECLARE_WEAKREFERENCE_TYPENAME(T)
+-#endif
+-
+-template <class T>
+-struct WeakPtrTraits {
+-  static void AssertSafeToAccessFromNonOwningThread() {
+-    MOZ_DIAGNOSTIC_ASSERT(false, "WeakPtr accessed from multiple threads");
+-  }
+-};
+-
+ namespace detail {
+ 
+ // This can live beyond the lifetime of the class derived from
+ // SupportsWeakPtr.
+-template <class T>
+-class WeakReference : public ::mozilla::RefCounted<WeakReference<T>> {
++class WeakReference : public ::mozilla::RefCounted<WeakReference> {
+  public:
+-  explicit WeakReference(T* p) : mPtr(p) {
++  explicit WeakReference(const SupportsWeakPtr* p)
++      : mPtr(const_cast<SupportsWeakPtr*>(p)) {
+     MOZ_WEAKPTR_INIT_THREAD_SAFETY_CHECK();
+   }
+ 
+-  T* get() const {
++  SupportsWeakPtr* get() const {
+     MOZ_WEAKPTR_ASSERT_THREAD_SAFETY();
+     return mPtr;
+   }
+ 
+ #ifdef MOZ_REFCOUNTED_LEAK_CHECKING
+-  const char* typeName() const {
+-    // The first time this is called mPtr is null, so don't
+-    // invoke any methods on mPtr.
+-    return T::weakReferenceTypeName();
+-  }
++  const char* typeName() const { return "WeakReference"; }
+   size_t typeSize() const { return sizeof(*this); }
+ #endif
+ 
+@@ -198,62 +175,53 @@
+ #endif
+ 
+  private:
+-  friend class mozilla::SupportsWeakPtr<T>;
++  friend class mozilla::SupportsWeakPtr;
+ 
+   void detach() {
+     MOZ_WEAKPTR_ASSERT_THREAD_SAFETY();
+     mPtr = nullptr;
+   }
+ 
+-  T* MOZ_NON_OWNING_REF mPtr;
++  SupportsWeakPtr* MOZ_NON_OWNING_REF mPtr;
+   MOZ_WEAKPTR_DECLARE_THREAD_SAFETY_CHECK
+ };
+ 
+ }  // namespace detail
+ 
+-template <typename T>
+ class SupportsWeakPtr {
++  using WeakReference = detail::WeakReference;
++
+  protected:
+   ~SupportsWeakPtr() {
+-    static_assert(std::is_base_of<SupportsWeakPtr<T>, T>::value,
+-                  "T must derive from SupportsWeakPtr<T>");
+     DetachWeakPtr();
+   }
+ 
+  protected:
+   void DetachWeakPtr() {
+-    if (mSelfReferencingWeakPtr) {
+-      mSelfReferencingWeakPtr.mRef->detach();
++    if (mSelfReferencingWeakReference) {
++      mSelfReferencingWeakReference->detach();
+     }
+   }
+ 
+  private:
+-  const WeakPtr<T>& SelfReferencingWeakPtr() {
+-    if (!mSelfReferencingWeakPtr) {
+-      mSelfReferencingWeakPtr.mRef =
+-          new detail::WeakReference<T>(static_cast<T*>(this));
++  WeakReference* SelfReferencingWeakReference() const {
++    if (!mSelfReferencingWeakReference) {
++      mSelfReferencingWeakReference = new WeakReference(this);
+     } else {
+-      MOZ_WEAKPTR_ASSERT_THREAD_SAFETY_DELEGATED(mSelfReferencingWeakPtr.mRef);
++      MOZ_WEAKPTR_ASSERT_THREAD_SAFETY_DELEGATED(mSelfReferencingWeakReference);
+     }
+-    return mSelfReferencingWeakPtr;
+-  }
+-
+-  const WeakPtr<const T>& SelfReferencingWeakPtr() const {
+-    const WeakPtr<T>& p =
+-        const_cast<SupportsWeakPtr*>(this)->SelfReferencingWeakPtr();
+-    return reinterpret_cast<const WeakPtr<const T>&>(p);
++    return mSelfReferencingWeakReference.get();
+   }
+ 
+-  friend class WeakPtr<T>;
+-  friend class WeakPtr<const T>;
++  template <typename U>
++  friend class WeakPtr;
+ 
+-  WeakPtr<T> mSelfReferencingWeakPtr;
++  mutable RefPtr<WeakReference> mSelfReferencingWeakReference;
+ };
+ 
+ template <typename T>
+ class WeakPtr {
+-  typedef detail::WeakReference<T> WeakReference;
+-  using NonConstT = std::remove_const_t<T>;
++  using WeakReference = detail::WeakReference;
+ 
+  public:
+   WeakPtr& operator=(const WeakPtr& aOther) {
+@@ -283,27 +251,12 @@
+     return *this;
+   }
+ 
+-  WeakPtr& operator=(SupportsWeakPtr<NonConstT> const* aOther) {
+-    // We must make sure the reference we have now is safe to be dereferenced
+-    // before we throw it away.
+-    MOZ_WEAKPTR_ASSERT_THREAD_SAFETY_DELEGATED_IF(mRef);
+-    if (aOther) {
+-      *this = aOther->SelfReferencingWeakPtr();
+-    } else if (!mRef || mRef->get()) {
+-      // Ensure that mRef is dereferenceable in the uninitialized state.
+-      mRef = new WeakReference(nullptr);
+-    }
+-    // The thread safety check happens inside SelfReferencingWeakPtr
+-    // or is initialized in the WeakReference constructor.
+-    return *this;
+-  }
+-
+-  WeakPtr& operator=(SupportsWeakPtr<NonConstT>* aOther) {
++  WeakPtr& operator=(const T* aOther) {
+     // We must make sure the reference we have now is safe to be dereferenced
+     // before we throw it away.
+     MOZ_WEAKPTR_ASSERT_THREAD_SAFETY_DELEGATED_IF(mRef);
+     if (aOther) {
+-      *this = aOther->SelfReferencingWeakPtr();
++      mRef = aOther->SelfReferencingWeakReference();
+     } else if (!mRef || mRef->get()) {
+       // Ensure that mRef is dereferenceable in the uninitialized state.
+       mRef = new WeakReference(nullptr);
+@@ -318,17 +271,16 @@
+   // Ensure that mRef is dereferenceable in the uninitialized state.
+   WeakPtr() : mRef(new WeakReference(nullptr)) {}
+ 
+-  operator T*() const { return mRef->get(); }
+-  T& operator*() const { return *mRef->get(); }
+-
+-  T* operator->() const MOZ_NO_ADDREF_RELEASE_ON_RETURN { return mRef->get(); }
+-
+-  T* get() const { return mRef->get(); }
++  explicit operator bool() const { return mRef->get(); }
++  T* get() const { return static_cast<T*>(mRef->get()); }
++  operator T*() const { return get(); }
++  T& operator*() const { return *get(); }
++  T* operator->() const MOZ_NO_ADDREF_RELEASE_ON_RETURN { return get(); }
+ 
+   ~WeakPtr() { MOZ_WEAKPTR_ASSERT_THREAD_SAFETY_DELEGATED(mRef); }
+ 
+  private:
+-  friend class SupportsWeakPtr<T>;
++  friend class SupportsWeakPtr;
+ 
+   explicit WeakPtr(const RefPtr<WeakReference>& aOther) : mRef(aOther) {}
+ 
+diff --git a/mfbt/tests/TestWeakPtr.cpp b/mfbt/tests/TestWeakPtr.cpp
+--- a/mfbt/tests/TestWeakPtr.cpp
++++ b/mfbt/tests/TestWeakPtr.cpp
+@@ -12,18 +12,15 @@
+ static char IamB[] = "B";
+ static char IamC[] = "C";
+ static char IamD[] = "D";
+-static char IamE[] = "E";
+ 
+-class B : public SupportsWeakPtr<B> {
++class B : public SupportsWeakPtr {
+  public:
+   char const* whoAmI() const { return IamB; }
+ };
+ 
+ // To have a class C support weak pointers, inherit from SupportsWeakPtr<C>.
+-class C : public SupportsWeakPtr<C> {
++class C : public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(C)
+-
+   int mNum;
+ 
+   C() : mNum(0) {}
+@@ -43,17 +40,11 @@
+   bool isConst() const { return true; }
+ };
+ 
+-// Supports weakptr for two base classes (B and C) and itself (D)
+-class D : public B, public C, public SupportsWeakPtr<D> {
+- public:
+-  char const* whoAmI() const { return IamD; }
+-};
+-
+ // Derived from a class that supports weakptr, but doesn't implement itself
+ // To check upcast works as expected
+-class E : public D {
++class D : public B {
+  public:
+-  char const* whoAmI() const { return IamE; }
++  char const* whoAmI() const { return IamD; }
+ };
+ 
+ bool isConst(C*) { return false; }
+@@ -136,38 +127,19 @@
+   delete c2;
+   MOZ_RELEASE_ASSERT(!w2, "Deleting an object should clear WeakPtr's to it.");
+ 
+-  // Testing multiple base classes weak pointer support
++  // Check that we correctly upcast to the base class supporting weakptr
+   D* d = new D;
+-  WeakPtr<D> dd = d;
+-  WeakPtr<const D> ddconst = d;
+-  WeakPtr<C> dc = d;
+-  WeakPtr<const C> dcconst = d;
+   WeakPtr<B> db = d;
+-  WeakPtr<const B> dbconst = d;
+ 
+-  MOZ_RELEASE_ASSERT(dd->whoAmI() == IamD);
+-  MOZ_RELEASE_ASSERT(ddconst->whoAmI() == IamD);
+-  MOZ_RELEASE_ASSERT(dc->whoAmI() == IamC);
+-  MOZ_RELEASE_ASSERT(dcconst->whoAmI() == IamC);
++  // You should be able to use WeakPtr<D> even if it's a base class which
++  // implements SupportsWeakPtr.
++  WeakPtr<D> weakd = d;
++
+   MOZ_RELEASE_ASSERT(db->whoAmI() == IamB);
+-  MOZ_RELEASE_ASSERT(dbconst->whoAmI() == IamB);
++  MOZ_RELEASE_ASSERT(weakd.get() == db.get());
+ 
+   delete d;
+ 
+-  MOZ_RELEASE_ASSERT(!dd);
+-  MOZ_RELEASE_ASSERT(!ddconst);
+-  MOZ_RELEASE_ASSERT(!dc);
+-  MOZ_RELEASE_ASSERT(!dcconst);
+   MOZ_RELEASE_ASSERT(!db);
+-  MOZ_RELEASE_ASSERT(!dbconst);
+-
+-  // Check that we correctly upcast to the base class supporting weakptr
+-  E* e = new E;
+-  WeakPtr<D> ed = e;
+-
+-  MOZ_RELEASE_ASSERT(ed->whoAmI() == IamD);
+-
+-  delete e;
+-
+-  MOZ_RELEASE_ASSERT(!ed);
++  MOZ_RELEASE_ASSERT(!weakd);
+ }
+diff --git a/netwerk/protocol/http/Http2Stream.h b/netwerk/protocol/http/Http2Stream.h
+--- a/netwerk/protocol/http/Http2Stream.h
++++ b/netwerk/protocol/http/Http2Stream.h
+@@ -31,9 +31,8 @@
+ 
+ class Http2Stream : public nsAHttpSegmentReader,
+                     public nsAHttpSegmentWriter,
+-                    public SupportsWeakPtr<Http2Stream> {
++                    public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(Http2Stream)
+   NS_DECL_NSAHTTPSEGMENTREADER
+   NS_DECL_NSAHTTPSEGMENTWRITER
+ 
+diff --git a/netwerk/sctp/datachannel/DataChannel.h b/netwerk/sctp/datachannel/DataChannel.h
+--- a/netwerk/sctp/datachannel/DataChannel.h
++++ b/netwerk/sctp/datachannel/DataChannel.h
+@@ -130,11 +130,8 @@
+ 
+   NS_INLINE_DECL_THREADSAFE_REFCOUNTING(DataChannelConnection)
+ 
+-  class DataConnectionListener
+-      : public SupportsWeakPtr<DataConnectionListener> {
++  class DataConnectionListener : public SupportsWeakPtr {
+    public:
+-    MOZ_DECLARE_WEAKREFERENCE_TYPENAME(
+-        DataChannelConnection::DataConnectionListener)
+     virtual ~DataConnectionListener() = default;
+ 
+     // Called when a new DataChannel has been opened by the other side.
+diff --git a/toolkit/components/extensions/WebExtensionPolicy.h b/toolkit/components/extensions/WebExtensionPolicy.h
+--- a/toolkit/components/extensions/WebExtensionPolicy.h
++++ b/toolkit/components/extensions/WebExtensionPolicy.h
+@@ -36,11 +36,10 @@
+ 
+ class WebExtensionPolicy final : public nsISupports,
+                                  public nsWrapperCache,
+-                                 public SupportsWeakPtr<WebExtensionPolicy> {
++                                 public SupportsWeakPtr {
+  public:
+   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(WebExtensionPolicy)
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(WebExtensionPolicy)
+ 
+   using ScriptArray = nsTArray<RefPtr<WebExtensionContentScript>>;
+ 
+diff --git a/toolkit/components/extensions/webrequest/ChannelWrapper.h b/toolkit/components/extensions/webrequest/ChannelWrapper.h
+--- a/toolkit/components/extensions/webrequest/ChannelWrapper.h
++++ b/toolkit/components/extensions/webrequest/ChannelWrapper.h
+@@ -110,11 +110,10 @@
+ class WebRequestChannelEntry;
+ 
+ class ChannelWrapper final : public DOMEventTargetHelper,
+-                             public SupportsWeakPtr<ChannelWrapper>,
++                             public SupportsWeakPtr,
+                              public LinkedListElement<ChannelWrapper>,
+                              private detail::ChannelHolder {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(ChannelWrapper)
+   NS_DECL_ISUPPORTS_INHERITED
+   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS_INHERITED(ChannelWrapper,
+                                                          DOMEventTargetHelper)
+diff --git a/toolkit/components/places/INativePlacesEventCallback.h b/toolkit/components/places/INativePlacesEventCallback.h
+--- a/toolkit/components/places/INativePlacesEventCallback.h
++++ b/toolkit/components/places/INativePlacesEventCallback.h
+@@ -14,12 +14,10 @@
+ namespace mozilla {
+ namespace places {
+ 
+-class INativePlacesEventCallback
+-    : public SupportsWeakPtr<INativePlacesEventCallback> {
++class INativePlacesEventCallback : public SupportsWeakPtr {
+  public:
+   typedef dom::Sequence<OwningNonNull<dom::PlacesEvent>> PlacesEventSequence;
+ 
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(INativePlacesEventCallback)
+   NS_INLINE_DECL_PURE_VIRTUAL_REFCOUNTING
+ 
+   virtual void HandlePlacesEvent(const PlacesEventSequence& aEvents) = 0;
+diff --git a/uriloader/prefetch/nsOfflineCacheUpdate.h b/uriloader/prefetch/nsOfflineCacheUpdate.h
+--- a/uriloader/prefetch/nsOfflineCacheUpdate.h
++++ b/uriloader/prefetch/nsOfflineCacheUpdate.h
+@@ -183,10 +183,8 @@
+   nsCString mOldManifestHashValue;
+ };
+ 
+-class nsOfflineCacheUpdateOwner
+-    : public mozilla::SupportsWeakPtr<nsOfflineCacheUpdateOwner> {
++class nsOfflineCacheUpdateOwner : public mozilla::SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(nsOfflineCacheUpdateOwner)
+   virtual ~nsOfflineCacheUpdateOwner() {}
+   virtual nsresult UpdateFinished(nsOfflineCacheUpdate* aUpdate) = 0;
+ };
+diff --git a/uriloader/preload/PreloaderBase.h b/uriloader/preload/PreloaderBase.h
+--- a/uriloader/preload/PreloaderBase.h
++++ b/uriloader/preload/PreloaderBase.h
+@@ -39,10 +39,8 @@
+  *
+  * This class is designed to be used only on the main thread.
+  */
+-class PreloaderBase : public SupportsWeakPtr<PreloaderBase>,
+-                      public nsISupports {
++class PreloaderBase : public SupportsWeakPtr, public nsISupports {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(PreloaderBase)
+   PreloaderBase() = default;
+ 
+   // Called by resource loaders to register this preload in the document's
+diff --git a/widget/android/jni/Natives.h b/widget/android/jni/Natives.h
+--- a/widget/android/jni/Natives.h
++++ b/widget/android/jni/Natives.h
+@@ -53,19 +53,18 @@
+  *   a single thread. To attach a Java instance to a C++ instance, pass in a
+  *   mozilla::SupportsWeakPtr pointer to the C++ class (i.e. MyClass*).
+  *
+- *   class MyClass : public SupportsWeakPtr<MyClass>
++ *   class MyClass : public SupportsWeakPtr
+  *                 , public MyJavaClass::Natives<MyClass>
+  *   {
+  *       // ...
+  *
+  *   public:
+- *       MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MyClass)
+  *       using MyJavaClass::Natives<MyClass>::DisposeNative;
+  *
+  *       void AttachTo(const MyJavaClass::LocalRef& instance)
+  *       {
+  *           MyJavaClass::Natives<MyClass>::AttachNative(
+- *                   instance, static_cast<SupportsWeakPtr<MyClass>*>(this));
++ *                   instance, static_cast<SupportsWeakPtr*>(this));
+  *
+  *           // "instance" does NOT own "this", so the C++ object
+  *           // lifetime is separate from the Java object lifetime.
+@@ -128,7 +127,7 @@
+ template <class Impl>
+ class NativePtrPicker {
+   template <class I>
+-  static std::enable_if_t<std::is_base_of<SupportsWeakPtr<I>, I>::value,
++  static std::enable_if_t<std::is_base_of<SupportsWeakPtr, I>::value,
+                           char (&)[NativePtrType::WEAK]>
+   Test(char);
+ 
+@@ -768,7 +767,7 @@
+  protected:
+   // Associate a C++ instance with a Java instance.
+   static void AttachNative(const typename Cls::LocalRef& instance,
+-                           SupportsWeakPtr<Impl>* ptr) {
++                           SupportsWeakPtr* ptr) {
+     static_assert(NativePtrPicker<Impl>::value == NativePtrType::WEAK,
+                   "Use another AttachNative for non-WeakPtr usage");
+     return NativePtr<Impl>::Set(instance, static_cast<Impl*>(ptr));
+diff --git a/widget/android/nsWindow.cpp b/widget/android/nsWindow.cpp
+--- a/widget/android/nsWindow.cpp
++++ b/widget/android/nsWindow.cpp
+@@ -296,7 +296,7 @@
+ 
+ class nsWindow::GeckoViewSupport final
+     : public GeckoSession::Window::Natives<GeckoViewSupport>,
+-      public SupportsWeakPtr<GeckoViewSupport> {
++      public SupportsWeakPtr {
+   nsWindow& window;
+ 
+   // We hold a WeakRef because we want to allow the
+@@ -307,9 +307,6 @@
+ 
+  public:
+   typedef GeckoSession::Window::Natives<GeckoViewSupport> Base;
+-  typedef SupportsWeakPtr<GeckoViewSupport> SupportsWeakPtr;
+-
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(GeckoViewSupport);
+ 
+   template <typename Functor>
+   static void OnNativeCall(Functor&& aCall) {
+diff --git a/xpcom/base/nsMessageLoop.cpp b/xpcom/base/nsMessageLoop.cpp
+--- a/xpcom/base/nsMessageLoop.cpp
++++ b/xpcom/base/nsMessageLoop.cpp
+@@ -27,10 +27,8 @@
+  * Note that the MessageLoop owns this object and will delete it after it calls
+  * Run().  Tread lightly.
+  */
+-class MessageLoopIdleTask : public Runnable,
+-                            public SupportsWeakPtr<MessageLoopIdleTask> {
++class MessageLoopIdleTask : public Runnable, public SupportsWeakPtr {
+  public:
+-  MOZ_DECLARE_WEAKREFERENCE_TYPENAME(MessageLoopIdleTask)
+   MessageLoopIdleTask(nsIRunnable* aTask, uint32_t aEnsureRunsAfterMS);
+   NS_IMETHOD Run() override;
+ 
+
