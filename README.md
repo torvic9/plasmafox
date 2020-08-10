@@ -1,10 +1,11 @@
 ## Plasmafox web browser
 
 ### IMPORTANT:
-**I have switched from Manjaro to EndeavourOS because I cannot accept the former's politics (and a few more things) anymore. I was absent from their forums for half a year, upon (brief) return I saw that nothing has changed. Still, I wish all the best to the devs and their project. I learned a lot, and also gave back a lot. Let's leave it at that.**
-**Therefore I cannot guarantee that the provided binaries work correctly on Manjaro. Your best bet is the 'unstable' branch.**
+I have switched from Manjaro to EndeavourOS. While I still highly appreciate Manjaro's software, i.e. distro and tools, I cannot accept its politics (and a few more things) anymore. 
+Still, I wish all the best to the devs and their project. I learned a lot, and also gave back a lot. Let's leave it at that.
+Therefore I cannot guarantee that the provided binaries work correctly on Manjaro. Your best bet is the 'unstable' branch.
 ____
-**Currently I'm unable to build v79 (see issues), for the moment being we stay on ESR branch. Since Thaodan, the maintainer of `firefox-kde-opensuse` seems to be back, you can use that one instead of Plasmafox.**
+Currently I'm unable to build v79 (see issues), for the moment being we stay on ESR branch. Since Thaodan, the maintainer of `firefox-kde-opensuse` seems to be back, you can use that one instead of Plasmafox.
 ____
 
 **Main differences between Plasmafox and Firefox:**
