@@ -143,13 +143,13 @@ index 0b781d49a3..fdca5731a9 100644
 -<!ENTITY  brandProductName      "Firefox">
 +<!ENTITY  brandProductName      "Plasmafox">
 diff --git a/browser/branding/unofficial/locales/en-US/brand.ftl b/browser/branding/unofficial/locales/en-US/brand.ftl
-index ef268375fe..cb9ed00d1c 100644
+index 51e5bfa..bdc5acb 100644
 --- a/browser/branding/unofficial/locales/en-US/brand.ftl
 +++ b/browser/branding/unofficial/locales/en-US/brand.ftl
-@@ -11,12 +11,12 @@
- ## - Translated.
+@@ -15,12 +15,12 @@
  ##
- ## Reference: https://www.mozilla.org/styleguide/communications/translation/
+ ## For further details, consult:
+ ## https://mozilla-l10n.github.io/styleguides/mozilla_general/#brands-copyright-and-trademark
  
 --brand-shorter-name = Nightly
 --brand-short-name = Nightly
@@ -337,9 +337,9 @@ index 71b7b788cd..439994e895 100644
        fill: var(--newtab-search-wordmark-color);
 -- 
 2.25.1
-From 4ebc8ab1412817231c691b52c173d369a645e74c Mon Sep 17 00:00:00 2001
+From 677c348f921a505def91380c1be802d6abededf7 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Tue, 7 Jan 2020 21:51:02 +0100
+Date: Sat, 29 Aug 2020 23:38:18 +0200
 Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -348,14 +348,13 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
-index f9038508e6..66d46e4f15 100644
+index 87b4461..ba881e8 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
-@@ -457,13 +457,13 @@ nsresult nsHttpHandler::Init() {
-   // monitor some preference changes
-   Preferences::RegisterPrefixCallbacks(nsHttpHandler::PrefsChanged,
-                                        gCallbackPrefs, this);
+@@ -485,11 +485,11 @@ nsresult nsHttpHandler::Init() {
    PrefsChanged(nullptr);
+   Telemetry::ScalarSet(
+       Telemetry::ScalarID::NETWORKING_HTTP3_ENABLED, mHttp3Enabled);
  
 -  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
 +  mMisc.AssignLiteral("rv:" MOZ_APP_UA_VERSION);
@@ -366,9 +365,7 @@ index f9038508e6..66d46e4f15 100644
    nsCOMPtr<nsIXULAppInfo> appInfo =
        do_GetService("@mozilla.org/xre/app-info;1");
  
-   mAppName.AssignLiteral(MOZ_APP_UA_NAME);
-@@ -912,22 +912,18 @@ void nsHttpHandler::BuildUserAgent() {
-   mUserAgent += ' ';
+@@ -942,20 +942,16 @@ void nsHttpHandler::BuildUserAgent() {
    mUserAgent += mProduct;
    mUserAgent += '/';
    mUserAgent += mProductSub;
@@ -397,9 +394,8 @@ index f9038508e6..66d46e4f15 100644
  }
  
  #ifdef XP_WIN
- #  define OSCPU_WINDOWS "Windows NT %ld.%ld"
 -- 
-2.24.1
+2.28.0
 
 From dc18d3c5ad26e6f284d6ce0f9e278d5bed99f4ad Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
@@ -654,31 +650,22 @@ index 284c60f4ad..bde9a1fdda 100644
 -- 
 2.24.0
 
---- a/widget/GfxInfoX11.cpp	2020-05-29 08:02:46.000000000 +0200
-+++ b/widget/GfxInfoX11.cpp	2020-06-02 21:13:59.320481724 +0200
-@@ -509,9 +509,8 @@
- 
-     ////////////////////////////////////
-     // FEATURE_WEBRENDER - ALLOWLIST
- 
--#ifdef NIGHTLY_BUILD
-     // Intel Mesa baseline, chosen arbitrarily.
-     APPEND_TO_DRIVER_BLOCKLIST_EXT(
-         OperatingSystem::Linux, ScreenSizeStatus::SmallAndMedium,
-         BatteryStatus::All, DesktopEnvironment::All, WindowProtocol::All,
-@@ -534,9 +533,8 @@
-         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
-         DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
-         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
-         V(18, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 18.0.0.0");
--#endif
-   }
-   return *sDriverInfo;
- }
- 
---- a/gfx/thebes/gfxPlatform.cpp	2020-05-29 08:02:42.000000000 +0200
-+++ b/gfx/thebes/gfxPlatform.cpp	2020-06-03 01:15:12.178047747 +0200
-@@ -2800,13 +2800,8 @@
+From b05e3e2b811af4923513c464862438b4011bf2cd Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sat, 29 Aug 2020 22:31:48 +0200
+Subject: [PATCH] allow webrender on release
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ gfx/thebes/gfxPlatform.cpp | 5 -----
+ widget/GfxInfoX11.cpp      | 2 --
+ 2 files changed, 7 deletions(-)
+
+diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
+index 45c68e5..fb2e6ec 100644
+--- a/gfx/thebes/gfxPlatform.cpp
++++ b/gfx/thebes/gfxPlatform.cpp
+@@ -2808,13 +2808,8 @@ void gfxPlatform::InitWebRenderConfig() {
  
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
@@ -686,9 +673,36 @@ index 284c60f4ad..bde9a1fdda 100644
 -#ifndef NIGHTLY_BUILD
 -  feature.ForceDisable(FeatureStatus::Blocked,
 -                       "WebGPU can only be enabled in nightly",
--                       NS_LITERAL_CSTRING("WEBGPU_DISABLE_NON_NIGHTLY"));
+-                       "WEBGPU_DISABLE_NON_NIGHTLY"_ns);
 -#endif
  }
  
  void gfxPlatform::InitOMTPConfig() {
    ScopedGfxFeatureReporter reporter("OMTP");
+diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
+index 2dc18a8..d42db43 100644
+--- a/widget/GfxInfoX11.cpp
++++ b/widget/GfxInfoX11.cpp
+@@ -553,9 +553,8 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         DRIVER_GREATER_THAN_OR_EQUAL, V(18, 0, 0, 0),
+         "FEATURE_ROLLOUT_EARLY_BETA_ATI_GNOME_XALL_MESA", "Mesa 18.0.0.0");
+ #endif
+ 
+-#ifdef NIGHTLY_BUILD
+     // Intel Mesa baseline, chosen arbitrarily.
+     APPEND_TO_DRIVER_BLOCKLIST_EXT(
+         OperatingSystem::Linux, ScreenSizeStatus::SmallAndMedium,
+         BatteryStatus::All, DesktopEnvironment::All, WindowProtocol::All,
+@@ -578,9 +577,8 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
+         DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
+         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
+         V(18, 0, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_ATI_MESA", "Mesa 18.0.0.0");
+-#endif
+   }
+   return *sDriverInfo;
+ }
+ 
+-- 
+2.28.0
+

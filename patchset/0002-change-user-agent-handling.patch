@@ -1,6 +1,6 @@
-From 4ebc8ab1412817231c691b52c173d369a645e74c Mon Sep 17 00:00:00 2001
+From 677c348f921a505def91380c1be802d6abededf7 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Tue, 7 Jan 2020 21:51:02 +0100
+Date: Sat, 29 Aug 2020 23:38:18 +0200
 Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -9,14 +9,13 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
-index f9038508e6..66d46e4f15 100644
+index 87b4461..ba881e8 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
-@@ -457,13 +457,13 @@ nsresult nsHttpHandler::Init() {
-   // monitor some preference changes
-   Preferences::RegisterPrefixCallbacks(nsHttpHandler::PrefsChanged,
-                                        gCallbackPrefs, this);
+@@ -485,11 +485,11 @@ nsresult nsHttpHandler::Init() {
    PrefsChanged(nullptr);
+   Telemetry::ScalarSet(
+       Telemetry::ScalarID::NETWORKING_HTTP3_ENABLED, mHttp3Enabled);
  
 -  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
 +  mMisc.AssignLiteral("rv:" MOZ_APP_UA_VERSION);
@@ -27,9 +26,7 @@ index f9038508e6..66d46e4f15 100644
    nsCOMPtr<nsIXULAppInfo> appInfo =
        do_GetService("@mozilla.org/xre/app-info;1");
  
-   mAppName.AssignLiteral(MOZ_APP_UA_NAME);
-@@ -912,22 +912,18 @@ void nsHttpHandler::BuildUserAgent() {
-   mUserAgent += ' ';
+@@ -942,20 +942,16 @@ void nsHttpHandler::BuildUserAgent() {
    mUserAgent += mProduct;
    mUserAgent += '/';
    mUserAgent += mProductSub;
@@ -58,7 +55,6 @@ index f9038508e6..66d46e4f15 100644
  }
  
  #ifdef XP_WIN
- #  define OSCPU_WINDOWS "Windows NT %ld.%ld"
 -- 
-2.24.1
+2.28.0
 

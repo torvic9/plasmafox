@@ -143,13 +143,13 @@ index 0b781d49a3..fdca5731a9 100644
 -<!ENTITY  brandProductName      "Firefox">
 +<!ENTITY  brandProductName      "Plasmafox">
 diff --git a/browser/branding/unofficial/locales/en-US/brand.ftl b/browser/branding/unofficial/locales/en-US/brand.ftl
-index ef268375fe..cb9ed00d1c 100644
+index 51e5bfa..bdc5acb 100644
 --- a/browser/branding/unofficial/locales/en-US/brand.ftl
 +++ b/browser/branding/unofficial/locales/en-US/brand.ftl
-@@ -11,12 +11,12 @@
- ## - Translated.
+@@ -15,12 +15,12 @@
  ##
- ## Reference: https://www.mozilla.org/styleguide/communications/translation/
+ ## For further details, consult:
+ ## https://mozilla-l10n.github.io/styleguides/mozilla_general/#brands-copyright-and-trademark
  
 --brand-shorter-name = Nightly
 --brand-short-name = Nightly

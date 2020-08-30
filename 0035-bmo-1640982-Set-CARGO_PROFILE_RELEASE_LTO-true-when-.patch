@@ -1,0 +1,31 @@
+From 1a35576f538c874f1296aaf2eb3e7040c94cf738 Mon Sep 17 00:00:00 2001
+From: Thomas Deutschmann <whissi@gentoo.org>
+Date: Mon, 10 Aug 2020 09:49:45 +0200
+Subject: [PATCH 35/35] bmo#1640982: Set CARGO_PROFILE_RELEASE_LTO=true when
+ enabling rust LTO
+
+Bug: https://bugs.gentoo.org/736463
+Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
+---
+ config/makefiles/rust.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/config/makefiles/rust.mk b/config/makefiles/rust.mk
+index a9abcc9af4..bbb4e793b0 100644
+--- a/config/makefiles/rust.mk
++++ b/config/makefiles/rust.mk
+@@ -61,7 +61,11 @@ ifndef MOZ_DEBUG_RUST
+ # Enable link-time optimization for release builds, but not when linking
+ # gkrust_gtest.
+ ifeq (,$(findstring gkrust_gtest,$(RUST_LIBRARY_FILE)))
++# Pass -Clto for older versions of rust, and CARGO_PROFILE_RELEASE_LTO=true
++# for newer ones that support it. Combining the latter with -Clto works, so
++# set both everywhere.
+ cargo_rustc_flags += -Clto
++export CARGO_PROFILE_RELEASE_LTO=true
+ endif
+ endif
+ endif
+-- 
+2.28.0
+

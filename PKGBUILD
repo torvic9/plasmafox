@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=79.0
+pkgver=80.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -27,10 +27,10 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
-_mbrev=2334
-_patchrevsuse=15e73dbe1b5290bb8c4a36a4e808199c07de3d83
-_pfdate=20200710
-options=('!emptydirs')
+_mbrev=2349
+_patchrevsuse=0d8818883a2a1d201d7eb40ca0094be91432d2a1
+_pfdate=20200829
+options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
@@ -39,11 +39,8 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.desktop
 	vendor.js
 	kde.js
-	#user.js
-    #fix-webgl2.patch
 	pgo-fix-missing-kdejs.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	bug1654465.diff
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
@@ -52,11 +49,13 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Menubar
-	unity-menubar-r${_mbrev}+vd.patch
+	unity-menubar-r${_mbrev}.patch
 	# System Libs
 	0005-bmo-847568-Support-system-harfbuzz.patch
 	0006-bmo-847568-Support-system-graphite2.patch
 	0007-bmo-1559213-Support-system-av1.patch
+	# Rust LTO fix
+	0035-bmo-1640982-Set-CARGO_PROFILE_RELEASE_LTO-true-when-.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -69,23 +68,23 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('12a922855914ec6b4d4f06a4ac58bc549aca6bdafd3722d68a3d709a935e5713'
+sha256sums=('380d9853e0712442ba2d4acd85c0e09c19ad36561a3ea8932705ad6b8a91146a'
             'SKIP'
-            'bbc623ea3347759630f56538c86ec114e00f414a105452c70afa3d5649cd5112'
+            '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '84e7309bcbb984b10e3ca11f85af7eb41fee1681c3564f98ff4a5469a93604a4'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
-            'e577f7e5636deda0026b0e385186f3ecb2212c9b84b6a2949a1811dab3e410d6'
-            '26a927f1be2c7efe376f318ef7b4b2418d61c6a27d1e6b940e04250c01df3ae3'
-            'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
-            '424dc57f2943e750aeee6abd9df8b6beb8837e534c23724c2a04d21fb45ed57c'
-            '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
-            '6592a0ffa2d29ad14ae78a6be339686f90fb73a52adf6c63065dc200d78f108b'
+            'f0837a059e6228fb64fe706c48dc483d30ef25f80a4d4fa5fdac714bd694690f'
+            '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
+            'c5d67de73fa4a3600ca35ecf34c14ccd072237ef09ffb7da4ec19bc31f3d42b2'
+            'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
+            '7945c168afbcf99027ebc8060eb1a31fcdb4a4cee7eb05daeb5359ae51fdba8b'
             '9563276744f9fa95556bf4772c793b123fd8e789402e0efe1edd7ca92cf7988f'
             '06d641f1868a5b34885116ebf97e8af25c62fec4116980a75ceb460f2d62e187'
             '01b57a48c03527ccfe4304a0988c8b7dccf515e34d5c80b55f05757c2333e41e'
+            '32243a47aa82f19d49f788c9bd40cad0cd768dc45290d56e1f7d86320223d70a'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -119,11 +118,6 @@ prepare() {
   # Arch patches
   echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-  # fix rust
-  patch -Np1 -i ../bug1654465.diff
-
-  # fix webgl
-  # patch -Np1 -i ../fix-webgl2.patch
 
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
@@ -133,10 +127,12 @@ prepare() {
 
   # add globalmenu support
   echo "---- Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r${_mbrev}+vd.patch
+  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
+
+  patch -Np1 -i ../0035-bmo-1640982-Set-CARGO_PROFILE_RELEASE_LTO-true-when-.patch
 
   # use more system libs
   echo "---- Patching for system libs"
@@ -173,12 +169,11 @@ build() {
   export NM=llvm-nm
   export RANLIB=llvm-ranlib
   export STRIP=llvm-strip
-  #export RUSTC_WRAPPER=sccache
 
   # -fno-plt with cross-LTO causes obscure LLVM errors
   # LLVM ERROR: Function Import: link error
-  CFLAGS="${CFLAGS/-fno-plt/}"
-  CXXFLAGS="${CXXFLAGS/-fno-plt/}"
+  #CFLAGS="${CFLAGS/-fno-plt/}"
+  #CXXFLAGS="${CXXFLAGS/-fno-plt/}"
 
   # Do 3-tier PGO
   echo "Building instrumented browser..."
