@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=80.0.1
+pkgver=81.0.1
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -28,7 +28,7 @@ provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
 _mbrev=2349
-_patchrevsuse=0d8818883a2a1d201d7eb40ca0094be91432d2a1
+_patchrevsuse=e64141ffa905efdf657306eda2627c868b399852
 _pfdate=20200829
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -68,7 +68,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('596b085e32a2d683ba960e161ea65c6271f90f576d4bf956e0d48e83af992c21'
+sha256sums=('9328745012178aee5a4f47c833539f7872cc6e0f20a853568a313e60cabd1ec8'
             'SKIP'
             '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -78,7 +78,7 @@ sha256sums=('596b085e32a2d683ba960e161ea65c6271f90f576d4bf956e0d48e83af992c21'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             'f0837a059e6228fb64fe706c48dc483d30ef25f80a4d4fa5fdac714bd694690f'
             '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
-            'c5d67de73fa4a3600ca35ecf34c14ccd072237ef09ffb7da4ec19bc31f3d42b2'
+            'b86972097f4eb1554de245b6203f5a5c2adf7c04899d987438fcb72c632b709f'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '7945c168afbcf99027ebc8060eb1a31fcdb4a4cee7eb05daeb5359ae51fdba8b'
             '9563276744f9fa95556bf4772c793b123fd8e789402e0efe1edd7ca92cf7988f'
