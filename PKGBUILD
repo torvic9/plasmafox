@@ -165,6 +165,7 @@ build() {
   export NM=llvm-nm
   export RANLIB=llvm-ranlib
   export STRIP=llvm-strip
+  export MACH_USE_SYSTEM_PYTHON=1
   #export RUSTC_WRAPPER=sccache
 
   # -fno-plt with cross-LTO causes obscure LLVM errors
