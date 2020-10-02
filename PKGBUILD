@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2349
 _patchrevsuse=e64141ffa905efdf657306eda2627c868b399852
-_pfdate=20200829
+_pfdate=20201002
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -80,7 +80,7 @@ sha256sums=('7eac8d3eaaf580e0f30e9bd79d798c3138aaa5fa2737616fa08c588b730e8fff'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             'c2489a4ad3bfb65c064e07180a1de9a2fbc3b1b72d6bc4cd3985484d1b6b7b29'
             '52cc26cda4117f79fae1a0ad59e1404b299191a1c53d38027ceb178dab91f3dc'
-            'f0837a059e6228fb64fe706c48dc483d30ef25f80a4d4fa5fdac714bd694690f'
+            'b386958cce340ae0d2950dde26bc77af20f1cb77121001ddd1de1a3e672ce100'
             '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
             'b86972097f4eb1554de245b6203f5a5c2adf7c04899d987438fcb72c632b709f'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'

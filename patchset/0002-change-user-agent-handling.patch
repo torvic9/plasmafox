@@ -1,6 +1,6 @@
-From 677c348f921a505def91380c1be802d6abededf7 Mon Sep 17 00:00:00 2001
+From caf2adf6e4b0becd0769d9fb052aabe7233d98e1 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sat, 29 Aug 2020 23:38:18 +0200
+Date: Fri, 2 Oct 2020 09:35:15 +0200
 Subject: [PATCH] change user agent handling
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
@@ -9,13 +9,13 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
  1 file changed, 10 insertions(+), 14 deletions(-)
 
 diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
-index 87b4461..ba881e8 100644
+index 1d9eb83..199c9de 100644
 --- a/netwerk/protocol/http/nsHttpHandler.cpp
 +++ b/netwerk/protocol/http/nsHttpHandler.cpp
 @@ -485,11 +485,11 @@ nsresult nsHttpHandler::Init() {
    PrefsChanged(nullptr);
-   Telemetry::ScalarSet(
-       Telemetry::ScalarID::NETWORKING_HTTP3_ENABLED, mHttp3Enabled);
+   Telemetry::ScalarSet(Telemetry::ScalarID::NETWORKING_HTTP3_ENABLED,
+                        mHttp3Enabled);
  
 -  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
 +  mMisc.AssignLiteral("rv:" MOZ_APP_UA_VERSION);
