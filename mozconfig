@@ -6,6 +6,7 @@ ac_add_options --enable-optimize
 ac_add_options --enable-rust-simd
 ac_add_options --enable-release
 ac_add_options --enable-linker=lld
+ac_add_options --enable-lto
 ac_add_options --disable-elf-hack
 # ac_add_options --disable-official-branding/--enable-official-branding
 ac_add_options --with-branding=browser/branding/unofficial
@@ -17,23 +18,20 @@ ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --allow-addon-sideload
 # ac_add_options --enable-ui-locale=en-US
 
-export MOZ_APP_NAME=Plasmafox
+#export MOZ_APP_NAME=Plasmafox
 export MOZ_APP_DISPLAYNAME=Plasmafox
 export MOZ_APP_VENDOR=Plasmafox
 export MOZ_APP_REMOTINGNAME=Plasmafox
-
-# export MOZ_TELEMETRY_REPORTING=false
-# export MOZ_DATA_REPORTING=false
-# export MOZ_CRASHREPORTER=0
 
 export MOZ_UPDATE_CHANNEL=release
 export MOZ_ADDON_SIGNING=1
 export MOZ_REQUIRE_SIGNING=1
 
-export STRIP_FLAGS="--strip-debug"
+export STRIP_FLAGS="--strip-debug --strip-unneeded"
 
-# mk_add_options "export CARGO_BUILD_JOBS=12"
-# mk_add_options MOZ_MAKE_FLAGS="-j12"
+# PGO
+ac_add_options MOZ_PGO=1
+mk_add_options PROFILE_GEN_SCRIPT='EXTRA_TEST_ARGS=10 $(MAKE) -C $(MOZ_OBJDIR) pgo-profile-run'
 
 # System libraries
 ac_add_options --with-system-nspr
@@ -47,7 +45,7 @@ ac_add_options --with-system-av1
 ac_add_options --with-system-webp
 ac_add_options --with-system-ffi
 ac_add_options --enable-system-pixman
-#ac_add_options --enable-libproxy
+ac_add_options --disable-libproxy
 #ac_add_options --with-system-libevent
 
 # Features
@@ -60,7 +58,7 @@ ac_add_options --disable-wmf
 ac_add_options --disable-tests
 ac_add_options --disable-gpsd
 ac_add_options --disable-synth-speechd
-ac_add_options --disable-debug
+#ac_add_options --disable-debug
 ac_add_options --disable-debug-symbols
 ac_add_options --disable-debug-js-modules
 ac_add_options --disable-webrtc

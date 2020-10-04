@@ -40,6 +40,10 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	vendor.js
 	kde.js
 	pgo-fix-missing-kdejs.patch
+	add_missing_pgo_rule.patch
+	# Revert patch from MOZILLA#1644409 to fix issue casused by this patch
+    mozilla-1644409.patch::https://hg.mozilla.org/mozilla-central/raw-rev/795c8762b16b
+    revert-920beb95b042.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	0002-Bug-1660901-Support-the-fstat-like-subset-of-fstatat.patch
 	0003-Bug-1660901-ignore-AT_NO_AUTOMOUNT-in-fstatat-system.patch
@@ -72,11 +76,14 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('7eac8d3eaaf580e0f30e9bd79d798c3138aaa5fa2737616fa08c588b730e8fff'
             'SKIP'
-            '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
+            '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '84e7309bcbb984b10e3ca11f85af7eb41fee1681c3564f98ff4a5469a93604a4'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
+            'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
+            'e7f0401b5e094eb3e53a0ce9b9fab5faf43008bed1511f9db2e60080d863d437'
+            '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             'c2489a4ad3bfb65c064e07180a1de9a2fbc3b1b72d6bc4cd3985484d1b6b7b29'
             '52cc26cda4117f79fae1a0ad59e1404b299191a1c53d38027ceb178dab91f3dc'
@@ -113,6 +120,7 @@ prepare() {
   cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrevsuse.patch
+  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-$_patchrevsuse.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -130,13 +138,17 @@ prepare() {
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
   patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
   patch -Np1 -i ../firefox-kde-$_patchrevsuse.patch
+  # Revert patch from MOZILLA#1644409 to fix issue casused by this patch
+  patch -R -Np1 -i ../mozilla-1644409.patch
 
   # add globalmenu support
   echo "---- Ubuntu global menu"
   patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  patch -R -Np1 -i ../revert-920beb95b042.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
+  patch -Np1 -i ../add_missing_pgo_rule.patch
 
   patch -Np1 -i ../0035-bmo-1640982-Set-CARGO_PROFILE_RELEASE_LTO-true-when-.patch
 
@@ -170,6 +182,7 @@ build() {
 
   ulimit -n 4096
 
+  export PATH=$HOME/clang11/bin:$PATH
   export CC='clang --target=x86_64-unknown-linux-gnu'
   export CXX='clang++ --target=x86_64-unknown-linux-gnu'
   export AR=llvm-ar
@@ -177,44 +190,11 @@ build() {
   export RANLIB=llvm-ranlib
   export STRIP=llvm-strip
 
-  # -fno-plt with cross-LTO causes obscure LLVM errors
-  # LLVM ERROR: Function Import: link error
-  #CFLAGS="${CFLAGS/-fno-plt/}"
-  #CXXFLAGS="${CXXFLAGS/-fno-plt/}"
+  # Do PGO
+  export DISPLAY=:92
+  xvfb-run -a -n 92 -s "-screen 0 1920x1080x24 -nolisten tcp" \
+  	./mach build
 
-  # Do 3-tier PGO
-  echo "Building instrumented browser..."
-  cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-profile-generate=cross
-END
-  ./mach build
-
-  echo "Profiling instrumented browser..."
-  ./mach package
-  LLVM_PROFDATA=llvm-profdata \
-  	JARLOG_FILE="$PWD/jarlog" \
-  	xvfb-run -a -n 92 -s "-screen 0 1920x1080x24 -nolisten tcp" \
-  	./mach python build/pgo/profileserver.py
-
-  stat -c "Profile data found (%s bytes)" merged.profdata
-  test -s merged.profdata
-
-  stat -c "Jar log found (%s bytes)" jarlog
-  test -s jarlog
-
-  echo "Removing instrumented browser..."
-  ./mach clobber
-
-  echo "Building optimized browser..."
-  cat >.mozconfig ../mozconfig - <<END
-ac_add_options --enable-lto=cross
-ac_add_options --enable-profile-use=cross
-ac_add_options --with-pgo-profile-path=${PWD@Q}/merged.profdata
-ac_add_options --with-pgo-jarlog=${PWD@Q}/jarlog
-END
-  ./mach build
-
-  echo "Building symbol archive..."
   ./mach buildsymbols
 
   # multilocale
@@ -281,7 +261,7 @@ END
     ln -srfv "$pkgdir/usr/lib/libnssckbi.so" "$nssckbi"
   fi
 
-  find . -name '*crashreporter-symbols-full.zip' -exec \
+  find . -name '*crashreporter-symbols-full.tar.zst' -exec \
 	cp -fvt "$startdir" {} +
 }
 
