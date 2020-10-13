@@ -3,8 +3,8 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=81.0.1
-pkgrel=1
+pkgver=81.0.2
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -44,6 +44,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Revert patch from MOZILLA#1644409 to fix issue casused by this patch
     mozilla-1644409.patch::https://hg.mozilla.org/mozilla-central/raw-rev/795c8762b16b
     revert-920beb95b042.patch
+    # arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	0002-Bug-1660901-Support-the-fstat-like-subset-of-fstatat.patch
 	0003-Bug-1660901-ignore-AT_NO_AUTOMOUNT-in-fstatat-system.patch
@@ -60,8 +61,12 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	0005-bmo-847568-Support-system-harfbuzz.patch
 	0006-bmo-847568-Support-system-graphite2.patch
 	0007-bmo-1559213-Support-system-av1.patch
-	# Rust LTO fix
-	0035-bmo-1640982-Set-CARGO_PROFILE_RELEASE_LTO-true-when-.patch
+	# gentoo patches
+	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
+	0030-bmo-1656505-Use-correct-RGB-RGBA-formats-with-dmabuf.patch
+	0031-bmo-1656505-Restore-active-texture-when-dmabuf-textu.patch
+	0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
+	0040-bmo-1663715-Update-syn-and-proc-macro2-so-that-Firef.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -74,7 +79,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('7eac8d3eaaf580e0f30e9bd79d798c3138aaa5fa2737616fa08c588b730e8fff'
+sha256sums=('91b6482de9b193b19d1fd9a8b99015a001646a48429297bbb7fe41784f9f9b44'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -95,7 +100,11 @@ sha256sums=('7eac8d3eaaf580e0f30e9bd79d798c3138aaa5fa2737616fa08c588b730e8fff'
             '9563276744f9fa95556bf4772c793b123fd8e789402e0efe1edd7ca92cf7988f'
             '06d641f1868a5b34885116ebf97e8af25c62fec4116980a75ceb460f2d62e187'
             '01b57a48c03527ccfe4304a0988c8b7dccf515e34d5c80b55f05757c2333e41e'
-            '32243a47aa82f19d49f788c9bd40cad0cd768dc45290d56e1f7d86320223d70a'
+            '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
+            '2fea6f7a292ca04208109af90d86e078580a8bd0f0416c79319b9c121be279fa'
+            '3de918f09f90cc7212c9e33c6930923e8cf86013798e58a972e8e4a802e93a07'
+            'f124581c57cc86889daa73d023068159cd56d23fa9e1d70784572f717c6ea71d'
+            'aa5739f92e940354aa052dfe9191286b28399c7c1c5a773b7600cbe923312f2b'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -150,7 +159,12 @@ prepare() {
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
   patch -Np1 -i ../add_missing_pgo_rule.patch
 
-  patch -Np1 -i ../0035-bmo-1640982-Set-CARGO_PROFILE_RELEASE_LTO-true-when-.patch
+  # gentoo patches
+  patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
+  patch -Np1 -i ../0030-bmo-1656505-Use-correct-RGB-RGBA-formats-with-dmabuf.patch
+  patch -Np1 -i ../0031-bmo-1656505-Restore-active-texture-when-dmabuf-textu.patch
+  patch -Np1 -i ../0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
+  patch -Np1 -i ../0040-bmo-1663715-Update-syn-and-proc-macro2-so-that-Firef.patch
 
   # use more system libs
   echo "---- Patching for system libs"
@@ -182,7 +196,7 @@ build() {
 
   ulimit -n 4096
 
-  export PATH=$HOME/clang11/bin:$PATH
+  #export PATH=$HOME/clang11/bin:$PATH
   export CC='clang --target=x86_64-unknown-linux-gnu'
   export CXX='clang++ --target=x86_64-unknown-linux-gnu'
   export AR=llvm-ar

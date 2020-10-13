@@ -1,0 +1,28 @@
+From 96d1e2f0fc0de4c61160b7858112df1380b31ae1 Mon Sep 17 00:00:00 2001
+From: Thomas Deutschmann <whissi@gentoo.org>
+Date: Sun, 27 Sep 2020 13:53:51 +0200
+Subject: [PATCH 30/40] bmo#1656505: Use correct RGB/RGBA formats with dmabuf
+
+Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
+---
+ widget/gtk/DMABufLibWrapper.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/widget/gtk/DMABufLibWrapper.cpp b/widget/gtk/DMABufLibWrapper.cpp
+index 6359c2eba5..d06d265631 100644
+--- a/widget/gtk/DMABufLibWrapper.cpp
++++ b/widget/gtk/DMABufLibWrapper.cpp
+@@ -149,8 +149,8 @@ int nsDMABufDevice::GetGbmDeviceFd() {
+ }
+ 
+ nsDMABufDevice::nsDMABufDevice()
+-    : mXRGBFormat({true, false, GBM_FORMAT_ARGB8888, nullptr, 0}),
+-      mARGBFormat({true, true, GBM_FORMAT_XRGB8888, nullptr, 0}),
++    : mXRGBFormat({true, false, GBM_FORMAT_XRGB8888, nullptr, 0}),
++      mARGBFormat({true, true, GBM_FORMAT_ARGB8888, nullptr, 0}),
+       mGbmDevice(nullptr),
+       mGbmFd(-1),
+       mGdmConfigured(false),
+-- 
+2.28.0
+

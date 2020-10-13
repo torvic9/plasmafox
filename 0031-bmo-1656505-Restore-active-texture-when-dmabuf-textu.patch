@@ -1,0 +1,129 @@
+From d8b33029877c4c515e375a0dff75143cf1bfd209 Mon Sep 17 00:00:00 2001
+From: Thomas Deutschmann <whissi@gentoo.org>
+Date: Sun, 27 Sep 2020 14:07:57 +0200
+Subject: [PATCH 31/40] bmo#1656505: Restore active texture when dmabuf texture
+ is created and provide logging to dmabuf surfaces
+
+Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
+---
+ gfx/gl/SharedSurfaceDMABUF.cpp |  2 ++
+ widget/gtk/DMABufSurface.cpp   | 20 ++++++++++++++++++--
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/gfx/gl/SharedSurfaceDMABUF.cpp b/gfx/gl/SharedSurfaceDMABUF.cpp
+index 5d3f940a76..e331e02450 100644
+--- a/gfx/gl/SharedSurfaceDMABUF.cpp
++++ b/gfx/gl/SharedSurfaceDMABUF.cpp
+@@ -63,6 +63,8 @@ UniquePtr<SurfaceFactory_DMABUF> SurfaceFactory_DMABUF::Create(GLContext& gl) {
+     return dmabufFactory;
+   }
+ 
++  LOGDMABUF(
++      ("SurfaceFactory_DMABUF::Create() failed, fallback to SW buffers.\n"));
+   gfxPlatformGtk::GetPlatform()->DisableDMABufWebGL();
+   return nullptr;
+ }
+diff --git a/widget/gtk/DMABufSurface.cpp b/widget/gtk/DMABufSurface.cpp
+index 50df5ad346..2a6d2add7b 100644
+--- a/widget/gtk/DMABufSurface.cpp
++++ b/widget/gtk/DMABufSurface.cpp
+@@ -26,6 +26,7 @@
+ #include "GLContextTypes.h"  // for GLContext, etc
+ #include "GLContextEGL.h"
+ #include "GLContextProvider.h"
++#include "ScopedGLHelpers.h"
+ 
+ #include "mozilla/layers/LayersSurfaces.h"
+ 
+@@ -320,6 +321,9 @@ bool DMABufSurfaceRGBA::Create(int aWidth, int aHeight,
+   mWidth = aWidth;
+   mHeight = aHeight;
+ 
++  LOGDMABUF(("DMABufSurfaceRGBA::Create() UID %d size %d x %d\n", mUID, mWidth,
++             mHeight));
++
+   mGmbFormat = GetDMABufDevice()->GetGbmFormat(mSurfaceFlags & DMABUF_ALPHA);
+   if (!mGmbFormat) {
+     // Requested DRM format is not supported.
+@@ -329,6 +333,7 @@ bool DMABufSurfaceRGBA::Create(int aWidth, int aHeight,
+   bool useModifiers = (aDMABufSurfaceFlags & DMABUF_USE_MODIFIERS) &&
+                       mGmbFormat->mModifiersCount > 0;
+   if (useModifiers) {
++    LOGDMABUF(("    Creating with modifiers\n"));
+     mGbmBufferObject[0] = nsGbmLib::CreateWithModifiers(
+         GetDMABufDevice()->GetGbmDevice(), mWidth, mHeight, mGmbFormat->mFormat,
+         mGmbFormat->mModifiers, mGmbFormat->mModifiersCount);
+@@ -339,6 +344,7 @@ bool DMABufSurfaceRGBA::Create(int aWidth, int aHeight,
+ 
+   // Create without modifiers - use plain/linear format.
+   if (!mGbmBufferObject[0]) {
++    LOGDMABUF(("    Creating without modifiers\n"));
+     mGbmBufferFlags = (GBM_BO_USE_SCANOUT | GBM_BO_USE_LINEAR);
+     if (mSurfaceFlags & DMABUF_CREATE_WL_BUFFER) {
+       mGbmBufferFlags |= GBM_BO_USE_RENDERING;
+@@ -360,6 +366,7 @@ bool DMABufSurfaceRGBA::Create(int aWidth, int aHeight,
+   }
+ 
+   if (!mGbmBufferObject[0]) {
++    LOGDMABUF(("    Failed to create GbmBufferObject\n"));
+     return false;
+   }
+ 
+@@ -429,6 +436,8 @@ void DMABufSurfaceRGBA::ImportSurfaceDescriptor(
+   if (desc.refCount().Length() > 0) {
+     GlobalRefCountImport(desc.refCount()[0].ClonePlatformHandle().release());
+   }
++
++  LOGDMABUF(("DMABufSurfaceRGBA::Import() UID %d\n", mUID));
+ }
+ 
+ bool DMABufSurfaceRGBA::Create(const SurfaceDescriptor& aDesc) {
+@@ -448,6 +457,8 @@ bool DMABufSurfaceRGBA::Serialize(
+   AutoTArray<ipc::FileDescriptor, 1> fenceFDs;
+   AutoTArray<ipc::FileDescriptor, 1> refCountFDs;
+ 
++  LOGDMABUF(("DMABufSurfaceRGBA::Serialize() UID %d\n", mUID));
++
+   width.AppendElement(mWidth);
+   height.AppendElement(mHeight);
+   format.AppendElement(mGmbFormat->mFormat);
+@@ -556,7 +567,7 @@ bool DMABufSurfaceRGBA::CreateTexture(GLContext* aGLContext, int aPlane) {
+ 
+   aGLContext->MakeCurrent();
+   aGLContext->fGenTextures(1, &mTexture);
+-  aGLContext->fBindTexture(LOCAL_GL_TEXTURE_2D, mTexture);
++  const ScopedBindTexture savedTex(aGLContext, mTexture);
+   aGLContext->fTexParameteri(LOCAL_GL_TEXTURE_2D, LOCAL_GL_TEXTURE_WRAP_S,
+                              LOCAL_GL_CLAMP_TO_EDGE);
+   aGLContext->fTexParameteri(LOCAL_GL_TEXTURE_2D, LOCAL_GL_TEXTURE_WRAP_T,
+@@ -567,6 +578,7 @@ bool DMABufSurfaceRGBA::CreateTexture(GLContext* aGLContext, int aPlane) {
+                              LOCAL_GL_LINEAR);
+   aGLContext->fEGLImageTargetTexture2D(LOCAL_GL_TEXTURE_2D, mEGLImage);
+   mGL = aGLContext;
++
+   return true;
+ }
+ 
+@@ -611,6 +623,10 @@ void* DMABufSurface::MapInternal(uint32_t aX, uint32_t aY, uint32_t aWidth,
+     return nullptr;
+   }
+ 
++  LOGDMABUF(
++      ("DMABufSurfaceRGBA::MapInternal() UID %d size %d x %d -> %d x %d\n",
++       mUID, aX, aY, aWidth, aHeight));
++
+   mMappedRegionStride[aPlane] = 0;
+   mMappedRegionData[aPlane] = nullptr;
+   mMappedRegion[aPlane] = nsGbmLib::Map(
+@@ -988,7 +1004,7 @@ bool DMABufSurfaceYUV::CreateTexture(GLContext* aGLContext, int aPlane) {
+ 
+   aGLContext->MakeCurrent();
+   aGLContext->fGenTextures(1, &mTexture[aPlane]);
+-  aGLContext->fBindTexture(LOCAL_GL_TEXTURE_2D, mTexture[aPlane]);
++  const ScopedBindTexture savedTex(aGLContext, mTexture[aPlane]);
+   aGLContext->fTexParameteri(LOCAL_GL_TEXTURE_2D, LOCAL_GL_TEXTURE_WRAP_S,
+                              LOCAL_GL_CLAMP_TO_EDGE);
+   aGLContext->fTexParameteri(LOCAL_GL_TEXTURE_2D, LOCAL_GL_TEXTURE_WRAP_T,
+-- 
+2.28.0
+
