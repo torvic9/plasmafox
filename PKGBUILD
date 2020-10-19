@@ -41,7 +41,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	pgo-fix-missing-kdejs.patch
 	add_missing_pgo_rule.patch
-    revert-920beb95b042.patch
+	revert-920beb95b042.patch
     # arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	# Plasmafox patchset
@@ -136,7 +136,7 @@ prepare() {
   # add globalmenu support
   echo "---- Ubuntu global menu"
   patch -R -Np1 -i ../revert-920beb95b042.patch
-  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  patch -Np1 -i ../unity-menubar-r${_mbrev}+.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
@@ -176,7 +176,7 @@ build() {
 
   ulimit -n 4096
 
-  #export PATH=$HOME/clang11/bin:$PATH
+  export PATH=$HOME/clang11/bin:$PATH
   export CC='clang --target=x86_64-unknown-linux-gnu'
   export CXX='clang++ --target=x86_64-unknown-linux-gnu'
   export AR=llvm-ar
