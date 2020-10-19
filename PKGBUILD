@@ -41,8 +41,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	pgo-fix-missing-kdejs.patch
 	add_missing_pgo_rule.patch
-	# Revert patch from MOZILLA#1644409 to fix issue casused by this patch
-    mozilla-1644409.patch::https://hg.mozilla.org/mozilla-central/raw-rev/795c8762b16b
     revert-920beb95b042.patch
     # arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
@@ -82,10 +80,9 @@ sha256sums=('90c58707f5bd34978e2d1bcadbe463556edc0878430f969893ae2f89c5d464c2'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
-            'e7f0401b5e094eb3e53a0ce9b9fab5faf43008bed1511f9db2e60080d863d437'
             '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
-            '58b7e3340c389824ca08430609ba5015e04c94b14d1ee88adc4d2fde7d377887'
+            '3368ae9de99ecc7f35c061b11837c53f85148aae59eb41016f8f52ebdffbf2c0'
             '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
             'b86972097f4eb1554de245b6203f5a5c2adf7c04899d987438fcb72c632b709f'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
@@ -135,13 +132,11 @@ prepare() {
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
   patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
   patch -Np1 -i ../firefox-kde-$_patchrevsuse.patch
-  # Revert patch from MOZILLA#1644409 to fix issue casused by this patch
-  patch -R -Np1 -i ../mozilla-1644409.patch
 
   # add globalmenu support
   echo "---- Ubuntu global menu"
-  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
   patch -R -Np1 -i ../revert-920beb95b042.patch
+  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
@@ -225,7 +220,7 @@ package() {
 [Global]
 id=plasmafox
 version=1.0
-about=Plasmafox for Manjaro
+about=Plasmafox for Arch compatible distributions
 
 [Preferences]
 app.distributor=$pkgname
