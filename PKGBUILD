@@ -176,7 +176,7 @@ build() {
 
   ulimit -n 4096
 
-  export PATH=$HOME/clang11/bin:$PATH
+  #export PATH=$HOME/clang11/bin:$PATH
   export CC='clang --target=x86_64-unknown-linux-gnu'
   export CXX='clang++ --target=x86_64-unknown-linux-gnu'
   export AR=llvm-ar
