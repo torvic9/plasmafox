@@ -5108,15 +5108,14 @@
    /**
     * GetLastUserInputTime returns a timestamp for the most recent user input
     * event.  This is intended for pointer grab requests (including drags).
-@@ -721,6 +725,8 @@ class nsWindow final : public nsBaseWidg
- 
+@@ -700,6 +700,7 @@
    mozilla::UniquePtr<mozilla::CurrentX11TimeGetter> mCurrentTimeGetter;
    static CSDSupportLevel sCSDSupportLevel;
-+
+ 
 +  mozilla::UniquePtr<nsMenuBar> mMenuBar;
+   static bool sTransparentMainWindow;
  };
  
- #endif /* __nsWindow_h__ */
 --- a/widget/moz.build
 +++ b/widget/moz.build
 @@ -69,9 +69,9 @@ elif toolkit == 'cocoa':

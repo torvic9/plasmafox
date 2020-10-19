@@ -432,51 +432,6 @@ index a251050feb..5aada7532e 100644
 -- 
 2.23.0
 
-From e39397fe381a0abfc37493254cd3c416d3436776 Mon Sep 17 00:00:00 2001
-From: torvic9 <torvic9@mailbox.org>
-Date: Sat, 26 Oct 2019 17:26:29 +0200
-Subject: [PATCH] set ddg as default search engine
-
-Signed-off-by: torvic9 <torvic9@mailbox.org>
----
- browser/components/search/extensions/list.json | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/browser/components/search/extensions/list.json b/browser/components/search/extensions/list.json
-index d023e0a0e5..daea92519e 100644
---- a/browser/components/search/extensions/list.json
-+++ b/browser/components/search/extensions/list.json
-@@ -1,11 +1,11 @@
- {
-   "default": {
--    "searchDefault": "Google",
--    "searchOrder": ["Google", "Bing"],
-+    "searchDefault": "DuckDuckGo",
-+    "searchOrder": ["DuckDuckGo", "Ecosia"],
-     "visibleDefaultEngines": [
--      "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"
-+      "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "wikipedia"
-     ]
-   },
-   "regionOverrides": {
-     "US": {
-       "google-b-d": "google-b-1-d"
-@@ -52,11 +52,11 @@
-   },
-   "locales": {
-     "en-US": {
-       "default": {
-         "visibleDefaultEngines": [
--          "google-b-d", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"
-+          "ddg", "ecosia", "google-b-d", "amazondotcom", "bing", "ebay", "wikipedia"
-         ]
-       },
-       "KZ": {
-         "visibleDefaultEngines": [
-           "amazondotcom", "bing", "google", "wikipedia", "ddg", "yandex-en"
--- 
-2.23.0
-
 From 34372306cfa209c82b02da3efcb529cd51b48bb9 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Sun, 6 Oct 2019 11:24:49 +0200
