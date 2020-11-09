@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=82.0.2
+pkgver=82.0.3
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -42,7 +42,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	pgo-fix-missing-kdejs.patch
 	add_missing_pgo_rule.patch
 	revert-920beb95b042.patch
-    # arch patches
+	# arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
@@ -72,7 +72,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('8851cae2df9923844c3dc97a4f77f6f3c86cc6f298b888b38949fbf74fcf2ca9'
+sha256sums=('4df40aecf4b71107c4816db585bcd425f093123f29d8563bc2443a8659058691'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
