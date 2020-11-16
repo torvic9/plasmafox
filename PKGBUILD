@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=82.0.3
+pkgver=83.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2349
 _patchrevsuse=e64141ffa905efdf657306eda2627c868b399852
-_pfdate=20201019
+_pfdate=20201116
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -59,7 +59,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	0007-bmo-1559213-Support-system-av1.patch
 	# gentoo patches
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-	0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
+	#0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -72,7 +72,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('4df40aecf4b71107c4816db585bcd425f093123f29d8563bc2443a8659058691'
+sha256sums=('d69e84e8b8449f828683d274c24e03095858362bfed21b08bdd7fe715eea5398'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -82,7 +82,7 @@ sha256sums=('4df40aecf4b71107c4816db585bcd425f093123f29d8563bc2443a8659058691'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
-            '3368ae9de99ecc7f35c061b11837c53f85148aae59eb41016f8f52ebdffbf2c0'
+            '642717f21b76c3d2d507b8fbfea58c187f7e7e5ef89ee522393748debf8f63cd'
             '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
             'b86972097f4eb1554de245b6203f5a5c2adf7c04899d987438fcb72c632b709f'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
@@ -91,7 +91,6 @@ sha256sums=('4df40aecf4b71107c4816db585bcd425f093123f29d8563bc2443a8659058691'
             '06d641f1868a5b34885116ebf97e8af25c62fec4116980a75ceb460f2d62e187'
             '01b57a48c03527ccfe4304a0988c8b7dccf515e34d5c80b55f05757c2333e41e'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
-            'f124581c57cc86889daa73d023068159cd56d23fa9e1d70784572f717c6ea71d'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -144,7 +143,7 @@ prepare() {
 
   # gentoo patches
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-  patch -Np1 -i ../0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
+  #patch -Np1 -i ../0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
 
   # use more system libs
   echo "---- Patching for system libs"
