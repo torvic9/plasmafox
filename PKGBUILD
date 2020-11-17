@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=78.4.1esr
+pkgver=78.5.0esr
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -42,7 +42,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	pgo-fix-missing-kdejs.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-	fix-build-with-rust147.patch
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
@@ -69,7 +68,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('1978eedd975b1cf95bd4a04b2381560d1ad9a4223032717f23fac26e3458a760'
+sha256sums=('51f54ff608aa09de07b304307581ae89112781597322b8999b3099cfabf48290'
             'SKIP'
             '82bc25aae4b26adf086d4182cc2714f04a09491eb49f6327978322db1aa13910'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -78,7 +77,6 @@ sha256sums=('1978eedd975b1cf95bd4a04b2381560d1ad9a4223032717f23fac26e3458a760'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
-            '665cf25255fd240f79d5d010b3c3764f2d80aa81fdc7b6e9a9728e4a7970685b'
             '2d8dd09acb33991f9c12cc0aeda49be3241ac5f77a80e74357ea695e065f3ae9'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
             '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
@@ -120,10 +118,9 @@ prepare() {
   # Arch patches
   echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-  
+
   # rust patches
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-  patch -Np1 -i ../fix-build-with-rust147.patch
 
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
