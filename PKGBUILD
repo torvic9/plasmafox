@@ -4,7 +4,7 @@
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=83.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -28,7 +28,7 @@ provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
 _mbrev=2349
-_patchrevsuse=e64141ffa905efdf657306eda2627c868b399852
+_patchrevsuse=1ae375c391baef113bf28f10f25552e9bbd17223
 _pfdate=20201116
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -44,6 +44,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	revert-920beb95b042.patch
 	# arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
+	0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
@@ -81,7 +82,8 @@ sha256sums=('d69e84e8b8449f828683d274c24e03095858362bfed21b08bdd7fe715eea5398'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
-            '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
+            '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
+            '8da91fdb08fcc6e820111acda88c8f2484ef1c5271ce32997bfd919d507a238c'
             '642717f21b76c3d2d507b8fbfea58c187f7e7e5ef89ee522393748debf8f63cd'
             '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
             'b86972097f4eb1554de245b6203f5a5c2adf7c04899d987438fcb72c632b709f'
@@ -125,6 +127,7 @@ prepare() {
   # Arch patches
   echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
+  patch -Np1 -i ../0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
 
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
@@ -143,7 +146,6 @@ prepare() {
 
   # gentoo patches
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-  #patch -Np1 -i ../0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
 
   # use more system libs
   echo "---- Patching for system libs"
@@ -175,7 +177,6 @@ build() {
 
   ulimit -n 4096
 
-  #export PATH=$HOME/clang11/bin:$PATH
   export CC='clang --target=x86_64-unknown-linux-gnu'
   export CXX='clang++ --target=x86_64-unknown-linux-gnu'
   export AR=llvm-ar
