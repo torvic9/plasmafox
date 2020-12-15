@@ -1,19 +1,24 @@
-# HG changeset patch
-# User Thomas Deutschmann <whissi@gentoo.org>
-# Parent  a58801e9e29b0db9da0b5d90b96f2e05ff062de1
+From 8e9f0497ddc64dd8ce04ec83b48974f6143dc0ce Mon Sep 17 00:00:00 2001
+From: Thomas Deutschmann <whissi@gentoo.org>
+Date: Mon, 6 Apr 2020 19:36:02 +0200
+Subject: [PATCH 06/38] bmo#1559213: Support system av1
 
-# Parent  66f9c84511dda432587261f6b9ebf07c4771aad8
-Add ability to use system-av1 (media-libs/libaom and media-libs/dav1d) instead of bundled.
+Allow building against system-wide av1.
+
+Bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1559213
+Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
+---
+ config/external/moz.build      |  5 +++--
+ config/system-headers.mozbuild |  8 ++++++++
+ dom/media/platforms/moz.build  |  5 +++++
+ toolkit/moz.configure          | 19 ++++++++++++++++++-
+ 4 files changed, 34 insertions(+), 3 deletions(-)
 
 diff --git a/config/external/moz.build b/config/external/moz.build
+index 704b35cb1b..95451627dc 100644
 --- a/config/external/moz.build
 +++ b/config/external/moz.build
-@@ -34,18 +34,19 @@ if CONFIG['MOZ_TREMOR']:
- 
- if CONFIG['MOZ_WEBM_ENCODER']:
-     external_dirs += ['media/libmkv']
- 
- if not CONFIG['MOZ_SYSTEM_LIBVPX']:
+@@ -39,8 +39,9 @@ if not CONFIG['MOZ_SYSTEM_LIBVPX']:
      external_dirs += ['media/libvpx']
  
  if CONFIG['MOZ_AV1']:
@@ -25,20 +30,11 @@ diff --git a/config/external/moz.build b/config/external/moz.build
  
  if not CONFIG['MOZ_SYSTEM_PNG']:
      external_dirs += ['media/libpng']
- 
- if not CONFIG['MOZ_SYSTEM_WEBP']:
-     external_dirs += ['media/libwebp']
- 
- if CONFIG['CPU_ARCH'] == 'arm':
 diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
+index 8e322e943e..a55e585447 100644
 --- a/config/system-headers.mozbuild
 +++ b/config/system-headers.mozbuild
-@@ -1291,16 +1291,24 @@ else:
-         'sys/event.h',
-     ]
- 
- if CONFIG['MOZ_ENABLE_LIBPROXY']:
-     system_headers += [
+@@ -1296,6 +1296,14 @@ if CONFIG['MOZ_ENABLE_LIBPROXY']:
          'proxy.h',
      ]
  
@@ -53,20 +49,11 @@ diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
  if CONFIG['MOZ_SYSTEM_LIBVPX']:
      system_headers += [
          'vpx_mem/vpx_mem.h',
-         'vpx/svc_context.h',
-         'vpx/vp8cx.h',
-         'vpx/vp8dx.h',
-         'vpx/vpx_codec.h',
-         'vpx/vpx_decoder.h',
 diff --git a/dom/media/platforms/moz.build b/dom/media/platforms/moz.build
+index 11af915bd0..6e51580275 100644
 --- a/dom/media/platforms/moz.build
 +++ b/dom/media/platforms/moz.build
-@@ -76,16 +76,21 @@ if CONFIG['MOZ_AV1']:
-     EXPORTS += [
-         'agnostic/AOMDecoder.h',
-         'agnostic/DAV1DDecoder.h',
-     ]
-     UNIFIED_SOURCES += [
+@@ -81,6 +81,11 @@ if CONFIG['MOZ_AV1']:
          'agnostic/AOMDecoder.cpp',
          'agnostic/DAV1DDecoder.cpp',
      ]
@@ -78,20 +65,11 @@ diff --git a/dom/media/platforms/moz.build b/dom/media/platforms/moz.build
  
  if CONFIG['MOZ_OMX']:
      EXPORTS += [
-         'omx/OmxCoreLibLinker.h',
-     ]
-     UNIFIED_SOURCES += [
-         'omx/OmxCoreLibLinker.cpp',
-     ]
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
+index e2109252eb..ed340fb530 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
-@@ -480,17 +480,33 @@ imply_option('--enable-fmp4', ffmpeg, '-
- option('--disable-av1',
-         help='Disable av1 video support')
- 
- @depends('--enable-av1')
- def av1(value):
+@@ -491,7 +491,23 @@ def av1(value):
      if value:
          return True
  
@@ -116,8 +94,14 @@ diff --git a/toolkit/moz.configure b/toolkit/moz.configure
  def dav1d_asm(target, nasm_version):
      if target.os != 'Android':
          if target.cpu == 'aarch64':
-             return True
-         elif target.cpu in ('x86', 'x86_64'):
-             if nasm_version < '2.14':
-                 die('nasm 2.14 or greater is required for AV1 support. '
-                     'Either install nasm or add --disable-av1 to your configure options.')
+@@ -507,6 +523,7 @@ set_config('MOZ_DAV1D_ASM', dav1d_asm)
+ set_define('MOZ_DAV1D_ASM', dav1d_asm)
+ set_config('MOZ_AV1', av1)
+ set_define('MOZ_AV1', av1)
++set_config('MOZ_SYSTEM_AV1', depends_if(system_av1)(lambda _: True))
+ 
+ # Built-in fragmented MP4 support.
+ # ==============================================================
+-- 
+2.29.2
+

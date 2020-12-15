@@ -42,6 +42,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	pgo-fix-missing-kdejs.patch
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
+	rust_1.48.patch
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
@@ -52,9 +53,9 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Menubar
 	unity-menubar-r${_mbrev}.patch
 	# System Libs
-	2000_system_harfbuzz_support.patch
-	2001_system_graphite2_support.patch
-	7002_system_av1_support.patch
+	0004-bmo-847568-Support-system-harfbuzz.patch
+	0005-bmo-847568-Support-system-graphite2.patch
+	0006-bmo-1559213-Support-system-av1.patch
 	# artwork
 	#about-background.png
 	about-logo.png
@@ -77,14 +78,15 @@ sha256sums=('5e69f9bfd1a35decdae8d4b28da8100820e58b429f539fa9884802347631cf53'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             '3bb7463471fb43b2163a705a79a13a3003d70fff4bbe44f467807ca056de9a75'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
+            'd90faa59dc59f457c5770b3cc1ee4caa5b255e754ab9ab3993af894992c007e4'
             '2d8dd09acb33991f9c12cc0aeda49be3241ac5f77a80e74357ea695e065f3ae9'
             'ed959c0f3c2c394c4ee52ff381c0059f9d48b65742dfe8e11f0031f660ba5a7f'
             '32efbabbd15dfc4f350b61d2441d7035111d732b7dd496dfd43049ea3484ce5c'
             '6c7995302586f6cd76d51409b75300e786f53aafce265d2669fd86d510446a83'
             '411f1580801f7b1484575d38f5967cf3d8c68efbba8dd4e2950e13a763bd09d8'
-            '3077567f8b6dbf77c3673126ae39f79d0a0cde62f01dba62fc11f3238a29946a'
-            '2fc8a9ab0cc31d24eeea39569005a0d6b6486b44cb677b07790bf6dedf2caa38'
-            '7c07054894abcb9c8d2567165f9b76814e43f8aa95177e8bbb5d86f1e796c241'
+            '42b4d83b0e18599dcafde7195a04343858a1af91d26e78cf39b8bd622f123849'
+            '77e57e3ee3e2601c3cca9c499e534b00027ac3285ccdd108172c2a4e74d4b58d'
+            'd4e5b4d747cedb6d4485e44787a965675df90a7388d41122913a84ccb5d82f03'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -121,6 +123,7 @@ prepare() {
 
   # rust patches
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
+  patch -Np1 -i ../rust_1.48.patch
 
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
@@ -137,9 +140,9 @@ prepare() {
 
   # use more system libs
   echo "---- Patching for system libs"
-  patch -Np1 -i ../2000_system_harfbuzz_support.patch
-  patch -Np1 -i ../2001_system_graphite2_support.patch
-  patch -Np1 -i ../7002_system_av1_support.patch
+  patch -Np1 -i ../0004-bmo-847568-Support-system-harfbuzz.patch
+  patch -Np1 -i ../0005-bmo-847568-Support-system-graphite2.patch
+  patch -Np1 -i ../0006-bmo-1559213-Support-system-av1.patch
 
   # Plasmafox patches
   echo "---- Plasmafox patches"

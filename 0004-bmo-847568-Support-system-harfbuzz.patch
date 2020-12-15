@@ -1,18 +1,30 @@
-# HG changeset patch
-# Parent  ddfced51baf26d84a283f2838dc4cf3a1dbff7ec
-Add ability to use system-harfbuzz instead of bundled.
+From af3fb9eaefe7aeeebc24ab744ad2fd1957a8027a Mon Sep 17 00:00:00 2001
+From: Thomas Deutschmann <whissi@gentoo.org>
+Date: Mon, 6 Apr 2020 19:32:39 +0200
+Subject: [PATCH 04/38] bmo#847568: Support system harfbuzz
 
-https://bugzilla.mozilla.org/show_bug.cgi?id=847568
+Allow building against system-wide harfbuzz.
+
+Bug: https://bugzilla.mozilla.org/show_bug.cgi?id=847568
+Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
+---
+ config/system-headers.mozbuild  |  7 +++++++
+ dom/base/moz.build              |  3 +++
+ gfx/moz.build                   |  4 +++-
+ gfx/skia/generate_mozbuild.py   |  3 +++
+ gfx/skia/moz.build              |  3 +++
+ gfx/thebes/moz.build            |  3 +++
+ intl/unicharutil/util/moz.build |  3 +++
+ netwerk/dns/moz.build           |  3 +++
+ toolkit/library/moz.build       |  3 +++
+ toolkit/moz.configure           | 10 ++++++++++
+ 10 files changed, 41 insertions(+), 1 deletion(-)
 
 diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
+index a2fd6daf3e..0337e9215f 100644
 --- a/config/system-headers.mozbuild
 +++ b/config/system-headers.mozbuild
-@@ -1227,16 +1227,23 @@ if CONFIG['OS_TARGET'] == 'Android':
-         'utils/TypeHelpers.h',
-         'utils/Unicode.h',
-         'utils/Vector.h',
-         'utils/VectorImpl.h',
-         'vr/gvr/capi/include/gvr_controller.h',
+@@ -1232,6 +1232,13 @@ if CONFIG['OS_TARGET'] == 'Android':
          'vr/gvr/capi/include/gvr.h',
      ]
  
@@ -26,20 +38,11 @@ diff --git a/config/system-headers.mozbuild b/config/system-headers.mozbuild
  if CONFIG['MOZ_JACK']:
      system_headers += [
          'jack/jack.h',
-         'jack/statistics.h',
-     ]
- 
- if CONFIG['MOZ_SYSTEM_JPEG']:
-     system_headers += [
 diff --git a/dom/base/moz.build b/dom/base/moz.build
+index a9966c01a0..86a3f17d6f 100644
 --- a/dom/base/moz.build
 +++ b/dom/base/moz.build
-@@ -543,16 +543,19 @@ include('/ipc/chromium/chromium-config.m
- FINAL_LIBRARY = 'xul'
- 
- if CONFIG['MOZ_BUILD_APP'] in ['browser', 'mobile/android', 'xulrunner']:
-     DEFINES['HAVE_SIDEBAR'] = True
- 
+@@ -549,6 +549,9 @@ if CONFIG['MOZ_BUILD_APP'] in ['browser', 'mobile/android', 'xulrunner']:
  if CONFIG['MOZ_X11']:
      CXXFLAGS += CONFIG['TK_CFLAGS']
  
@@ -49,20 +52,11 @@ diff --git a/dom/base/moz.build b/dom/base/moz.build
  GeneratedFile('UseCounterList.h', script='gen-usecounters.py',
                entry_point='use_counter_list', inputs=['UseCounters.conf'])
  
- GeneratedFile('UseCounterWorkerList.h', script='gen-usecounters.py',
-               entry_point='use_counter_list', inputs=['UseCountersWorker.conf'])
- 
- if CONFIG['CC_TYPE'] in ('clang', 'gcc'):
-     CXXFLAGS += ['-Wno-error=shadow']
 diff --git a/gfx/moz.build b/gfx/moz.build
+index 61d348a6bf..aa701068d7 100644
 --- a/gfx/moz.build
 +++ b/gfx/moz.build
-@@ -8,26 +8,28 @@ with Files('**'):
-     BUG_COMPONENT = ('Core', 'Graphics')
-     SCHEDULES.inclusive += ['android-hw-gfx']
- with Files('wr/**'):
-     BUG_COMPONENT = ('Core', 'Graphics: WebRender')
- 
+@@ -13,6 +13,9 @@ with Files('wr/**'):
  if CONFIG['MOZ_TREE_CAIRO']:
      DIRS += ['cairo']
  
@@ -72,9 +66,7 @@ diff --git a/gfx/moz.build b/gfx/moz.build
  DIRS += [
      '2d',
      'ycbcr',
-     'angle',
-     'src',
-     'qcms',
+@@ -22,7 +25,6 @@ DIRS += [
      'gl',
      'layers',
      'graphite2/src',
@@ -82,20 +74,11 @@ diff --git a/gfx/moz.build b/gfx/moz.build
      'ots/src',
      'thebes',
      'ipc',
-     'vr',
-     'config',
-     'webrender_bindings',
-     'wgpu_bindings',
- ]
 diff --git a/gfx/skia/generate_mozbuild.py b/gfx/skia/generate_mozbuild.py
+index d5c409b657..9ad751e321 100755
 --- a/gfx/skia/generate_mozbuild.py
 +++ b/gfx/skia/generate_mozbuild.py
-@@ -93,16 +93,19 @@ if CONFIG['CC_TYPE'] == 'gcc':
- if CONFIG['CC_TYPE'] in ('clang', 'clang-cl'):
-     CXXFLAGS += [
-         '-Wno-implicit-fallthrough',
-         '-Wno-inconsistent-missing-override',
-         '-Wno-macro-redefined',
+@@ -98,6 +98,9 @@ if CONFIG['CC_TYPE'] in ('clang', 'clang-cl'):
          '-Wno-unused-private-field',
      ]
  
@@ -105,20 +88,11 @@ diff --git a/gfx/skia/generate_mozbuild.py b/gfx/skia/generate_mozbuild.py
  if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk', 'android'):
      CXXFLAGS += CONFIG['MOZ_CAIRO_CFLAGS']
      CXXFLAGS += CONFIG['CAIRO_FT_CFLAGS']
- 
- if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
-     CXXFLAGS += CONFIG['MOZ_PANGO_CFLAGS']
- 
- if CONFIG['MOZ_ENABLE_SKIA_PDF_SFNTLY']:
 diff --git a/gfx/skia/moz.build b/gfx/skia/moz.build
+index 66b21aec25..6f0c015d09 100755
 --- a/gfx/skia/moz.build
 +++ b/gfx/skia/moz.build
-@@ -485,16 +485,19 @@ if CONFIG['CC_TYPE'] == 'gcc':
- if CONFIG['CC_TYPE'] in ('clang', 'clang-cl'):
-     CXXFLAGS += [
-         '-Wno-implicit-fallthrough',
-         '-Wno-inconsistent-missing-override',
-         '-Wno-macro-redefined',
+@@ -490,6 +490,9 @@ if CONFIG['CC_TYPE'] in ('clang', 'clang-cl'):
          '-Wno-unused-private-field',
      ]
  
@@ -128,20 +102,11 @@ diff --git a/gfx/skia/moz.build b/gfx/skia/moz.build
  if CONFIG['MOZ_WIDGET_TOOLKIT'] in ('gtk', 'android'):
      CXXFLAGS += CONFIG['MOZ_CAIRO_CFLAGS']
      CXXFLAGS += CONFIG['CAIRO_FT_CFLAGS']
- 
- if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
-     CXXFLAGS += CONFIG['MOZ_PANGO_CFLAGS']
- 
- if CONFIG['MOZ_ENABLE_SKIA_PDF_SFNTLY']:
 diff --git a/gfx/thebes/moz.build b/gfx/thebes/moz.build
+index 8e5bcf1aea..a8a0d05f14 100644
 --- a/gfx/thebes/moz.build
 +++ b/gfx/thebes/moz.build
-@@ -285,11 +285,14 @@ if CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk'
- 
- if CONFIG['MOZ_WAYLAND']:
-     CXXFLAGS += CONFIG['MOZ_WAYLAND_CFLAGS']
- 
- LOCAL_INCLUDES += CONFIG['SKIA_INCLUDES']
+@@ -291,6 +291,9 @@ LOCAL_INCLUDES += CONFIG['SKIA_INCLUDES']
  
  DEFINES['GRAPHITE2_STATIC'] = True
  
@@ -152,14 +117,10 @@ diff --git a/gfx/thebes/moz.build b/gfx/thebes/moz.build
      # Suppress warnings from Skia header files.
      SOURCES['gfxPlatform.cpp'].flags += ['-Wno-implicit-fallthrough']
 diff --git a/intl/unicharutil/util/moz.build b/intl/unicharutil/util/moz.build
+index b12b3bb4f1..05f5ccfba1 100644
 --- a/intl/unicharutil/util/moz.build
 +++ b/intl/unicharutil/util/moz.build
-@@ -20,9 +20,12 @@ UNIFIED_SOURCES += [
-     'ICUUtils.cpp',
-     'IrishCasing.cpp',
-     'nsBidiUtils.cpp',
-     'nsSpecialCasingData.cpp',
-     'nsUnicharUtils.cpp',
+@@ -25,4 +25,7 @@ UNIFIED_SOURCES += [
      'nsUnicodeProperties.cpp',
  ]
  
@@ -168,14 +129,10 @@ diff --git a/intl/unicharutil/util/moz.build b/intl/unicharutil/util/moz.build
 +
  FINAL_LIBRARY = 'xul'
 diff --git a/netwerk/dns/moz.build b/netwerk/dns/moz.build
+index 0945029195..e291a5a4bd 100644
 --- a/netwerk/dns/moz.build
 +++ b/netwerk/dns/moz.build
-@@ -80,12 +80,15 @@ GeneratedFile('etld_data.inc', script='p
-               inputs=['effective_tld_names.dat'])
- 
- # need to include etld_data.inc
- LOCAL_INCLUDES += [
-     '/netwerk/base',
+@@ -94,6 +94,9 @@ LOCAL_INCLUDES += [
      '/netwerk/protocol/http',
  ]
  
@@ -185,16 +142,11 @@ diff --git a/netwerk/dns/moz.build b/netwerk/dns/moz.build
  USE_LIBS += ['icu']
  
  if CONFIG['CC_TYPE'] in ('clang', 'gcc'):
-     CXXFLAGS += ['-Wno-error=shadow']
 diff --git a/toolkit/library/moz.build b/toolkit/library/moz.build
+index cdc0577443..033da52502 100644
 --- a/toolkit/library/moz.build
 +++ b/toolkit/library/moz.build
-@@ -234,16 +234,19 @@ if CONFIG['MOZ_ANDROID_GOOGLE_VR']:
-     OS_LIBS += [
-         '-L%s' % CONFIG['MOZ_ANDROID_GOOGLE_VR_LIBS'],
-         '-lgvr',
-     ]
- 
+@@ -234,6 +234,9 @@ if CONFIG['MOZ_ANDROID_GOOGLE_VR']:
  OS_LIBS += CONFIG['MOZ_CAIRO_OSLIBS']
  OS_LIBS += CONFIG['MOZ_WEBRTC_X11_LIBS']
  
@@ -204,20 +156,11 @@ diff --git a/toolkit/library/moz.build b/toolkit/library/moz.build
  if CONFIG['MOZ_SYSTEM_JPEG']:
      OS_LIBS += CONFIG['MOZ_JPEG_LIBS']
  
- if CONFIG['MOZ_SYSTEM_PNG']:
-     OS_LIBS += CONFIG['MOZ_PNG_LIBS']
- 
- if CONFIG['MOZ_SYSTEM_WEBP']:
-     OS_LIBS += CONFIG['MOZ_WEBP_LIBS']
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
+index ebc4dbdb2d..827d1de352 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
-@@ -397,16 +397,26 @@ def freetype2_combined_info(fontconfig_i
-     return namespace(
-         cflags=freetype2_info.cflags + fontconfig_info.cflags,
-         libs=freetype2_info.libs + fontconfig_info.libs,
-     )
- 
+@@ -408,6 +408,16 @@ def freetype2_combined_info(fontconfig_info, freetype2_info):
  add_old_configure_assignment('_HAVE_FREETYPE2',
                               depends_if(freetype2_info)(lambda _: True))
  
@@ -234,8 +177,6 @@ diff --git a/toolkit/moz.configure b/toolkit/moz.configure
  # Apple platform decoder support
  # ==============================================================
  @depends(toolkit)
- def applemedia(toolkit):
-     if toolkit in ('cocoa', 'uikit'):
-         return True
- 
- set_config('MOZ_APPLEMEDIA', applemedia)
+-- 
+2.29.2
+
