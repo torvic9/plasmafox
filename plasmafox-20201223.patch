@@ -605,8 +605,7 @@ Subject: [PATCH] allow webgpu on release
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
  gfx/thebes/gfxPlatform.cpp | 5 -----
- widget/GfxInfoX11.cpp      | 4 ----
- 2 files changed, 9 deletions(-)
+ 1 file changed, 5 deletions(-)
 
 diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
 index cab3568..92ae17e 100644
