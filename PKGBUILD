@@ -3,8 +3,8 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=83.0
-pkgrel=2
+pkgver=84.0.1
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -44,13 +44,15 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	revert-920beb95b042.patch
 	# arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
+	#0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
-	firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
+	#firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
+	firefox-kde-${_patchrevsuse}+vd.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
+	#mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
+	mozilla-kde-${_patchrevsuse}+vd.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Menubar
 	unity-menubar-r${_mbrev}+.patch
@@ -73,7 +75,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('d69e84e8b8449f828683d274c24e03095858362bfed21b08bdd7fe715eea5398'
+sha256sums=('ae5500d270a199f9a10674fbd4ba7a6beac1f260a4c009bbca8ea39967592243'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -83,10 +85,9 @@ sha256sums=('d69e84e8b8449f828683d274c24e03095858362bfed21b08bdd7fe715eea5398'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '8da91fdb08fcc6e820111acda88c8f2484ef1c5271ce32997bfd919d507a238c'
             '642717f21b76c3d2d507b8fbfea58c187f7e7e5ef89ee522393748debf8f63cd'
-            '4b91fcf04c65a99626f39de89146a2ee01fcf868c3fdde26704796a394c18e68'
-            'b86972097f4eb1554de245b6203f5a5c2adf7c04899d987438fcb72c632b709f'
+            '16721d6c69ad00e5c36aae904b46910f043fecf8c381ddd58817ed820a323a94'
+            '3e4db3232c60ea7e29aee4083ce8f10111937a3082f732b3b884fac1e393664d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '00f9adb917a9e40c60e6e7c3c339dbad52e515120a71df6a36e66450dee0756a'
             '9563276744f9fa95556bf4772c793b123fd8e789402e0efe1edd7ca92cf7988f'
@@ -127,7 +128,7 @@ prepare() {
   # Arch patches
   echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-  patch -Np1 -i ../0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
+  #patch -Np1 -i ../0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
 
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
@@ -136,9 +137,9 @@ prepare() {
   patch -Np1 -i ../firefox-kde-$_patchrevsuse.patch
 
   # add globalmenu support
-  echo "---- Ubuntu global menu"
-  patch -R -Np1 -i ../revert-920beb95b042.patch
-  patch -Np1 -i ../unity-menubar-r${_mbrev}+.patch
+  #echo "---- Ubuntu global menu"
+  #patch -R -Np1 -i ../revert-920beb95b042.patch
+  #patch -Np1 -i ../unity-menubar-r${_mbrev}+.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
