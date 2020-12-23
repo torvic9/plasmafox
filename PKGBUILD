@@ -41,7 +41,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	pgo-fix-missing-kdejs.patch
 	add_missing_pgo_rule.patch
-	revert-920beb95b042.patch
 	# arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	#0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
@@ -83,7 +82,6 @@ sha256sums=('ae5500d270a199f9a10674fbd4ba7a6beac1f260a4c009bbca8ea39967592243'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
-            '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
             'a729a2c15b369a679b8bdd4b8b29aeaa744dd00fd78ca657b83c5160b012df2b'
             '16721d6c69ad00e5c36aae904b46910f043fecf8c381ddd58817ed820a323a94'
