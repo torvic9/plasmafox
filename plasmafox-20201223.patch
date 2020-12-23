@@ -1,0 +1,628 @@
+From 165d6e66a11cc3359681862faa79e55d6a694746 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sat, 22 Feb 2020 11:32:10 +0100
+Subject: [PATCH] branding and dialogs
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/base/content/aboutDialog.css                 |  6 +++---
+ browser/base/content/aboutDialog.xhtml               |  8 ++++----
+ browser/base/content/overrides/app-license.html      |  2 +-
+ browser/branding/branding-common.mozbuild            |  3 +++
+ browser/branding/unofficial/configure.sh             |  4 +++-
+ browser/branding/unofficial/content/aboutDialog.css  |  2 +-
+ browser/branding/unofficial/locales/en-US/brand.dtd  |  8 ++++----
+ browser/branding/unofficial/locales/en-US/brand.ftl  | 12 ++++++------
+ .../unofficial/locales/en-US/brand.properties        | 10 +++++-----
+ browser/branding/unofficial/pref/firefox-branding.js |  6 +++---
+ browser/installer/package-manifest.in                |  3 +++
+ browser/locales/en-US/browser/aboutDialog.ftl        |  2 +-
+ .../shared/privatebrowsing/aboutPrivateBrowsing.css  |  2 +-
+ 13 files changed, 38 insertions(+), 30 deletions(-)
+
+diff --git a/browser/base/content/aboutDialog.css b/browser/base/content/aboutDialog.css
+index 7dbb248c1f..7ce119d865 100644
+--- a/browser/base/content/aboutDialog.css
++++ b/browser/base/content/aboutDialog.css
+@@ -13,12 +13,12 @@
+ 
+ #rightBox {
+   background-image: url("chrome://branding/content/about-wordmark.svg");
+   background-repeat: no-repeat;
+-  background-size: 288px auto;
++  background-size: 108px auto;
+   /* padding-top creates room for the wordmark */
+-  padding-top: 38px;
+-  margin-top: 20px;
++  padding-top: 30px;
++  margin-top: 18px;
+ }
+ 
+ #rightBox:-moz-locale-dir(rtl) {
+   background-position: 100% 0;
+diff --git a/browser/base/content/aboutDialog.xhtml b/browser/base/content/aboutDialog.xhtml
+index f7e10f2632..94418f97bc 100644
+--- a/browser/base/content/aboutDialog.xhtml
++++ b/browser/base/content/aboutDialog.xhtml
+@@ -127,19 +127,19 @@
+ #endif
+           <vbox id="experimental" hidden="true">
+             <description class="text-blurb" id="warningDesc" data-l10n-id="warningDesc-version"></description>
+             <description class="text-blurb" id="communityExperimentalDesc" data-l10n-id="community-exp">
+-              <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-exp-mozillaLink"></label>
++              <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-exp-mozillaLink"></label>
+               <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-exp-creditsLink"></label>
+             </description>
+           </vbox>
+           <description class="text-blurb" id="communityDesc" data-l10n-id="community-2">
+-            <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-mozillaLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-mozillaLink"></label>
+             <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-creditsLink"></label>
+           </description>
+           <description class="text-blurb" id="contributeDesc" data-l10n-id="helpus">
+-            <label is="text-link" href="https://donate.mozilla.org/?utm_source=firefox&#38;utm_medium=referral&#38;utm_campaign=firefox_about&#38;utm_content=firefox_about" data-l10n-name="helpus-donateLink"></label>
+-            <label is="text-link" href="http://www.mozilla.org/contribute/" data-l10n-name="helpus-getInvolvedLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-donateLink"></label>
++            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-getInvolvedLink"></label>
+           </description>
+         </vbox>
+       </vbox>
+     </hbox>
+diff --git a/browser/base/content/overrides/app-license.html b/browser/base/content/overrides/app-license.html
+index e7a158c792..2730e9af0c 100644
+--- a/browser/base/content/overrides/app-license.html
++++ b/browser/base/content/overrides/app-license.html
+@@ -1,6 +1,6 @@
+ <!-- This Source Code Form is subject to the terms of the Mozilla Public
+    - License, v. 2.0. If a copy of the MPL was not distributed with this
+    - file, You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+     <p><b>Binaries</b> of this product have been made available to you by the
+-    <a href="http://www.mozilla.org/">Mozilla Project</a> under the Mozilla
++    <a href="https://github.com/torvic9/plasmafox">Plasmafox Project</a> under the Mozilla
+     Public License 2.0 (MPL). <a href="about:rights">Know your rights</a>.</p>
+diff --git a/browser/branding/branding-common.mozbuild b/browser/branding/branding-common.mozbuild
+index 908553b8b9..9fb2702eb2 100644
+--- a/browser/branding/branding-common.mozbuild
++++ b/browser/branding/branding-common.mozbuild
+@@ -26,8 +26,11 @@ def FirefoxBranding():
+     elif CONFIG['MOZ_WIDGET_TOOLKIT'] == 'gtk':
+         FINAL_TARGET_FILES.chrome.icons.default += [
+             'default128.png',
+             'default16.png',
++            'default22.png',
++            'default24.png',
++            'default256.png',
+             'default32.png',
+             'default48.png',
+             'default64.png',
+         ]
+diff --git a/browser/branding/unofficial/configure.sh b/browser/branding/unofficial/configure.sh
+index edd3bd3e86..c61c85c56d 100644
+--- a/browser/branding/unofficial/configure.sh
++++ b/browser/branding/unofficial/configure.sh
+@@ -1,5 +1,7 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-MOZ_APP_DISPLAYNAME=Nightly
++MOZ_APP_DISPLAYNAME=Plasmafox
++MOZ_APP_PROFILE=Plasmafox
++
+diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
+index 229d7bcea1..284c60f4ad 100644
+--- a/browser/branding/unofficial/content/aboutDialog.css
++++ b/browser/branding/unofficial/content/aboutDialog.css
+@@ -47,7 +47,7 @@
+   padding-top: 64px;
+ }
+ 
+ #bottomBox {
+-  background-color: hsla(235, 43%, 10%, .5);
++  background-color: rgba(10,17,37,.4);
+   padding: 15px 10px 15px;
+ }
+diff --git a/browser/branding/unofficial/locales/en-US/brand.dtd b/browser/branding/unofficial/locales/en-US/brand.dtd
+index 0b781d49a3..fdca5731a9 100644
+--- a/browser/branding/unofficial/locales/en-US/brand.dtd
++++ b/browser/branding/unofficial/locales/en-US/brand.dtd
+@@ -1,11 +1,11 @@
+ <!-- This Source Code Form is subject to the terms of the Mozilla Public
+    - License, v. 2.0. If a copy of the MPL was not distributed with this
+    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+ 
+-<!ENTITY  brandShorterName      "Nightly">
+-<!ENTITY  brandShortName        "Nightly">
+-<!ENTITY  brandFullName         "Nightly">
++<!ENTITY  brandShorterName      "Plasmafox">
++<!ENTITY  brandShortName        "Plasmafox">
++<!ENTITY  brandFullName         "Plasmafox">
+ <!-- LOCALIZATION NOTE (brandProductName):
+    This brand name can be used in messages where the product name needs to
+    remain unchanged across different versions (Nightly, Beta, etc.). -->
+-<!ENTITY  brandProductName      "Firefox">
++<!ENTITY  brandProductName      "Plasmafox">
+diff --git a/browser/branding/unofficial/locales/en-US/brand.ftl b/browser/branding/unofficial/locales/en-US/brand.ftl
+index 51e5bfa..bdc5acb 100644
+--- a/browser/branding/unofficial/locales/en-US/brand.ftl
++++ b/browser/branding/unofficial/locales/en-US/brand.ftl
+@@ -15,12 +15,12 @@
+ ##
+ ## For further details, consult:
+ ## https://mozilla-l10n.github.io/styleguides/mozilla_general/#brands-copyright-and-trademark
+ 
+--brand-shorter-name = Nightly
+--brand-short-name = Nightly
+--brand-full-name = Nightly
++-brand-shorter-name = Plasmafox
++-brand-short-name = Plasmafox
++-brand-full-name = Plasmafox
+ # This brand name can be used in messages where the product name needs to
+ # remain unchanged across different versions (Nightly, Beta, etc.).
+--brand-product-name = Firefox
+--vendor-short-name = Mozilla
+-trademarkInfo = { " " }
++-brand-product-name = Plasmafox
++-vendor-short-name = Plasmafox
++trademarkInfo = { "Plasmafox is not associated with Mozilla" }
+diff --git a/browser/branding/unofficial/locales/en-US/brand.properties b/browser/branding/unofficial/locales/en-US/brand.properties
+index 7c86db3f43..e7dfa02951 100644
+--- a/browser/branding/unofficial/locales/en-US/brand.properties
++++ b/browser/branding/unofficial/locales/en-US/brand.properties
+@@ -1,14 +1,14 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+-brandShorterName=Nightly
+-brandShortName=Nightly
+-brandFullName=Nightly
++brandShorterName=Plasmafox
++brandShortName=Plasmafox
++brandFullName=Plasmafox
+ # LOCALIZATION NOTE(brandProductName):
+ # This brand name can be used in messages where the product name needs to
+ # remain unchanged across different versions (Nightly, Beta, etc.).
+-brandProductName=Firefox
+-vendorShortName=Mozilla
++brandProductName=Plasmafox
++vendorShortName=Plasmafox
+ 
+ syncBrandShortName=Sync
+diff --git a/browser/branding/unofficial/pref/firefox-branding.js b/browser/branding/unofficial/pref/firefox-branding.js
+index f22dd0a51c..a98f7e3ecb 100644
+--- a/browser/branding/unofficial/pref/firefox-branding.js
++++ b/browser/branding/unofficial/pref/firefox-branding.js
+@@ -4,20 +4,20 @@
+ 
+ // This file contains branding-specific prefs.
+ 
+ pref("startup.homepage_override_url", "");
+-pref("startup.homepage_welcome_url", "");
++pref("startup.homepage_welcome_url", "https://github.com/torvic9/plasmafox");
+ pref("startup.homepage_welcome_url.additional", "");
+ // The time interval between checks for a new version (in seconds)
+ pref("app.update.interval", 86400); // 24 hours
+ // Give the user x seconds to react before showing the big UI. default=24 hours
+ pref("app.update.promptWaitTime", 86400);
+ // URL user can browse to manually if for some reason all update installation
+ // attempts fail.
+-pref("app.update.url.manual", "https://nightly.mozilla.org");
++pref("app.update.url.manual", "https://github.com/torvic9/plasmafox");
+ // A default value for the "More information about this update" link
+ // supplied in the "An update is available" page of the update wizard.
+-pref("app.update.url.details", "https://nightly.mozilla.org");
++pref("app.update.url.details", "https://github.com/torvic9/plasmafox");
+ 
+ // The number of days a binary is permitted to be old
+ // without checking for an update.  This assumes that
+ // app.update.checkInstallTime is true.
+diff --git a/browser/installer/package-manifest.in b/browser/installer/package-manifest.in
+index 7054749357..ce49fd65cc 100644
+--- a/browser/installer/package-manifest.in
++++ b/browser/installer/package-manifest.in
+@@ -253,12 +253,15 @@
+ @RESPATH@/chrome/recording.manifest
+ @RESPATH@/chrome/recording/*
+ #ifdef MOZ_GTK
+ @RESPATH@/browser/chrome/icons/default/default16.png
++@RESPATH@/browser/chrome/icons/default/default22.png
++@RESPATH@/browser/chrome/icons/default/default24.png
+ @RESPATH@/browser/chrome/icons/default/default32.png
+ @RESPATH@/browser/chrome/icons/default/default48.png
+ @RESPATH@/browser/chrome/icons/default/default64.png
+ @RESPATH@/browser/chrome/icons/default/default128.png
++@RESPATH@/browser/chrome/icons/default/default256.png
+ #endif
+ @RESPATH@/browser/features/*
+ 
+ ; [DevTools Startup Files]
+diff --git a/browser/locales/en-US/browser/aboutDialog.ftl b/browser/locales/en-US/browser/aboutDialog.ftl
+index 5737302831..5b8aeb7a8f 100644
+--- a/browser/locales/en-US/browser/aboutDialog.ftl
++++ b/browser/locales/en-US/browser/aboutDialog.ftl
+@@ -38,9 +38,9 @@ channel-description = You are currently on the <label data-l10n-name="current-ch
+ warningDesc-version = { -brand-short-name } is experimental and may be unstable.
+ 
+ community-exp = <label data-l10n-name="community-exp-mozillaLink">{ -vendor-short-name }</label> is a <label data-l10n-name="community-exp-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
+ 
+-community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, a <label data-l10n-name="community-creditsLink">global community</label> working together to keep the Web open, public and accessible to all.
++community-2 = { -brand-short-name } is designed by <label data-l10n-name="community-mozillaLink">{ -vendor-short-name }</label>, to be used with KDE/Plasma on Linux distros that are compatible with Arch.
+ 
+ helpus = Want to help? <label data-l10n-name="helpus-donateLink">Make a donation</label> or <label data-l10n-name="helpus-getInvolvedLink">get involved!</label>
+ 
+ bottomLinks-license = Licensing Information
+diff --git a/browser/branding/unofficial/content/jar.mn b/browser/branding/unofficial/content/jar.mn
+index 68b2bfd8e5..b2e8b2369c 100644
+--- a/browser/branding/unofficial/content/jar.mn
++++ b/browser/branding/unofficial/content/jar.mn
+@@ -7,9 +7,9 @@ browser.jar:
+   content/branding/about.png
+   content/branding/about-logo.png
+   content/branding/about-logo@2x.png
+   content/branding/about-wordmark.svg
+-  content/branding/firefox-wordmark.svg
++  content/branding/plasmafox-wordmark.svg
+   content/branding/aboutlogins.svg
+   content/branding/icon16.png                    (../default16.png)
+   content/branding/icon32.png                    (../default32.png)
+   content/branding/icon48.png                    (../default48.png)
+diff --git a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
+index a24a3e8225..3d2da0faeb 100644
+--- a/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
++++ b/browser/themes/shared/privatebrowsing/aboutPrivateBrowsing.css
+@@ -55,27 +55,21 @@ p {
+ }
+ 
+ .logo {
+   background: url("chrome://branding/content/about-logo.png") no-repeat center center;
+-  background-size: 96px;
++  background-size: 128px;
+   display: inline-block;
+-  height: 96px;
+-  width: 96px;
+-}
+-
+-@media (min-resolution: 2x) {
+-  .logo {
+-    background-image: url('chrome://branding/content/about-logo@2x.png');
+-  }
++  height: 128px;
++  width: 128px;
+ }
+ 
+ .wordmark {
+-  background: url("chrome://branding/content/firefox-wordmark.svg") no-repeat center center;
++  background: url("chrome://branding/content/plasmafox-wordmark.svg") no-repeat center center;
+   background-size: 172px;
+   -moz-context-properties: fill;
+   display: inline-block;
+-  fill: #fff;
+-  height: 96px;
++  fill: #bfd;
++  height: 128px;
+   margin-inline-start: 15px;
+   width: 172px;
+ }
+
+diff --git a/browser/components/newtab/content-src/components/Search/_Search.scss b/browser/components/newtab/content-src/components/Search/_Search.scss
+index fdbf52f299..f33600c76e 100644
+--- a/browser/components/newtab/content-src/components/Search/_Search.scss
++++ b/browser/components/newtab/content-src/components/Search/_Search.scss
+@@ -32,9 +32,9 @@ $glyph-forward: url('chrome://browser/skin/forward.svg');
+       width: $logo-size;
+     }
+ 
+     .wordmark {
+-      background: url('chrome://branding/content/firefox-wordmark.svg') no-repeat center center;
++      background: url('chrome://branding/content/plasmafox-wordmark.svg') no-repeat center center;
+       background-size: $wordmark-size;
+       -moz-context-properties: fill;
+       display: inline-block;
+       fill: var(--newtab-search-wordmark-color);
+diff --git a/browser/components/newtab/css/activity-stream-linux.css b/browser/components/newtab/css/activity-stream-linux.css
+index 71b7b788cd..439994e895 100644
+--- a/browser/components/newtab/css/activity-stream-linux.css
++++ b/browser/components/newtab/css/activity-stream-linux.css
+@@ -1042,9 +1042,9 @@ main {
+       @media (min-resolution: 2x) {
+         .search-wrapper .logo-and-wordmark .logo {
+           background-image: url("chrome://branding/content/about-logo@2x.png"); } }
+     .search-wrapper .logo-and-wordmark .wordmark {
+-      background: url("chrome://branding/content/firefox-wordmark.svg") no-repeat center center;
++      background: url("chrome://branding/content/plasmafox-wordmark.svg") no-repeat center center;
+       background-size: 172px;
+       -moz-context-properties: fill;
+       display: inline-block;
+       fill: var(--newtab-search-wordmark-color);
+-- 
+2.25.1
+From caf2adf6e4b0becd0769d9fb052aabe7233d98e1 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Fri, 2 Oct 2020 09:35:15 +0200
+Subject: [PATCH] change user agent handling
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ netwerk/protocol/http/nsHttpHandler.cpp | 24 ++++++++++--------------
+ 1 file changed, 10 insertions(+), 14 deletions(-)
+
+diff --git a/netwerk/protocol/http/nsHttpHandler.cpp b/netwerk/protocol/http/nsHttpHandler.cpp
+index 1d9eb83..199c9de 100644
+--- a/netwerk/protocol/http/nsHttpHandler.cpp
++++ b/netwerk/protocol/http/nsHttpHandler.cpp
+@@ -485,11 +485,11 @@ nsresult nsHttpHandler::Init() {
+   PrefsChanged(nullptr);
+   Telemetry::ScalarSet(Telemetry::ScalarID::NETWORKING_HTTP3_ENABLED,
+                        mHttp3Enabled);
+ 
+-  mMisc.AssignLiteral("rv:" MOZILLA_UAVERSION);
++  mMisc.AssignLiteral("rv:" MOZ_APP_UA_VERSION);
+ 
+-  mCompatFirefox.AssignLiteral("Firefox/" MOZILLA_UAVERSION);
++  mCompatFirefox.AssignLiteral("Plasmafox/" MOZ_APP_UA_VERSION);
+ 
+   nsCOMPtr<nsIXULAppInfo> appInfo =
+       do_GetService("@mozilla.org/xre/app-info;1");
+ 
+@@ -942,20 +942,16 @@ void nsHttpHandler::BuildUserAgent() {
+   mUserAgent += mProduct;
+   mUserAgent += '/';
+   mUserAgent += mProductSub;
+ 
+-  bool isFirefox = mAppName.EqualsLiteral("Firefox");
+-  if (isFirefox || mCompatFirefoxEnabled) {
+-    // "Firefox/x.y" (compatibility) app token
+-    mUserAgent += ' ';
+-    mUserAgent += mCompatFirefox;
+-  }
+-  if (!isFirefox) {
+-    // App portion
+-    mUserAgent += ' ';
+-    mUserAgent += mAppName;
+-    mUserAgent += '/';
+-    mUserAgent += mAppVersion;
++  // App portion
++  mUserAgent += ' ';
++  mUserAgent += "Firefox";
++  mUserAgent += '/';
++  mUserAgent += mAppVersion;
++  if (mCompatFirefoxEnabled) {
++		mUserAgent += ' ';
++		mUserAgent += mCompatFirefox;
+   }
+ }
+ 
+ #ifdef XP_WIN
+-- 
+2.28.0
+
+From dc18d3c5ad26e6f284d6ce0f9e278d5bed99f4ad Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sat, 26 Oct 2019 16:20:16 +0200
+Subject: [PATCH] disable healthreport and normandy
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/moz.configure | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/browser/moz.configure b/browser/moz.configure
+index 8653bcbb16..935af4065a 100644
+--- a/browser/moz.configure
++++ b/browser/moz.configure
+@@ -4,13 +4,13 @@
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ imply_option("MOZ_PLACES", True)
+-imply_option("MOZ_SERVICES_HEALTHREPORT", True)
++imply_option("MOZ_SERVICES_HEALTHREPORT", False)
+ imply_option("MOZ_SERVICES_SYNC", True)
+ imply_option("MOZ_DEDICATED_PROFILES", True)
+ imply_option("MOZ_BLOCK_PROFILE_DOWNGRADE", True)
+-imply_option("MOZ_NORMANDY", True)
++imply_option("MOZ_NORMANDY", False)
+ 
+ with only_when(target_is_linux & compile_environment):
+     option(env="MOZ_NO_PIE_COMPAT", help="Enable non-PIE wrapper")
+ 
+From 34372306cfa209c82b02da3efcb529cd51b48bb9 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Sun, 6 Oct 2019 11:24:49 +0200
+Subject: [PATCH] remove UI Tour
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/base/content/browser.css       | 65 --------------------------
+ browser/base/content/browser.js        |  1 -
+ browser/base/content/utilityOverlay.js |  6 ---
+ browser/components/moz.build           |  1 -
+ 4 files changed, 73 deletions(-)
+
+[manual dirty adaptations above for >= 72.0]
+
+diff --git a/browser/base/content/browser.css b/browser/base/content/browser.css
+index f5ffb29c93..db6e9acd3c 100644
+--- a/browser/base/content/browser.css
++++ b/browser/base/content/browser.css
+@@ -1280,73 +1280,8 @@ toolbarpaletteitem > toolbaritem {
+ :root[customizing=true] .panel-banner-item {
+   display: none;
+ }
+ 
+-/* UI Tour */
+-
+-@keyframes uitour-wobble {
+-  from {
+-    transform: rotate(0deg) translateX(3px) rotate(0deg);
+-  }
+-  50% {
+-    transform: rotate(360deg) translateX(3px) rotate(-360deg);
+-  }
+-  to {
+-    transform: rotate(720deg) translateX(0px) rotate(-720deg);
+-  }
+-}
+-
+-@keyframes uitour-zoom {
+-  from {
+-    transform: scale(0.8);
+-  }
+-  50% {
+-    transform: scale(1.0);
+-  }
+-  to {
+-    transform: scale(0.8);
+-  }
+-}
+-
+-@keyframes uitour-color {
+-  from {
+-    border-color: #5B9CD9;
+-  }
+-  50% {
+-    border-color: #FF0000;
+-  }
+-  to {
+-    border-color: #5B9CD9;
+-  }
+-}
+-
+-#UITourHighlightContainer,
+-#UITourHighlight {
+-  pointer-events: none;
+-}
+-
+-#UITourHighlight[active] {
+-  animation-delay: 2s;
+-  animation-fill-mode: forwards;
+-  animation-iteration-count: infinite;
+-  animation-timing-function: linear;
+-}
+-
+-#UITourHighlight[active="wobble"] {
+-  animation-name: uitour-wobble;
+-  animation-delay: 0s;
+-  animation-duration: 1.5s;
+-  animation-iteration-count: 1;
+-}
+-#UITourHighlight[active="zoom"] {
+-  animation-name: uitour-zoom;
+-  animation-duration: 1s;
+-}
+-#UITourHighlight[active="color"] {
+-  animation-name: uitour-color;
+-  animation-duration: 2s;
+-}
+-
+ /* Combined context-menu items */
+ #context-navigation > .menuitem-iconic > .menu-iconic-text,
+ #context-navigation > .menuitem-iconic > .menu-accel-container {
+   display: none;
+diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
+index 160f569d1e..78acefd31f 100644
+--- a/browser/base/content/browser.js
++++ b/browser/base/content/browser.js
+@@ -76,9 +76,8 @@
+   TabModalPrompt: "chrome://global/content/tabprompts.jsm",
+   TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
+   TelemetryEnvironment: "resource://gre/modules/TelemetryEnvironment.jsm",
+   Translation: "resource:///modules/translation/TranslationParent.jsm",
+-  UITour: "resource:///modules/UITour.jsm",
+   UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
+   UrlbarInput: "resource:///modules/UrlbarInput.jsm",
+   UrlbarPrefs: "resource:///modules/UrlbarPrefs.jsm",
+   UrlbarProviderSearchTips: "resource:///modules/UrlbarProviderSearchTips.jsm",
+diff --git a/browser/base/content/utilityOverlay.js b/browser/base/content/utilityOverlay.js
+index 7180d0829b..a6931738bb 100644
+--- a/browser/base/content/utilityOverlay.js
++++ b/browser/base/content/utilityOverlay.js
+@@ -1087,14 +1087,8 @@ function openFeedbackPage() {
+   var url = Services.urlFormatter.formatURLPref("app.feedback.baseURL");
+   openTrustedLinkIn(url, "tab");
+ }
+ 
+-function openTourPage() {
+-  let scope = {};
+-  ChromeUtils.import("resource:///modules/UITour.jsm", scope);
+-  openTrustedLinkIn(scope.UITour.url, "tab");
+-}
+-
+ function buildHelpMenu() {
+   document.getElementById(
+     "feedbackPage"
+   ).disabled = !Services.policies.isAllowed("feedbackCommands");
+diff --git a/browser/components/moz.build b/browser/components/moz.build
+index ba617de9d8..23f6ef0f12 100644
+--- a/browser/components/moz.build
++++ b/browser/components/moz.build
+@@ -54,9 +54,8 @@ DIRS += [
+     "sessionstore",
+     "shell",
+     "ssb",
+     "syncedtabs",
+-    "uitour",
+     "urlbar",
+     "translation",
+ ]
+ 
+From 2d228c5075fa0292bb99866cf85ba78a06619bf3 Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Thu, 5 Dec 2019 20:57:46 +0100
+Subject: [PATCH] new logo for new about screen
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ .../browser/branding/unofficial/content/aboutDialog.css         | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/browser/branding/unofficial/content/aboutDialog.css b/browser/branding/unofficial/content/aboutDialog.css
+index 284c60f4ad..bde9a1fdda 100644
+--- a/browser/branding/unofficial/content/aboutDialog.css
++++ b/browser/branding/unofficial/content/aboutDialog.css
+@@ -10,11 +10,11 @@
+ #clientBox {
+   padding: 10px 0 15px;
+ }
+ 
+ #leftBox {
+-  background-image: url("chrome://branding/content/about-logo.png");
++  background-image: url("chrome://branding/content/about-logo@2x.png");
+   background-repeat: no-repeat;
+   background-size: 192px auto;
+   background-position: center 20%;
+   /* min-width and min-height create room for the logo */
+   min-width: 210px;
+-- 
+2.24.0
+
+From 33ecf784876064c9c5543f7788d020bf7201897e Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Mon, 16 Nov 2020 17:51:58 +0100
+Subject: [PATCH] allow webgpu on release
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ gfx/thebes/gfxPlatform.cpp | 5 -----
+ widget/GfxInfoX11.cpp      | 4 ----
+ 2 files changed, 9 deletions(-)
+
+diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
+index cab3568..92ae17e 100644
+--- a/gfx/thebes/gfxPlatform.cpp
++++ b/gfx/thebes/gfxPlatform.cpp
+@@ -2865,13 +2865,8 @@ void gfxPlatform::InitWebRenderConfig() {
+ 
+ void gfxPlatform::InitWebGPUConfig() {
+   FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
+   feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
+-#ifndef NIGHTLY_BUILD
+-  feature.ForceDisable(FeatureStatus::Blocked,
+-                       "WebGPU can only be enabled in nightly",
+-                       "WEBGPU_DISABLE_NON_NIGHTLY"_ns);
+-#endif
+ }
+ 
+ void gfxPlatform::InitOMTPConfig() {
+   ScopedGfxFeatureReporter reporter("OMTP");

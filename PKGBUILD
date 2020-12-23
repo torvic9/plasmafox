@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2349
 _patchrevsuse=1ae375c391baef113bf28f10f25552e9bbd17223
-_pfdate=20201116
+_pfdate=20201223
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -57,12 +57,11 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Menubar
 	unity-menubar-r${_mbrev}+.patch
 	# System Libs
-	0005-bmo-847568-Support-system-harfbuzz.patch
-	0006-bmo-847568-Support-system-graphite2.patch
-	0007-bmo-1559213-Support-system-av1.patch
+	0004-bmo-847568-Support-system-harfbuzz.patch
+	0005-bmo-847568-Support-system-graphite2.patch
+	0006-bmo-1559213-Support-system-av1.patch
 	# gentoo patches
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-	#0036-bmo-1634404-Fix-popup-position-when-layout.css.devPi.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -85,14 +84,14 @@ sha256sums=('ae5500d270a199f9a10674fbd4ba7a6beac1f260a4c009bbca8ea39967592243'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '0e538b0cd6890ef35291a2c7ccb17c3de1005af69327db78c29f8e6c311b275c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '642717f21b76c3d2d507b8fbfea58c187f7e7e5ef89ee522393748debf8f63cd'
+            'a729a2c15b369a679b8bdd4b8b29aeaa744dd00fd78ca657b83c5160b012df2b'
             '16721d6c69ad00e5c36aae904b46910f043fecf8c381ddd58817ed820a323a94'
             '3e4db3232c60ea7e29aee4083ce8f10111937a3082f732b3b884fac1e393664d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '00f9adb917a9e40c60e6e7c3c339dbad52e515120a71df6a36e66450dee0756a'
-            '9563276744f9fa95556bf4772c793b123fd8e789402e0efe1edd7ca92cf7988f'
-            '06d641f1868a5b34885116ebf97e8af25c62fec4116980a75ceb460f2d62e187'
-            '01b57a48c03527ccfe4304a0988c8b7dccf515e34d5c80b55f05757c2333e41e'
+            'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
+            '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
+            'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
@@ -117,8 +116,8 @@ prepare() {
   #cd mozilla-unified
   cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
-  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrevsuse.patch
-  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-$_patchrevsuse.patch
+  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-${_patchrevsuse}+vd.patch
+  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-${_patchrevsuse}+vd.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -128,13 +127,12 @@ prepare() {
   # Arch patches
   echo "---- Arch patches"
   patch -Np1 -i ../0001-Use-remoting-name-for-GDK-application-names.patch
-  #patch -Np1 -i ../0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
 
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
-  patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
-  patch -Np1 -i ../firefox-kde-$_patchrevsuse.patch
+  patch -Np1 -i ../mozilla-kde-${_patchrevsuse}+vd.patch
+  patch -Np1 -i ../firefox-kde-${_patchrevsuse}+vd.patch
 
   # add globalmenu support
   #echo "---- Ubuntu global menu"
@@ -150,9 +148,9 @@ prepare() {
 
   # use more system libs
   echo "---- Patching for system libs"
-  patch -Np1 -i ../0005-bmo-847568-Support-system-harfbuzz.patch
-  patch -Np1 -i ../0006-bmo-847568-Support-system-graphite2.patch
-  patch -Np1 -i ../0007-bmo-1559213-Support-system-av1.patch
+  patch -Np1 -i ../0004-bmo-847568-Support-system-harfbuzz.patch
+  patch -Np1 -i ../0005-bmo-847568-Support-system-graphite2.patch
+  patch -Np1 -i ../0006-bmo-1559213-Support-system-av1.patch
 
   # Plasmafox patches
   echo "---- Plasmafox patches"

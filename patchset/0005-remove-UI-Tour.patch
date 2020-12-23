@@ -125,19 +125,16 @@ index 7180d0829b..a6931738bb 100644
      "feedbackPage"
    ).disabled = !Services.policies.isAllowed("feedbackCommands");
 diff --git a/browser/components/moz.build b/browser/components/moz.build
-index 4195a30a5d..338ad508c0 100644
+index ba617de9d8..23f6ef0f12 100644
 --- a/browser/components/moz.build
 +++ b/browser/components/moz.build
-@@ -50,9 +50,8 @@ DIRS += [
-     'sessionstore',
-     'shell',
-     'ssb',
-     'syncedtabs',
--    'uitour',
-     'urlbar',
-     'translation',
-     'webshare',
+@@ -54,9 +54,8 @@ DIRS += [
+     "sessionstore",
+     "shell",
+     "ssb",
+     "syncedtabs",
+-    "uitour",
+     "urlbar",
+     "translation",
  ]
--- 
-2.23.0
-
+ 
