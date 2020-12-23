@@ -27,7 +27,7 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
-_mbrev=2349
+_mbrev=2368
 _patchrevsuse=1ae375c391baef113bf28f10f25552e9bbd17223
 _pfdate=20201223
 options=('!emptydirs' '!strip')
@@ -54,8 +54,9 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	#mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
 	mozilla-kde-${_patchrevsuse}+vd.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
-	# Menubar
-	unity-menubar-r${_mbrev}+.patch
+	# Ubuntu
+	unity-menubar-r${_mbrev}.patch
+	reduce-rust-debuginfo.patch
 	# System Libs
 	0004-bmo-847568-Support-system-harfbuzz.patch
 	0005-bmo-847568-Support-system-graphite2.patch
@@ -88,7 +89,8 @@ sha256sums=('ae5500d270a199f9a10674fbd4ba7a6beac1f260a4c009bbca8ea39967592243'
             '16721d6c69ad00e5c36aae904b46910f043fecf8c381ddd58817ed820a323a94'
             '3e4db3232c60ea7e29aee4083ce8f10111937a3082f732b3b884fac1e393664d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
-            '00f9adb917a9e40c60e6e7c3c339dbad52e515120a71df6a36e66450dee0756a'
+            '6e5b64cef3fba8795c4a400ee59d8deda371f2bbb55f1fc33bc99671bd1f8df8'
+            '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
             'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
             '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
             'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
@@ -135,9 +137,9 @@ prepare() {
   patch -Np1 -i ../firefox-kde-${_patchrevsuse}+vd.patch
 
   # add globalmenu support
-  #echo "---- Ubuntu global menu"
-  #patch -R -Np1 -i ../revert-920beb95b042.patch
-  #patch -Np1 -i ../unity-menubar-r${_mbrev}+.patch
+  echo "---- Ubuntu patches"
+  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  patch -Np1 -i ../reduce-rust-debuginfo.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
