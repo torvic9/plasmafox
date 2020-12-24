@@ -111,6 +111,7 @@ prepare() {
   cd firefox-${pkgver%esr}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrev.patch
+  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-$_patchrev.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
