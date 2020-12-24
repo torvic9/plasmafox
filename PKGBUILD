@@ -17,7 +17,7 @@ depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse
 makedepends=('unzip' 'zip' 'diffutils' 'python-setuptools' 'python-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
 			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2'
-			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld')
+			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld' 'python-zstandard')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech'
@@ -180,6 +180,7 @@ build() {
   export CXX='clang++ --target=x86_64-unknown-linux-gnu'
   export AR=llvm-ar
   export NM=llvm-nm
+  export OBJCOPY='/usr/bin/llvm-objcopy'
   export RANLIB=llvm-ranlib
   export STRIP=llvm-strip
 
