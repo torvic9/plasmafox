@@ -1,16 +1,10 @@
 ## Plasmafox web browser
-
-### IMPORTANT:
-I have switched from Manjaro to EndeavourOS. While I still highly appreciate Manjaro's software, i.e. distro and tools, I cannot accept its politics (and a few more things) anymore. 
-Still, I wish all the best to the devs and their project. I learned a lot, and also gave back a lot. Let's leave it at that.
-Therefore I cannot guarantee that the provided binaries work correctly on Manjaro. Your best bet is the 'unstable' branch.
-____
-Currently I'm unable to build v79 (see issues), for the moment being we stay on ESR branch. Since Thaodan, the maintainer of `firefox-kde-opensuse` seems to be back, you can use that one instead of Plasmafox.
+### for Arch-compatible distros
 ____
 
 **Main differences between Plasmafox and Firefox:**
  - KDE integration with file dialogs and global menu
- - Binaries built with clang 10.0.1 from repos
+ - Binaries built with clang 11.0.0
  - Uses additional system libraries (e.g. icu, zlib, harfbuzz, av1 etc.)
  - Some Mozilla services like Pocket, Telemetry, UI Tour and Sync disabled
  - Removed most of trademark-restricted marks like the name "Firefox" and the icons
