@@ -1,19 +1,8 @@
-From 33ecf784876064c9c5543f7788d020bf7201897e Mon Sep 17 00:00:00 2001
-From: torvic9 <torvic9@mailbox.org>
-Date: Mon, 16 Nov 2020 17:51:58 +0100
-Subject: [PATCH] allow webgpu on release
-
-Signed-off-by: torvic9 <torvic9@mailbox.org>
----
- gfx/thebes/gfxPlatform.cpp | 5 -----
- 1 file changed, 5 deletions(-)
-
 diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
-index cab3568..92ae17e 100644
+index c650b89ce2..7eba8b015a 100644
 --- a/gfx/thebes/gfxPlatform.cpp
 +++ b/gfx/thebes/gfxPlatform.cpp
-@@ -2865,13 +2865,8 @@ void gfxPlatform::InitWebRenderConfig() {
- 
+@@ -2877,11 +2877,6 @@ void gfxPlatform::InitWebGLConfig() {
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
    feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
@@ -25,4 +14,55 @@ index cab3568..92ae17e 100644
  }
  
  void gfxPlatform::InitOMTPConfig() {
-   ScopedGfxFeatureReporter reporter("OMTP");
+diff --git a/widget/GfxDriverInfo.cpp b/widget/GfxDriverInfo.cpp
+index d6e16df049..466e248d9a 100644
+--- a/widget/GfxDriverInfo.cpp
++++ b/widget/GfxDriverInfo.cpp
+@@ -751,6 +751,8 @@ const GfxDeviceFamily* GfxDriverInfo::GetDeviceFamily(DeviceFamily id) {
+       APPEND_DEVICE(0x15d8);
+       // Renoir
+       APPEND_DEVICE(0x1636);
++      // Navi10
++      APPEND_DEVICE(0x731f);
+ 
+       // Evergreen
+       APPEND_RANGE(0x6840, 0x684b);
+diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
+index 8e33da8316..c89bca0e1f 100644
+--- a/widget/GfxInfoX11.cpp
++++ b/widget/GfxInfoX11.cpp
+@@ -581,14 +581,13 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         V(18, 0, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_ATI_MESA", "Mesa 18.0.0.0");
+ #endif
+ 
+-#ifdef NIGHTLY_BUILD
+     // Intel Mesa baseline, chosen arbitrarily.
+     APPEND_TO_DRIVER_BLOCKLIST_EXT(
+         OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
+         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
+         DeviceFamily::IntelRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
+         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
+-        V(18, 0, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_INTEL_MESA", "Mesa 18.0.0.0");
++        V(18, 0, 0, 0), "FEATURE_ROLLOUT_INTEL_MESA", "Mesa 18.0.0.0");
+ 
+     // Nvidia Mesa baseline, see bug 1563859.
+     APPEND_TO_DRIVER_BLOCKLIST_EXT(
+@@ -596,7 +595,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
+         DeviceFamily::NvidiaRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
+         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
+-        V(18, 2, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_NVIDIA_MESA", "Mesa 18.2.0.0");
++        V(18, 2, 0, 0), "FEATURE_ROLLOUT_NVIDIA_MESA", "Mesa 18.2.0.0");
+ 
+     // ATI Mesa baseline, chosen arbitrarily.
+     APPEND_TO_DRIVER_BLOCKLIST_EXT(
+@@ -604,8 +603,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
+         DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
+         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
+-        V(18, 0, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_ATI_MESA", "Mesa 18.0.0.0");
+-#endif
++        V(18, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 18.0.0.0");
+ 
+     ////////////////////////////////////
+ 

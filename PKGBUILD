@@ -4,7 +4,7 @@
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=84.0.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -28,7 +28,7 @@ provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
 _mbrev=2368
-_patchrevsuse=1ae375c391baef113bf28f10f25552e9bbd17223
+_patchrevsuse=c6bad4ac579cda0aa7d6ceedee15dcf3228b71ca
 _pfdate=20201223
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
@@ -47,11 +47,9 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
-	#firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
-	firefox-kde-${_patchrevsuse}+vd.patch
+	firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
 	# Gecko/toolkit patchset
-	#mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
-	mozilla-kde-${_patchrevsuse}+vd.patch
+	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Ubuntu
 	unity-menubar-r${_mbrev}.patch
@@ -61,6 +59,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	0005-bmo-847568-Support-system-graphite2.patch
 	0006-bmo-1559213-Support-system-av1.patch
 	# gentoo patches
+	0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
 	# artwork
 	about-logo.png
@@ -83,15 +82,16 @@ sha256sums=('ae5500d270a199f9a10674fbd4ba7a6beac1f260a4c009bbca8ea39967592243'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            'f7e02108ce0fb75e4052462a02a669c356e135ea31f228bfcec0b50f0a1a6942'
-            '16721d6c69ad00e5c36aae904b46910f043fecf8c381ddd58817ed820a323a94'
-            '3e4db3232c60ea7e29aee4083ce8f10111937a3082f732b3b884fac1e393664d'
+            '11845c61ed6ed3a7d8d2389e1a340590fcbd95d882b02edaaea75f0dca971cbc'
+            '6a958cc3349d047e825daf761eeb70a4902d33466d9f3b276d1e2d52f960ea97'
+            '2934d72164f773febcb292fed3c4a4ef3147e6be12cac4b79d704fd648f2366d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '6e5b64cef3fba8795c4a400ee59d8deda371f2bbb55f1fc33bc99671bd1f8df8'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
             'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
             '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
             'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
+            '82129e30512477232556e939ee8ed64b999b0e095001d043b121c5e5d334692c'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
@@ -116,8 +116,8 @@ prepare() {
   #cd mozilla-unified
   cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
-  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-${_patchrevsuse}+vd.patch
-  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-${_patchrevsuse}+vd.patch
+  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-${_patchrevsuse}.patch
+  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-${_patchrevsuse}.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -131,8 +131,8 @@ prepare() {
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
-  patch -Np1 -i ../mozilla-kde-${_patchrevsuse}+vd.patch
-  patch -Np1 -i ../firefox-kde-${_patchrevsuse}+vd.patch
+  patch -Np1 -i ../mozilla-kde-${_patchrevsuse}.patch
+  patch -Np1 -i ../firefox-kde-${_patchrevsuse}.patch
 
   # add globalmenu support
   echo "---- Ubuntu patches"
@@ -144,6 +144,7 @@ prepare() {
   patch -Np1 -i ../add_missing_pgo_rule.patch
 
   # gentoo patches
+  patch -Np1 -i ../0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
 
   # use more system libs
