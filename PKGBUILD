@@ -3,8 +3,8 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=84.0.1
-pkgrel=2
+pkgver=84.0.2
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -73,7 +73,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('ae5500d270a199f9a10674fbd4ba7a6beac1f260a4c009bbca8ea39967592243'
+sha256sums=('92bfd518d4f9760c897388a8e06130b171c1c43524d8af181add9daac2be7b37'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
