@@ -49,19 +49,19 @@ index f7e10f2632..94418f97bc 100644
            <vbox id="experimental" hidden="true">
              <description class="text-blurb" id="warningDesc" data-l10n-id="warningDesc-version"></description>
              <description class="text-blurb" id="communityExperimentalDesc" data-l10n-id="community-exp">
--              <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-exp-mozillaLink"></label>
+-              <label is="text-link" href="https://www.mozilla.org/?utm_source=firefox-browser&#38;utm_medium=firefox-desktop&#38;utm_campaign=about-dialog" data-l10n-name="community-exp-mozillaLink"></label>
 +              <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-exp-mozillaLink"></label>
                <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-exp-creditsLink"></label>
              </description>
            </vbox>
            <description class="text-blurb" id="communityDesc" data-l10n-id="community-2">
--            <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-mozillaLink"></label>
+-            <label is="text-link" href="https://www.mozilla.org/?utm_source=firefox-browser&#38;utm_medium=firefox-desktop&#38;utm_campaign=about-dialog" data-l10n-name="community-mozillaLink"></label>
 +            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-mozillaLink"></label>
              <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-creditsLink"></label>
            </description>
            <description class="text-blurb" id="contributeDesc" data-l10n-id="helpus">
 -            <label is="text-link" href="https://donate.mozilla.org/?utm_source=firefox&#38;utm_medium=referral&#38;utm_campaign=firefox_about&#38;utm_content=firefox_about" data-l10n-name="helpus-donateLink"></label>
--            <label is="text-link" href="http://www.mozilla.org/contribute/" data-l10n-name="helpus-getInvolvedLink"></label>
+-            <label is="text-link" href="https://www.mozilla.org/contribute/?utm_source=firefox-browser&#38;utm_medium=firefox-desktop&#38;utm_campaign=about-dialog" data-l10n-name="helpus-getInvolvedLink"></label>
 +            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-donateLink"></label>
 +            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-getInvolvedLink"></label>
            </description>
@@ -331,7 +331,7 @@ index 71b7b788cd..439994e895 100644
      .search-wrapper .logo-and-wordmark .wordmark {
 -      background: url("chrome://branding/content/firefox-wordmark.svg") no-repeat center center;
 +      background: url("chrome://branding/content/plasmafox-wordmark.svg") no-repeat center center;
-       background-size: 172px;
+       background-size: 134px;
        -moz-context-properties: fill;
        display: inline-block;
        fill: var(--newtab-search-wordmark-color);
@@ -597,11 +597,10 @@ index 284c60f4ad..bde9a1fdda 100644
 -- 
 2.24.0
 
-diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
-index c650b89ce2..7eba8b015a 100644
---- a/gfx/thebes/gfxPlatform.cpp
-+++ b/gfx/thebes/gfxPlatform.cpp
-@@ -2877,11 +2877,6 @@ void gfxPlatform::InitWebGLConfig() {
+--- a/gfx/thebes/gfxPlatform.cpp	2021-01-18 19:29:44.000000000 +0100
++++ b/gfx/thebes/gfxPlatform.cpp	2021-01-28 18:48:07.732544026 +0100
+@@ -2889,13 +2889,8 @@
+ 
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
    feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
@@ -610,9 +609,10 @@ index c650b89ce2..7eba8b015a 100644
 -                       "WebGPU can only be enabled in nightly",
 -                       "WEBGPU_DISABLE_NON_NIGHTLY"_ns);
 -#endif
- }
- 
- void gfxPlatform::InitOMTPConfig() {
+   if (!UseWebRender()) {
+     feature.ForceDisable(FeatureStatus::UnavailableNoWebRender,
+                          "WebGPU can't present without WebRender",
+                          "FEATURE_FAILURE_WEBGPU_NEED_WEBRENDER"_ns);
 diff --git a/widget/GfxDriverInfo.cpp b/widget/GfxDriverInfo.cpp
 index d6e16df049..466e248d9a 100644
 --- a/widget/GfxDriverInfo.cpp

@@ -49,19 +49,19 @@ index f7e10f2632..94418f97bc 100644
            <vbox id="experimental" hidden="true">
              <description class="text-blurb" id="warningDesc" data-l10n-id="warningDesc-version"></description>
              <description class="text-blurb" id="communityExperimentalDesc" data-l10n-id="community-exp">
--              <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-exp-mozillaLink"></label>
+-              <label is="text-link" href="https://www.mozilla.org/?utm_source=firefox-browser&#38;utm_medium=firefox-desktop&#38;utm_campaign=about-dialog" data-l10n-name="community-exp-mozillaLink"></label>
 +              <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-exp-mozillaLink"></label>
                <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-exp-creditsLink"></label>
              </description>
            </vbox>
            <description class="text-blurb" id="communityDesc" data-l10n-id="community-2">
--            <label is="text-link" href="http://www.mozilla.org/" data-l10n-name="community-mozillaLink"></label>
+-            <label is="text-link" href="https://www.mozilla.org/?utm_source=firefox-browser&#38;utm_medium=firefox-desktop&#38;utm_campaign=about-dialog" data-l10n-name="community-mozillaLink"></label>
 +            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="community-mozillaLink"></label>
              <label is="text-link" useoriginprincipal="true" href="about:credits" data-l10n-name="community-creditsLink"></label>
            </description>
            <description class="text-blurb" id="contributeDesc" data-l10n-id="helpus">
 -            <label is="text-link" href="https://donate.mozilla.org/?utm_source=firefox&#38;utm_medium=referral&#38;utm_campaign=firefox_about&#38;utm_content=firefox_about" data-l10n-name="helpus-donateLink"></label>
--            <label is="text-link" href="http://www.mozilla.org/contribute/" data-l10n-name="helpus-getInvolvedLink"></label>
+-            <label is="text-link" href="https://www.mozilla.org/contribute/?utm_source=firefox-browser&#38;utm_medium=firefox-desktop&#38;utm_campaign=about-dialog" data-l10n-name="helpus-getInvolvedLink"></label>
 +            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-donateLink"></label>
 +            <label is="text-link" href="https://github.com/torvic9/plasmafox" data-l10n-name="helpus-getInvolvedLink"></label>
            </description>
@@ -331,7 +331,7 @@ index 71b7b788cd..439994e895 100644
      .search-wrapper .logo-and-wordmark .wordmark {
 -      background: url("chrome://branding/content/firefox-wordmark.svg") no-repeat center center;
 +      background: url("chrome://branding/content/plasmafox-wordmark.svg") no-repeat center center;
-       background-size: 172px;
+       background-size: 134px;
        -moz-context-properties: fill;
        display: inline-block;
        fill: var(--newtab-search-wordmark-color);

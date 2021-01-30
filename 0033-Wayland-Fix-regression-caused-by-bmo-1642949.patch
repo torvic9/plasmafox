@@ -1,0 +1,26 @@
+From e812e81d2ea5daced97d4d5011332658c3807e47 Mon Sep 17 00:00:00 2001
+From: Thomas Deutschmann <whissi@gentoo.org>
+Date: Fri, 22 Jan 2021 20:15:47 +0100
+Subject: [PATCH 33/35] Wayland: Fix regression caused by bmo#1642949
+
+Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
+---
+ widget/gtk/WindowSurfaceWayland.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/widget/gtk/WindowSurfaceWayland.cpp b/widget/gtk/WindowSurfaceWayland.cpp
+index af697f4a1a..8080f1371e 100644
+--- a/widget/gtk/WindowSurfaceWayland.cpp
++++ b/widget/gtk/WindowSurfaceWayland.cpp
+@@ -900,6 +900,8 @@ void WindowSurfaceWayland::CacheImageSurface(
+                     size.width, size.height));
+       }
+ #endif
++    } else {
++      mDelayedImageCommits.AppendElement(lastSurf);
+     }
+   }
+ 
+-- 
+2.30.0
+

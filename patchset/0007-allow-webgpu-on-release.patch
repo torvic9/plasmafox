@@ -1,8 +1,7 @@
-diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
-index c650b89ce2..7eba8b015a 100644
---- a/gfx/thebes/gfxPlatform.cpp
-+++ b/gfx/thebes/gfxPlatform.cpp
-@@ -2877,11 +2877,6 @@ void gfxPlatform::InitWebGLConfig() {
+--- a/gfx/thebes/gfxPlatform.cpp	2021-01-18 19:29:44.000000000 +0100
++++ b/gfx/thebes/gfxPlatform.cpp	2021-01-28 18:48:07.732544026 +0100
+@@ -2889,13 +2889,8 @@
+ 
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
    feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
@@ -11,9 +10,10 @@ index c650b89ce2..7eba8b015a 100644
 -                       "WebGPU can only be enabled in nightly",
 -                       "WEBGPU_DISABLE_NON_NIGHTLY"_ns);
 -#endif
- }
- 
- void gfxPlatform::InitOMTPConfig() {
+   if (!UseWebRender()) {
+     feature.ForceDisable(FeatureStatus::UnavailableNoWebRender,
+                          "WebGPU can't present without WebRender",
+                          "FEATURE_FAILURE_WEBGPU_NEED_WEBRENDER"_ns);
 diff --git a/widget/GfxDriverInfo.cpp b/widget/GfxDriverInfo.cpp
 index d6e16df049..466e248d9a 100644
 --- a/widget/GfxDriverInfo.cpp

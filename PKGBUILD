@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=84.0.2
+pkgver=85.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2368
 _patchrevsuse=c6bad4ac579cda0aa7d6ceedee15dcf3228b71ca
-_pfdate=20201223
+_pfdate=20210130
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -43,7 +43,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	add_missing_pgo_rule.patch
 	# arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
-	#0002-Bug-1667736-Update-packed_simd-to-compile-on-Rust-1..patch
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
@@ -52,7 +51,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Ubuntu
-	unity-menubar-r${_mbrev}.patch
+	# unity-menubar-r${_mbrev}.patch # produces build error, needs update
 	reduce-rust-debuginfo.patch
 	# System Libs
 	0004-bmo-847568-Support-system-harfbuzz.patch
@@ -61,6 +60,8 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# gentoo patches
 	0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
+	0031-bmo-1681107-Wayland-Fix-race-condition-of-calling-Co.patch
+	0033-Wayland-Fix-regression-caused-by-bmo-1642949.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -73,7 +74,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('92bfd518d4f9760c897388a8e06130b171c1c43524d8af181add9daac2be7b37'
+sha256sums=('5f03712642f5e77de4581d2ba3ee3e87cfa44c3d2fdd8fe0fb56ea05a57f7b50'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -82,17 +83,18 @@ sha256sums=('92bfd518d4f9760c897388a8e06130b171c1c43524d8af181add9daac2be7b37'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '11845c61ed6ed3a7d8d2389e1a340590fcbd95d882b02edaaea75f0dca971cbc'
+            '9fe55f3a822154eed17f6b3f21aef6cf80fdd7c7ad042f1791af9d80accde1ee'
             '6a958cc3349d047e825daf761eeb70a4902d33466d9f3b276d1e2d52f960ea97'
             '2934d72164f773febcb292fed3c4a4ef3147e6be12cac4b79d704fd648f2366d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
-            '6e5b64cef3fba8795c4a400ee59d8deda371f2bbb55f1fc33bc99671bd1f8df8'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
             'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
             '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
             'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
             '82129e30512477232556e939ee8ed64b999b0e095001d043b121c5e5d334692c'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
+            '9a58efba539e400ae9890eb3a98242bd9ce366715c9745852c5e9774db55999b'
+            'eb8a3786d17e7e031c21923d63110e74abc99ea59d83a5cd4bdad0ff60e7b3c2'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -136,7 +138,7 @@ prepare() {
 
   # add globalmenu support
   echo "---- Ubuntu patches"
-  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  # patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
   patch -Np1 -i ../reduce-rust-debuginfo.patch
 
   # add missing file Makefile for pgo builds
@@ -144,8 +146,11 @@ prepare() {
   patch -Np1 -i ../add_missing_pgo_rule.patch
 
   # gentoo patches
+  echo "---- Gentoo patches"
   patch -Np1 -i ../0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
+  patch -Np1 -i ../0031-bmo-1681107-Wayland-Fix-race-condition-of-calling-Co.patch
+  patch -Np1 -i ../0033-Wayland-Fix-regression-caused-by-bmo-1642949.patch
 
   # use more system libs
   echo "---- Patching for system libs"
