@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=85.0
+pkgver=85.0.1
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -34,7 +34,6 @@ options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
 source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$pkgver.source.tar.xz{,.asc}
-	#"hg+$_repo#tag=FIREFOX_${pkgver//./_}_RELEASE"
 	mozconfig
 	plasmafox.desktop
 	vendor.js
@@ -53,6 +52,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Ubuntu
 	# unity-menubar-r${_mbrev}.patch # produces build error, needs update
 	reduce-rust-debuginfo.patch
+	upstream-fix-startup-hang.patch
 	# System Libs
 	0004-bmo-847568-Support-system-harfbuzz.patch
 	0005-bmo-847568-Support-system-graphite2.patch
@@ -74,7 +74,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('5f03712642f5e77de4581d2ba3ee3e87cfa44c3d2fdd8fe0fb56ea05a57f7b50'
+sha256sums=('e98f586aa4d58e7418da41a2d19cd30030d072f86edd24a3fd6f769284287cee'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -88,6 +88,7 @@ sha256sums=('5f03712642f5e77de4581d2ba3ee3e87cfa44c3d2fdd8fe0fb56ea05a57f7b50'
             '2934d72164f773febcb292fed3c4a4ef3147e6be12cac4b79d704fd648f2366d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
+            'a2a654e6bb3396a5f7f68bd5a1f1065d9f9ac223f37c2d6de27ae07231fc1330'
             'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
             '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
             'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
@@ -140,6 +141,7 @@ prepare() {
   echo "---- Ubuntu patches"
   # patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
   patch -Np1 -i ../reduce-rust-debuginfo.patch
+  patch -Np1 -i ../upstream-fix-startup-hang.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
