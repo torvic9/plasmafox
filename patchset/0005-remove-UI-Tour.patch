@@ -129,9 +129,9 @@ index ba617de9d8..23f6ef0f12 100644
 --- a/browser/components/moz.build
 +++ b/browser/components/moz.build
 @@ -54,9 +54,8 @@ DIRS += [
+     "search",
      "sessionstore",
      "shell",
-     "ssb",
      "syncedtabs",
 -    "uitour",
      "urlbar",

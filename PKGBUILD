@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=85.0.1
+pkgver=86.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -17,7 +17,7 @@ depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse
 makedepends=('unzip' 'zip' 'diffutils' 'python-setuptools' 'python-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
 			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2'
-			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld' 'python-zstandard')
+			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld' 'python-zstandard' 'dump_syms')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
             'speech-dispatcher: Text-to-Speech'
@@ -27,9 +27,9 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
-_mbrev=2368
+_mbrev=2377
 _patchrevsuse=c6bad4ac579cda0aa7d6ceedee15dcf3228b71ca
-_pfdate=20210130
+_pfdate=20210225
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -52,7 +52,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Ubuntu
 	# unity-menubar-r${_mbrev}.patch # produces build error, needs update
 	reduce-rust-debuginfo.patch
-	upstream-fix-startup-hang.patch
 	# System Libs
 	0004-bmo-847568-Support-system-harfbuzz.patch
 	0005-bmo-847568-Support-system-graphite2.patch
@@ -60,8 +59,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# gentoo patches
 	0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-	0031-bmo-1681107-Wayland-Fix-race-condition-of-calling-Co.patch
-	0033-Wayland-Fix-regression-caused-by-bmo-1642949.patch
+	0032-bmo-1684365-Add-a-null-pointer-check-so-that-Firefox.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -74,7 +72,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('e98f586aa4d58e7418da41a2d19cd30030d072f86edd24a3fd6f769284287cee'
+sha256sums=('c3ac474a2cf6a8e31a962f57c7357dbe67b5088b6aceea9980f25ce7a99b58dd'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -83,19 +81,17 @@ sha256sums=('e98f586aa4d58e7418da41a2d19cd30030d072f86edd24a3fd6f769284287cee'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '9fe55f3a822154eed17f6b3f21aef6cf80fdd7c7ad042f1791af9d80accde1ee'
+            '3bf10f4e06742c1036f5c2ff78a0e08dc48e95143ad98cfc235a9de2ed809a29'
             '6a958cc3349d047e825daf761eeb70a4902d33466d9f3b276d1e2d52f960ea97'
             '2934d72164f773febcb292fed3c4a4ef3147e6be12cac4b79d704fd648f2366d'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
-            'a2a654e6bb3396a5f7f68bd5a1f1065d9f9ac223f37c2d6de27ae07231fc1330'
             'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
             '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
             'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
             '82129e30512477232556e939ee8ed64b999b0e095001d043b121c5e5d334692c'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
-            '9a58efba539e400ae9890eb3a98242bd9ce366715c9745852c5e9774db55999b'
-            'eb8a3786d17e7e031c21923d63110e74abc99ea59d83a5cd4bdad0ff60e7b3c2'
+            '2029ad58593aae0f05e8150ad998e78fbcf7f4338a8abc821302acc50825f726'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -141,7 +137,6 @@ prepare() {
   echo "---- Ubuntu patches"
   # patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
   patch -Np1 -i ../reduce-rust-debuginfo.patch
-  patch -Np1 -i ../upstream-fix-startup-hang.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
@@ -151,8 +146,7 @@ prepare() {
   echo "---- Gentoo patches"
   patch -Np1 -i ../0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-  patch -Np1 -i ../0031-bmo-1681107-Wayland-Fix-race-condition-of-calling-Co.patch
-  patch -Np1 -i ../0033-Wayland-Fix-regression-caused-by-bmo-1642949.patch
+  patch -Np1 -i ../0032-bmo-1684365-Add-a-null-pointer-check-so-that-Firefox.patch
 
   # use more system libs
   echo "---- Patching for system libs"
