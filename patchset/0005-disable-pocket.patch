@@ -1,0 +1,25 @@
+From e255dd794df9fcb3ee4c008cbce3787306cd4ded Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Thu, 25 Mar 2021 14:15:57 +0100
+Subject: [PATCH] disable pocket
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/components/moz.build | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/browser/components/moz.build b/browser/components/moz.build
+index 80aed84a5a..e37faf163e 100644
+--- a/browser/components/moz.build
++++ b/browser/components/moz.build
+@@ -42,7 +42,6 @@ DIRS += [
+     "originattributes",
+     "ion",
+     "places",
+-    "pocket",
+     "preferences",
+     "privatebrowsing",
+     "prompts",
+-- 
+2.31.0
+

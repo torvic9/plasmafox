@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=86.0.1
+pkgver=87.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2377
 _patchrevsuse=c6bad4ac579cda0aa7d6ceedee15dcf3228b71ca
-_pfdate=20210225
+_pfdate=20210325
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -45,12 +45,14 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Plasmafox patchset
 	plasmafox-${_pfdate}.patch
 	# Firefox patchset
-	firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
+	# firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
+	firefox-kde-plasmafox87.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
+	# mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
+	mozilla-kde-plasmafox87.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Ubuntu
-	# unity-menubar-r${_mbrev}.patch # produces build error, needs update
+	# unity-menubar-r${_mbrev}.patch # does not apply cleanly, needs fixing
 	reduce-rust-debuginfo.patch
 	# System Libs
 	0004-bmo-847568-Support-system-harfbuzz.patch
@@ -59,7 +61,6 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# gentoo patches
 	0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
 	0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-	0032-bmo-1684365-Add-a-null-pointer-check-so-that-Firefox.patch
 	# artwork
 	about-logo.png
 	about-logo@2x.png
@@ -72,18 +73,18 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('74f99c226ae6747f0170566f4f88be410866b0120214d2a593566cd1fff3d3df'
+sha256sums=('ce98be0522f971b6950f22c738c4b2caf19cf7f48ab2ae2e6d46694af7fd58ab'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
-            '84e7309bcbb984b10e3ca11f85af7eb41fee1681c3564f98ff4a5469a93604a4'
+            '97a9f81f791abce42880232140d1834d6c7cc166ca3cf16d49476657e20e23fa'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '3bf10f4e06742c1036f5c2ff78a0e08dc48e95143ad98cfc235a9de2ed809a29'
-            '6a958cc3349d047e825daf761eeb70a4902d33466d9f3b276d1e2d52f960ea97'
-            '2934d72164f773febcb292fed3c4a4ef3147e6be12cac4b79d704fd648f2366d'
+            '7eb130d1c17d37250b3739279d897a0ad03b8ad39990747c98300c63460d09ec'
+            '8b82bff954da2d8ce28021c22a209816102b03dae9f46489d5fd0cc07b9244f3'
+            'e724ccfe8a34b32e129dda78e007b6d50ca653f126e07ed79178dad2db040ab6'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
             'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
@@ -91,7 +92,6 @@ sha256sums=('74f99c226ae6747f0170566f4f88be410866b0120214d2a593566cd1fff3d3df'
             'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
             '82129e30512477232556e939ee8ed64b999b0e095001d043b121c5e5d334692c'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
-            '2029ad58593aae0f05e8150ad998e78fbcf7f4338a8abc821302acc50825f726'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
             '6f791b85debe8c12d542b2a9f1b6851aea7df28a2f52e762e09b5db8ec11a349'
             'a450b5aee59b15cba4a32e641d189d6d3641965b3916f769362701bbbdb6ba1a'
@@ -115,8 +115,8 @@ prepare() {
   #cd mozilla-unified
   cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
-  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-${_patchrevsuse}.patch
-  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-${_patchrevsuse}.patch
+  sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-plasmafox87.patch
+  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-plasmafox87.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -130,8 +130,8 @@ prepare() {
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
-  patch -Np1 -i ../mozilla-kde-${_patchrevsuse}.patch
-  patch -Np1 -i ../firefox-kde-${_patchrevsuse}.patch
+  patch -Np1 -i ../mozilla-kde-plasmafox87.patch
+  patch -Np1 -i ../firefox-kde-plasmafox87.patch
 
   # add globalmenu support
   echo "---- Ubuntu patches"
@@ -146,7 +146,6 @@ prepare() {
   echo "---- Gentoo patches"
   patch -Np1 -i ../0021-bmo-1516081-Disable-watchdog-during-PGO-builds.patch
   patch -Np1 -i ../0029-LTO-Only-enable-LTO-for-Rust-when-complete-build-use.patch
-  patch -Np1 -i ../0032-bmo-1684365-Add-a-null-pointer-check-so-that-Firefox.patch
 
   # use more system libs
   echo "---- Patching for system libs"
@@ -178,8 +177,8 @@ build() {
 
   ulimit -n 4096
 
-  export CC='clang --target=x86_64-unknown-linux-gnu'
-  export CXX='clang++ --target=x86_64-unknown-linux-gnu'
+  export CC='clang --target=x86_64-pc-linux-gnu'
+  export CXX='clang++ --target=x86_64-pc-linux-gnu'
   export AR=llvm-ar
   export NM=llvm-nm
   export OBJCOPY='/usr/bin/llvm-objcopy'

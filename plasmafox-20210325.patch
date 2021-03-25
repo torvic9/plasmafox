@@ -427,27 +427,23 @@ index 8653bcbb16..935af4065a 100644
  with only_when(target_is_linux & compile_environment):
      option(env="MOZ_NO_PIE_COMPAT", help="Enable non-PIE wrapper")
  
-From 34372306cfa209c82b02da3efcb529cd51b48bb9 Mon Sep 17 00:00:00 2001
+From de9f3e3de645f52928537e28678dd1f58b9c685c Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Sun, 6 Oct 2019 11:24:49 +0200
-Subject: [PATCH] remove UI Tour
+Date: Thu, 25 Mar 2021 14:13:11 +0100
+Subject: [PATCH] remove UI tour
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
- browser/base/content/browser.css       | 65 --------------------------
- browser/base/content/browser.js        |  1 -
- browser/base/content/utilityOverlay.js |  6 ---
- browser/components/moz.build           |  1 -
- 4 files changed, 73 deletions(-)
-
-[manual dirty adaptations above for >= 72.0]
+ browser/base/content/browser.css | 65 --------------------------------
+ browser/base/content/browser.js  |  1 -
+ browser/components/moz.build     |  1 -
+ 3 files changed, 67 deletions(-)
 
 diff --git a/browser/base/content/browser.css b/browser/base/content/browser.css
-index f5ffb29c93..db6e9acd3c 100644
+index 7b68594ef1..5998f0725f 100644
 --- a/browser/base/content/browser.css
 +++ b/browser/base/content/browser.css
-@@ -1280,73 +1280,8 @@ toolbarpaletteitem > toolbaritem {
- :root[customizing=true] .panel-banner-item {
+@@ -1263,71 +1263,6 @@ toolbarpaletteitem > toolbaritem {
    display: none;
  }
  
@@ -519,13 +515,11 @@ index f5ffb29c93..db6e9acd3c 100644
  /* Combined context-menu items */
  #context-navigation > .menuitem-iconic > .menu-iconic-text,
  #context-navigation > .menuitem-iconic > .menu-accel-container {
-   display: none;
 diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
-index 160f569d1e..78acefd31f 100644
+index 27d8911d61..9598a13849 100644
 --- a/browser/base/content/browser.js
 +++ b/browser/base/content/browser.js
-@@ -76,9 +76,8 @@
-   TabModalPrompt: "chrome://global/content/tabprompts.jsm",
+@@ -80,7 +80,6 @@ XPCOMUtils.defineLazyModuleGetters(this, {
    TabCrashHandler: "resource:///modules/ContentCrashHandlers.jsm",
    TelemetryEnvironment: "resource://gre/modules/TelemetryEnvironment.jsm",
    Translation: "resource:///modules/translation/TranslationParent.jsm",
@@ -533,32 +527,11 @@ index 160f569d1e..78acefd31f 100644
    UpdateUtils: "resource://gre/modules/UpdateUtils.jsm",
    UrlbarInput: "resource:///modules/UrlbarInput.jsm",
    UrlbarPrefs: "resource:///modules/UrlbarPrefs.jsm",
-   UrlbarProviderSearchTips: "resource:///modules/UrlbarProviderSearchTips.jsm",
-diff --git a/browser/base/content/utilityOverlay.js b/browser/base/content/utilityOverlay.js
-index 7180d0829b..a6931738bb 100644
---- a/browser/base/content/utilityOverlay.js
-+++ b/browser/base/content/utilityOverlay.js
-@@ -1087,14 +1087,8 @@ function openFeedbackPage() {
-   var url = Services.urlFormatter.formatURLPref("app.feedback.baseURL");
-   openTrustedLinkIn(url, "tab");
- }
- 
--function openTourPage() {
--  let scope = {};
--  ChromeUtils.import("resource:///modules/UITour.jsm", scope);
--  openTrustedLinkIn(scope.UITour.url, "tab");
--}
--
- function buildHelpMenu() {
-   document.getElementById(
-     "feedbackPage"
-   ).disabled = !Services.policies.isAllowed("feedbackCommands");
 diff --git a/browser/components/moz.build b/browser/components/moz.build
-index ba617de9d8..23f6ef0f12 100644
+index d16b27b1ea..80aed84a5a 100644
 --- a/browser/components/moz.build
 +++ b/browser/components/moz.build
-@@ -54,9 +54,8 @@ DIRS += [
-     "search",
+@@ -53,7 +53,6 @@ DIRS += [
      "sessionstore",
      "shell",
      "syncedtabs",
@@ -566,7 +539,34 @@ index ba617de9d8..23f6ef0f12 100644
      "urlbar",
      "translation",
  ]
- 
+-- 
+2.31.0
+
+From e255dd794df9fcb3ee4c008cbce3787306cd4ded Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Thu, 25 Mar 2021 14:15:57 +0100
+Subject: [PATCH] disable pocket
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ browser/components/moz.build | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/browser/components/moz.build b/browser/components/moz.build
+index 80aed84a5a..e37faf163e 100644
+--- a/browser/components/moz.build
++++ b/browser/components/moz.build
+@@ -42,7 +42,6 @@ DIRS += [
+     "originattributes",
+     "ion",
+     "places",
+-    "pocket",
+     "preferences",
+     "privatebrowsing",
+     "prompts",
+-- 
+2.31.0
+
 From 2d228c5075fa0292bb99866cf85ba78a06619bf3 Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Thu, 5 Dec 2019 20:57:46 +0100
@@ -597,10 +597,23 @@ index 284c60f4ad..bde9a1fdda 100644
 -- 
 2.24.0
 
---- a/gfx/thebes/gfxPlatform.cpp	2021-01-18 19:29:44.000000000 +0100
-+++ b/gfx/thebes/gfxPlatform.cpp	2021-01-28 18:48:07.732544026 +0100
-@@ -2889,13 +2889,8 @@
- 
+From 1bbdc889055bc82bf79112d6034fbdc86e74f05c Mon Sep 17 00:00:00 2001
+From: torvic9 <torvic9@mailbox.org>
+Date: Thu, 25 Mar 2021 14:29:27 +0100
+Subject: [PATCH] enable webrender on release and add sway wm
+
+Signed-off-by: torvic9 <torvic9@mailbox.org>
+---
+ gfx/thebes/gfxPlatform.cpp |  5 -----
+ widget/GfxDriverInfo.cpp   |  3 +++
+ widget/GfxInfoX11.cpp      | 12 +++++++-----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
+index 35ca1fbbaa..c1ef786558 100644
+--- a/gfx/thebes/gfxPlatform.cpp
++++ b/gfx/thebes/gfxPlatform.cpp
+@@ -2835,11 +2835,6 @@ void gfxPlatform::InitWebGLConfig() {
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
    feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
@@ -612,12 +625,11 @@ index 284c60f4ad..bde9a1fdda 100644
    if (!UseWebRender()) {
      feature.ForceDisable(FeatureStatus::UnavailableNoWebRender,
                           "WebGPU can't present without WebRender",
-                          "FEATURE_FAILURE_WEBGPU_NEED_WEBRENDER"_ns);
 diff --git a/widget/GfxDriverInfo.cpp b/widget/GfxDriverInfo.cpp
-index d6e16df049..466e248d9a 100644
+index e13326afd4..eb2c09a870 100644
 --- a/widget/GfxDriverInfo.cpp
 +++ b/widget/GfxDriverInfo.cpp
-@@ -751,6 +751,8 @@ const GfxDeviceFamily* GfxDriverInfo::GetDeviceFamily(DeviceFamily id) {
+@@ -764,6 +764,8 @@ const GfxDeviceFamily* GfxDriverInfo::GetDeviceFamily(DeviceFamily id) {
        APPEND_DEVICE(0x15d8);
        // Renoir
        APPEND_DEVICE(0x1636);
@@ -626,42 +638,64 @@ index d6e16df049..466e248d9a 100644
  
        // Evergreen
        APPEND_RANGE(0x6840, 0x684b);
+@@ -834,6 +836,7 @@ const nsAString& GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment id) {
+     DECLARE_DESKTOP_ENVIRONMENT_ID(LXDE, "lxde");
+     DECLARE_DESKTOP_ENVIRONMENT_ID(Openbox, "openbox");
+     DECLARE_DESKTOP_ENVIRONMENT_ID(i3, "i3");
++    DECLARE_DESKTOP_ENVIRONMENT_ID(sway, "sway");
+     DECLARE_DESKTOP_ENVIRONMENT_ID(Mate, "mate");
+     DECLARE_DESKTOP_ENVIRONMENT_ID(Unity, "unity");
+     DECLARE_DESKTOP_ENVIRONMENT_ID(Pantheon, "pantheon");
 diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
-index 8e33da8316..c89bca0e1f 100644
+index c0c8bd40c3..15b55fd12d 100644
 --- a/widget/GfxInfoX11.cpp
 +++ b/widget/GfxInfoX11.cpp
-@@ -581,14 +581,13 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
-         V(18, 0, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_ATI_MESA", "Mesa 18.0.0.0");
- #endif
+@@ -535,6 +535,10 @@ void GfxInfo::GetData() {
+       CopyUTF16toUTF8(
+           GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment::i3),
+           mDesktopEnvironment);
++    } else if (currentDesktop.find("sway") != std::string::npos) {
++      CopyUTF16toUTF8(
++          GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment::sway),
++          mDesktopEnvironment);
+     } else if (currentDesktop.find("mate") != std::string::npos) {
+       CopyUTF16toUTF8(
+           GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment::Mate),
+@@ -754,14 +758,13 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         DRIVER_GREATER_THAN_OR_EQUAL, V(17, 0, 0, 0),
+         "FEATURE_ROLLOUT_ATI_GNOME_WAYLAND_MESA", "Mesa 17.0.0.0");
  
--#ifdef NIGHTLY_BUILD
+-#ifdef EARLY_BETA_OR_EARLIER
      // Intel Mesa baseline, chosen arbitrarily.
      APPEND_TO_DRIVER_BLOCKLIST_EXT(
          OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
          DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
          DeviceFamily::IntelRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
-         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
--        V(18, 0, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_INTEL_MESA", "Mesa 18.0.0.0");
-+        V(18, 0, 0, 0), "FEATURE_ROLLOUT_INTEL_MESA", "Mesa 18.0.0.0");
+         nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
+-        V(17, 0, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_INTEL_MESA",
++        V(17, 0, 0, 0), "FEATURE_ROLLOUT_INTEL_MESA",
+         "Mesa 17.0.0.0");
  
      // Nvidia Mesa baseline, see bug 1563859.
-     APPEND_TO_DRIVER_BLOCKLIST_EXT(
-@@ -596,7 +595,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+@@ -770,7 +773,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
          DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
          DeviceFamily::NvidiaRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
          nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
--        V(18, 2, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_NVIDIA_MESA", "Mesa 18.2.0.0");
-+        V(18, 2, 0, 0), "FEATURE_ROLLOUT_NVIDIA_MESA", "Mesa 18.2.0.0");
+-        V(18, 2, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_NVIDIA_MESA",
++        V(18, 2, 0, 0), "FEATURE_ROLLOUT_NVIDIA_MESA",
+         "Mesa 18.2.0.0");
  
-     // ATI Mesa baseline, chosen arbitrarily.
-     APPEND_TO_DRIVER_BLOCKLIST_EXT(
-@@ -604,8 +603,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+     // Nvidia proprietary driver baseline, see bug 1673752.
+@@ -787,8 +790,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
          DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
          DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
-         nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
--        V(18, 0, 0, 0), "FEATURE_ROLLOUT_NIGHTLY_ATI_MESA", "Mesa 18.0.0.0");
+         nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
+-        V(17, 0, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_ATI_MESA", "Mesa 17.0.0.0");
 -#endif
-+        V(18, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 18.0.0.0");
++        V(17, 0, 0, 0), "FEATURE_ROLLOUT_ATI_MESA", "Mesa 17.0.0.0");
  
      ////////////////////////////////////
- 
+     // FEATURE_WEBRENDER_SOFTWARE - ALLOWLIST
+-- 
+2.31.0
+
