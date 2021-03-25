@@ -600,7 +600,7 @@ index 284c60f4ad..bde9a1fdda 100644
 From 1bbdc889055bc82bf79112d6034fbdc86e74f05c Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
 Date: Thu, 25 Mar 2021 14:29:27 +0100
-Subject: [PATCH] enable webrender on release and add sway wm
+Subject: [PATCH] enable webrender on release
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
@@ -638,29 +638,10 @@ index e13326afd4..eb2c09a870 100644
  
        // Evergreen
        APPEND_RANGE(0x6840, 0x684b);
-@@ -834,6 +836,7 @@ const nsAString& GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment id) {
-     DECLARE_DESKTOP_ENVIRONMENT_ID(LXDE, "lxde");
-     DECLARE_DESKTOP_ENVIRONMENT_ID(Openbox, "openbox");
-     DECLARE_DESKTOP_ENVIRONMENT_ID(i3, "i3");
-+    DECLARE_DESKTOP_ENVIRONMENT_ID(sway, "sway");
-     DECLARE_DESKTOP_ENVIRONMENT_ID(Mate, "mate");
-     DECLARE_DESKTOP_ENVIRONMENT_ID(Unity, "unity");
-     DECLARE_DESKTOP_ENVIRONMENT_ID(Pantheon, "pantheon");
 diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
 index c0c8bd40c3..15b55fd12d 100644
 --- a/widget/GfxInfoX11.cpp
 +++ b/widget/GfxInfoX11.cpp
-@@ -535,6 +535,10 @@ void GfxInfo::GetData() {
-       CopyUTF16toUTF8(
-           GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment::i3),
-           mDesktopEnvironment);
-+    } else if (currentDesktop.find("sway") != std::string::npos) {
-+      CopyUTF16toUTF8(
-+          GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment::sway),
-+          mDesktopEnvironment);
-     } else if (currentDesktop.find("mate") != std::string::npos) {
-       CopyUTF16toUTF8(
-           GfxDriverInfo::GetDesktopEnvironment(DesktopEnvironment::Mate),
 @@ -754,14 +758,13 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
          DRIVER_GREATER_THAN_OR_EQUAL, V(17, 0, 0, 0),
          "FEATURE_ROLLOUT_ATI_GNOME_WAYLAND_MESA", "Mesa 17.0.0.0");
