@@ -1,7 +1,7 @@
-From a4769c78a47b794b4b20bba7f6786db7590a0982 Mon Sep 17 00:00:00 2001
+From e1584f433b876c7d8fe7375ab7a7ea2af76d07bb Mon Sep 17 00:00:00 2001
 From: Thomas Deutschmann <whissi@gentoo.org>
 Date: Mon, 6 Apr 2020 19:34:44 +0200
-Subject: [PATCH 05/35] bmo#847568: Support system graphite2
+Subject: [PATCH 05/34] bmo#847568: Support system graphite2
 
 Allow building against system-wide graphite2.
 
@@ -118,10 +118,10 @@ index c9cb3d592a..2e822f0134 100644
      "thebes",
      "ipc",
 diff --git a/gfx/thebes/moz.build b/gfx/thebes/moz.build
-index 4263a13600..6ef986ae17 100644
+index fb2ad5bf34..c6ce6f8417 100644
 --- a/gfx/thebes/moz.build
 +++ b/gfx/thebes/moz.build
-@@ -287,7 +287,10 @@ if CONFIG["MOZ_WAYLAND"]:
+@@ -288,7 +288,10 @@ if CONFIG["MOZ_WAYLAND"]:
  
  LOCAL_INCLUDES += CONFIG["SKIA_INCLUDES"]
  
@@ -134,10 +134,10 @@ index 4263a13600..6ef986ae17 100644
  if CONFIG["MOZ_SYSTEM_HARFBUZZ"]:
      CXXFLAGS += CONFIG["MOZ_HARFBUZZ_CFLAGS"]
 diff --git a/old-configure.in b/old-configure.in
-index 7e1233da76..71a6d86cfb 100644
+index 4ddc3f5b45..de727a48bd 100644
 --- a/old-configure.in
 +++ b/old-configure.in
-@@ -2290,6 +2290,27 @@ if test "$USE_FC_FREETYPE"; then
+@@ -2283,6 +2283,27 @@ if test "$USE_FC_FREETYPE"; then
      fi
  fi
  
@@ -166,10 +166,10 @@ index 7e1233da76..71a6d86cfb 100644
  dnl Check if we need the 32-bit Linux SSE2 error dialog
  dnl ========================================================
 diff --git a/toolkit/library/moz.build b/toolkit/library/moz.build
-index 32b6a603cf..1e5e921f8b 100644
+index 3f393f3316..df178bc6cf 100644
 --- a/toolkit/library/moz.build
 +++ b/toolkit/library/moz.build
-@@ -238,6 +238,9 @@ if CONFIG["MOZ_ANDROID_GOOGLE_VR"]:
+@@ -241,6 +241,9 @@ if CONFIG["MOZ_ANDROID_GOOGLE_VR"]:
  OS_LIBS += CONFIG["MOZ_CAIRO_OSLIBS"]
  OS_LIBS += CONFIG["MOZ_WEBRTC_X11_LIBS"]
  
@@ -180,7 +180,7 @@ index 32b6a603cf..1e5e921f8b 100644
      OS_LIBS += CONFIG["MOZ_HARFBUZZ_LIBS"]
  
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
-index df002a54c2..9d58c76925 100644
+index 169c3d7c79..31ab9c7add 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
 @@ -475,6 +475,19 @@ add_old_configure_assignment(
@@ -204,5 +204,5 @@ index df002a54c2..9d58c76925 100644
  # ==============================================================
  option('--with-system-harfbuzz', help="Use system harfbuzz (located with pkgconfig)")
 -- 
-2.29.2
+2.31.1
 

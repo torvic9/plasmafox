@@ -1,7 +1,7 @@
-From d76558ad9ccfb3c49f018bfbcc27ac36469cb40d Mon Sep 17 00:00:00 2001
+From 5abc4e0e050beb42c18f102803388d07d7c577f2 Mon Sep 17 00:00:00 2001
 From: Thomas Deutschmann <whissi@gentoo.org>
 Date: Mon, 6 Apr 2020 19:36:02 +0200
-Subject: [PATCH 06/35] bmo#1559213: Support system av1
+Subject: [PATCH 06/34] bmo#1559213: Support system av1
 
 Allow building against system-wide av1.
 
@@ -11,8 +11,8 @@ Signed-off-by: Thomas Deutschmann <whissi@gentoo.org>
  config/external/moz.build      |  5 +++--
  config/system-headers.mozbuild |  8 ++++++++
  dom/media/platforms/moz.build  |  5 +++++
- toolkit/moz.configure          | 17 ++++++++++++++++-
- 4 files changed, 32 insertions(+), 3 deletions(-)
+ toolkit/moz.configure          | 20 ++++++++++++++++++--
+ 4 files changed, 34 insertions(+), 4 deletions(-)
 
 diff --git a/config/external/moz.build b/config/external/moz.build
 index 4e9888f365..bf1e255107 100644
@@ -66,16 +66,16 @@ index 16ca8a9cbc..b349dcbe6d 100644
  if CONFIG["MOZ_OMX"]:
      EXPORTS += [
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
-index 9d58c76925..5e74e1f3f4 100644
+index 31ab9c7add..9eb0a51d2d 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
-@@ -559,8 +559,22 @@ def av1(value):
+@@ -559,14 +559,29 @@ def av1(value):
      if value:
          return True
  
 +option("--with-system-av1", help="Use system av1 (located with pkg-config)")
  
--@depends(target, nasm_version, when=av1 & compile_environment)
+-@depends(target, when=av1 & compile_environment)
 +system_libaom_info = pkg_check_modules('MOZ_SYSTEM_LIBAOM', 'aom >= 1.0.0',
 +                                       when='--with-system-av1')
 +
@@ -89,11 +89,19 @@ index 9d58c76925..5e74e1f3f4 100644
 +        has_av1_libs = True
 +    return has_av1_libs
 +
-+@depends(target, nasm_version, when=av1 & depends(system_av1)(lambda v: not v) & compile_environment)
- def dav1d_asm(target, nasm_version):
-     if target.cpu == "aarch64":
++
++@depends(target, when=av1 & depends(system_av1)(lambda v: not v) & compile_environment)
+ def dav1d_asm(target):
+     if target.cpu in ("aarch64", "x86", "x86_64"):
          return True
-@@ -577,6 +591,7 @@ set_config("MOZ_DAV1D_ASM", dav1d_asm)
+ 
+ 
+-@depends(target, when=av1 & compile_environment)
++@depends(target, when=av1 & depends(system_av1)(lambda v: not v) & compile_environment)
+ def dav1d_nasm(target):
+     if target.cpu in ("x86", "x86_64"):
+         return namespace(version="2.14", what="AV1")
+@@ -576,6 +591,7 @@ set_config("MOZ_DAV1D_ASM", dav1d_asm)
  set_define("MOZ_DAV1D_ASM", dav1d_asm)
  set_config("MOZ_AV1", av1)
  set_define("MOZ_AV1", av1)
@@ -102,5 +110,5 @@ index 9d58c76925..5e74e1f3f4 100644
  # Built-in fragmented MP4 support.
  # ==============================================================
 -- 
-2.29.2
+2.31.1
 

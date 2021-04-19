@@ -1,20 +1,19 @@
-From 1bbdc889055bc82bf79112d6034fbdc86e74f05c Mon Sep 17 00:00:00 2001
+From c36fa90b182c079a9d92a976f761629c82bbc76d Mon Sep 17 00:00:00 2001
 From: torvic9 <torvic9@mailbox.org>
-Date: Thu, 25 Mar 2021 14:29:27 +0100
-Subject: [PATCH] enable webrender on release
+Date: Mon, 19 Apr 2021 18:45:43 +0200
+Subject: [PATCH] enable webrender
 
 Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
  gfx/thebes/gfxPlatform.cpp |  5 -----
- widget/GfxDriverInfo.cpp   |  2 ++
- widget/GfxInfoX11.cpp      | 12 +++++++-----
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ widget/GfxInfoX11.cpp      | 12 +++---------
+ 2 files changed, 3 insertions(+), 14 deletions(-)
 
 diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
-index 35ca1fbbaa..c1ef786558 100644
+index 2492b73c25..b701f56e30 100644
 --- a/gfx/thebes/gfxPlatform.cpp
 +++ b/gfx/thebes/gfxPlatform.cpp
-@@ -2835,11 +2835,6 @@ void gfxPlatform::InitWebGLConfig() {
+@@ -2823,11 +2823,6 @@ void gfxPlatform::InitWebGLConfig() {
  void gfxPlatform::InitWebGPUConfig() {
    FeatureState& feature = gfxConfig::GetFeature(Feature::WEBGPU);
    feature.SetDefaultFromPref("dom.webgpu.enabled", true, false);
@@ -26,26 +25,13 @@ index 35ca1fbbaa..c1ef786558 100644
    if (!UseWebRender()) {
      feature.ForceDisable(FeatureStatus::UnavailableNoWebRender,
                           "WebGPU can't present without WebRender",
-diff --git a/widget/GfxDriverInfo.cpp b/widget/GfxDriverInfo.cpp
-index e13326afd4..eb2c09a870 100644
---- a/widget/GfxDriverInfo.cpp
-+++ b/widget/GfxDriverInfo.cpp
-@@ -764,6 +764,8 @@ const GfxDeviceFamily* GfxDriverInfo::GetDeviceFamily(DeviceFamily id) {
-       APPEND_DEVICE(0x15d8);
-       // Renoir
-       APPEND_DEVICE(0x1636);
-+      // Navi10
-+      APPEND_DEVICE(0x731f);
- 
-       // Evergreen
-       APPEND_RANGE(0x6840, 0x684b);
 diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
-index c0c8bd40c3..15b55fd12d 100644
+index fa4b1b4d0b..78b9a756f9 100644
 --- a/widget/GfxInfoX11.cpp
 +++ b/widget/GfxInfoX11.cpp
-@@ -754,14 +758,13 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
-         DRIVER_GREATER_THAN_OR_EQUAL, V(17, 0, 0, 0),
-         "FEATURE_ROLLOUT_ATI_GNOME_WAYLAND_MESA", "Mesa 17.0.0.0");
+@@ -770,14 +770,13 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+         nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
+         V(17, 0, 0, 0), "FEATURE_ROLLOUT_ATI_XFCE_MESA", "Mesa 17.0.0.0");
  
 -#ifdef EARLY_BETA_OR_EARLIER
      // Intel Mesa baseline, chosen arbitrarily.
@@ -59,7 +45,7 @@ index c0c8bd40c3..15b55fd12d 100644
          "Mesa 17.0.0.0");
  
      // Nvidia Mesa baseline, see bug 1563859.
-@@ -770,7 +773,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+@@ -786,7 +785,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
          DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
          DeviceFamily::NvidiaRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
          nsIGfxInfo::FEATURE_ALLOW_QUALIFIED, DRIVER_GREATER_THAN_OR_EQUAL,
@@ -68,7 +54,7 @@ index c0c8bd40c3..15b55fd12d 100644
          "Mesa 18.2.0.0");
  
      // Nvidia proprietary driver baseline, see bug 1673752.
-@@ -787,8 +790,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+@@ -803,12 +802,10 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
          DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
          DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
          nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
@@ -78,6 +64,28 @@ index c0c8bd40c3..15b55fd12d 100644
  
      ////////////////////////////////////
      // FEATURE_WEBRENDER_SOFTWARE - ALLOWLIST
+-#ifdef EARLY_BETA_OR_EARLIER
+ #  if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || \
+       defined(__i386) || defined(__amd64__)
+     APPEND_TO_DRIVER_BLOCKLIST(OperatingSystem::Linux, DeviceFamily::All,
+@@ -817,9 +814,7 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+                                DRIVER_COMPARISON_IGNORED, V(0, 0, 0, 0),
+                                "FEATURE_ROLLOUT_EARLY_BETA_SOFTWARE_WR", "");
+ #  endif
+-#endif
+ 
+-#if defined(_M_X64) || defined(__amd64__)
+     // Initial Linux release population for SW-WR.
+     if (mozilla::supports_avx2()) {
+       APPEND_TO_DRIVER_BLOCKLIST_EXT(
+@@ -838,7 +833,6 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
+           nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_COMPARISON_IGNORED,
+           V(0, 0, 0, 0), "FEATURE_ROLLOUT_LLVMPIPE_RELEASE_SOFTWARE_WR", "");
+     }
+-#endif
+ 
+     ////////////////////////////////////
+     // FEATURE_X11_EGL
 -- 
-2.31.0
+2.31.1
 

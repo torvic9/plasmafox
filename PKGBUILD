@@ -3,8 +3,8 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=87.0
-pkgrel=2
+pkgver=88.0
+pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2377
 _patchrevsuse=3fdf082cf93d94e4289e552cbd9988601044576a
-_pfdate=20210325
+_pfdate=20210419
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -47,7 +47,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	# Firefox patchset
 	firefox-kde-$_patchrevsuse.patch::$_patchurl/firefox/firefox-kde.patch
 	# Gecko/toolkit patchset
-	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
+	mozilla-kde-plasmafox88.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Ubuntu
 	# unity-menubar-r${_mbrev}.patch # does not apply cleanly, needs fixing
@@ -71,7 +71,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('ce98be0522f971b6950f22c738c4b2caf19cf7f48ab2ae2e6d46694af7fd58ab'
+sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
             'SKIP'
             '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -80,14 +80,14 @@ sha256sums=('ce98be0522f971b6950f22c738c4b2caf19cf7f48ab2ae2e6d46694af7fd58ab'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '8a1d5338152778ae3f23be421beb99643081ab58880231f299879d1bb729894f'
+            '87ce0de9091d14e4d554d962841899a0f65193d750e6730c36caa470ea4a4cfc'
             '0ae5bce3da13b7f58e37be6d7115bef323256d776195279592f4371179497f8a'
-            '86f0c0cede1aacdd5c9628e58266ab431b8b9890bac0f96a710a20c73c7ef25a'
+            '9398b1e00e843776baa6396e1a5ffd3852439efe73e76f80acefb23a617dc3ac'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
-            'f954b7b5450cf7538f896cab53c09fe2fc1c079f7f87f99e4d3eda8dae08d14e'
-            '22af1bdb2ca9b69ca3265aaa7b4b65db0aeb53c15a9db7e78b4bb3ba10d163b0'
-            'f285331005a5778e3d30220c71e5823f6e7834c7f5f004020d542e2cf553b500'
+            '5a17d266664559e0ba864f8e5b25a1b9cf2c80bc1c54213d758f935e28a99222'
+            '2614024f88f26b0effc4dd69501b1e6b7b76ddf4e3826cb542b370df0734c8c7'
+            '78d4023fe0bf32b3cf8534cd8c2dc0cbf3abd7cf86996cea96491f93e93fd9a3'
             '82129e30512477232556e939ee8ed64b999b0e095001d043b121c5e5d334692c'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
@@ -114,7 +114,7 @@ prepare() {
   cd firefox-${pkgver}
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrevsuse.patch
-  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-$_patchrevsuse.patch
+  sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-plasmafox88.patch
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -128,7 +128,7 @@ prepare() {
   # KDE patches (W. Rosenauer)
   echo "---- Patching for KDE"
   patch -Np1 -i ../mozilla-nongnome-proxies-$_patchrevsuse.patch
-  patch -Np1 -i ../mozilla-kde-$_patchrevsuse.patch
+  patch -Np1 -i ../mozilla-kde-plasmafox88.patch
   patch -Np1 -i ../firefox-kde-$_patchrevsuse.patch
 
   # add globalmenu support
