@@ -74,7 +74,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
             'SKIP'
-            '4f7209df6545f30be2a8d33ae6a3bf8bd3ea3991601a6f930211fc93826b3e3e'
+            '306610d3cfb8cef3c618e8d37074df3f930ca8df362132893f764802ac4493e8'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '97a9f81f791abce42880232140d1834d6c7cc166ca3cf16d49476657e20e23fa'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
