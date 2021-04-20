@@ -4,7 +4,7 @@
 pkgname=plasmafox
 _pkgname=firefox
 pkgver=88.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
 license=('MPL' 'GPL' 'LGPL')
@@ -50,7 +50,8 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	mozilla-kde-plasmafox88.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Ubuntu
-	# unity-menubar-r${_mbrev}.patch # does not apply cleanly, needs fixing
+	unity-menubar-r${_mbrev}.patch
+	fix-hidden-buttons-with-csd-menubar.patch
 	reduce-rust-debuginfo.patch
 	# System Libs
 	0004-bmo-847568-Support-system-harfbuzz.patch
@@ -73,7 +74,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 install=plasmafox.install
 sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
             'SKIP'
-            '504ad23221d2ec6bce1af80ed30fd5c2b3408b11b96e6acac0df7e8df7481820'
+            '4f7209df6545f30be2a8d33ae6a3bf8bd3ea3991601a6f930211fc93826b3e3e'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
             '97a9f81f791abce42880232140d1834d6c7cc166ca3cf16d49476657e20e23fa'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
@@ -84,6 +85,8 @@ sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
             '0ae5bce3da13b7f58e37be6d7115bef323256d776195279592f4371179497f8a'
             '9398b1e00e843776baa6396e1a5ffd3852439efe73e76f80acefb23a617dc3ac'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
+            'a7bea51734840c89b55b575fafd22d097382f1273a711f9865b1e851390d9511'
+            '482935782429b30f5e1581347a9a798705068c40f20bf4eee9304a254fd81bc8'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
             '5a17d266664559e0ba864f8e5b25a1b9cf2c80bc1c54213d758f935e28a99222'
             '2614024f88f26b0effc4dd69501b1e6b7b76ddf4e3826cb542b370df0734c8c7'
@@ -133,7 +136,8 @@ prepare() {
 
   # add globalmenu support
   echo "---- Ubuntu patches"
-  # patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  patch -Np1 -i ../fix-hidden-buttons-with-csd-menubar.patch
   patch -Np1 -i ../reduce-rust-debuginfo.patch
 
   # add missing file Makefile for pgo builds
@@ -170,6 +174,7 @@ build() {
   cd firefox-${pkgver}
   export MOZ_NOSPAM=1
   export MOZBUILD_STATE_PATH="$srcdir/mozbuild"
+  export MOZ_ENABLE_FULL_SYMBOLS=1
   export STRIP=/bin/true
   export MACH_USE_SYSTEM_PYTHON=1
 
