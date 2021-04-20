@@ -27,9 +27,9 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
 provides=("plasmafox=${pkgver}")
 #conflicts=('plasmafox-esr')
 #_patchrev=4fd43e0d4a8f
-_mbrev=2377
+_mbrev=2389
 _patchrevsuse=3fdf082cf93d94e4289e552cbd9988601044576a
-_pfdate=20210419
+_pfdate=20210420
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -80,7 +80,7 @@ sha256sums=('6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '87ce0de9091d14e4d554d962841899a0f65193d750e6730c36caa470ea4a4cfc'
+            '9856f93283ea018442107eac4cddfc1064af26d020a5b9a7616180e7cf6ff84c'
             '0ae5bce3da13b7f58e37be6d7115bef323256d776195279592f4371179497f8a'
             '9398b1e00e843776baa6396e1a5ffd3852439efe73e76f80acefb23a617dc3ac'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
