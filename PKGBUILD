@@ -16,7 +16,7 @@ depends=(gtk3 libxt mime-types dbus-glib ffmpeg nss ttf-font libpulse
 
 makedepends=('unzip' 'zip' 'diffutils' 'python-setuptools' 'python-psutil'
 			 'python' 'yasm' 'mesa' 'imake' 'xorg-server-xvfb' 'libpulse'
-			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2'
+			 'inetutils' 'autoconf2.13' 'rust' 'cargo' 'llvm' 'clang' 'gtk2' 'libevent'
 			 'nodejs' 'cbindgen' 'nasm' 'zlib' 'lld' 'python-zstandard' 'dump_syms')
 
 optdepends=('networkmanager: Location detection via available WiFi networks'
