@@ -29,4 +29,6 @@ ____
 - The binaries are built in a systemd EndeavourOS/Arch container.
 - Neither profile-sync-daemon nor firejail are enabled by default. Symlink the files from `/usr/lib/plasmafox/distribution` to the respective directories as described in the post-install notice.
 - Global menu on KDE seems to require `libdbusmenu-{qt5,gtk3}` and/or `appmenu-gtk-module` packages
-- You should check the signature of the binary by importing the current [public key](https://github.com/torvic9/plasmafox/blob/master/torvic9-pubkey-2020.key).
+- You should check the signature of the binary by importing the current [public key](https://github.com/torvic9/plasmafox/blob/master/torvic9-pubkey-2021.key).
+- kplasmafoxhelper is now in AUR
+
