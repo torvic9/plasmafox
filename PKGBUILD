@@ -40,6 +40,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	kde.js
 	pgo-fix-missing-kdejs.patch
 	add_missing_pgo_rule.patch
+	#use-mcpu-native-with-lto-pgo.patch
 	# arch patches
 	0001-Use-remoting-name-for-GDK-application-names.patch
 	# Plasmafox patchset
@@ -50,7 +51,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	mozilla-kde-$_patchrevsuse.patch::$_patchurl/mozilla-kde.patch
 	mozilla-nongnome-proxies-$_patchrevsuse.patch::$_patchurl/mozilla-nongnome-proxies.patch
 	# Ubuntu
-	unity-menubar-r${_mbrev}.patch
+	#unity-menubar-r${_mbrev}.patch
 	fix-hidden-buttons-with-csd-menubar.patch
 	reduce-rust-debuginfo.patch
 	# System Libs
@@ -80,12 +81,12 @@ sha256sums=('db43d7d5796455051a5b847f6daa3423393803c9288c8b6d7f1186f5e2e0a90a'
             'b8cc5f35ec35fc96ac5c5a2477b36722e373dbb57eba87eb5ad1276e4df7236d'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
+            'c585ba84b476605fffe4b1aa188f9744afe37c528b39ecd5cbea37681e86eeba'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
             '32f1ca9b4f462a512b350ca868bb562efc5e424206c00eea909514992fcd5e23'
             '0ae5bce3da13b7f58e37be6d7115bef323256d776195279592f4371179497f8a'
             '9843662fd9b766801a70bdef22bb996a1abd9d7c3781f1fb58b7034e575350a1'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
-            '841f4f2c330e7d8caa3f4caa5e502788da2c4fed990d4da7a3dc35402fa16e82'
             '482935782429b30f5e1581347a9a798705068c40f20bf4eee9304a254fd81bc8'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
             '9feeea614ffe0bc9493ab2c3adc68aa547b2ee99f59ad15376356476b93571b8'
@@ -118,7 +119,7 @@ prepare() {
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrevsuse.patch
   sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-$_patchrevsuse.patch
-  
+
   # set number of cores directly
   sed -i -e "s/multiprocessing.cpu_count()/$(nproc)/" build/moz.configure/lto-pgo.configure
 
@@ -139,13 +140,14 @@ prepare() {
 
   # add globalmenu support
   echo "---- Ubuntu patches"
-  patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
+  #patch -Np1 -i ../unity-menubar-r${_mbrev}.patch
   patch -Np1 -i ../fix-hidden-buttons-with-csd-menubar.patch
   patch -Np1 -i ../reduce-rust-debuginfo.patch
 
   # add missing file Makefile for pgo builds
   patch -Np1 -i ../pgo-fix-missing-kdejs.patch
   patch -Np1 -i ../add_missing_pgo_rule.patch
+  #patch -Np1 -i ../use-mcpu-native-with-lto-pgo.patch
 
   # gentoo patches
   echo "---- Gentoo patches"
@@ -182,14 +184,6 @@ build() {
   export MACH_USE_SYSTEM_PYTHON=1
 
   ulimit -n 4096
-
-  #export CC='clang --target=x86_64-pc-linux-gnu'
-  #export CXX='clang++ --target=x86_64-pc-linux-gnu'
-  #export AR=llvm-ar
-  #export NM=llvm-nm
-  #export OBJCOPY='/usr/bin/llvm-objcopy'
-  #export RANLIB=llvm-ranlib
-  #export STRIP=llvm-strip
 
   # Do PGO
   export DISPLAY=:92

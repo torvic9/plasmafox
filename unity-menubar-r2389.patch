@@ -46,31 +46,6 @@
          <menu accesskey="&organize.accesskey;" class="menu-iconic"
  #endif
                id="organizeButton" label="&organize.label;"
---- a/dom/xul/XULPopupElement.cpp
-+++ b/dom/xul/XULPopupElement.cpp
-@@ -158,6 +158,10 @@ void XULPopupElement::GetState(nsString&
-     }
-   }
- 
-+#ifdef MOZ_WIDGET_GTK
-+  nsAutoString nativeState;
-+#endif
-+
-   nsMenuPopupFrame* menuPopupFrame =
-       do_QueryFrame(GetPrimaryFrame(FlushType::Frames));
- 
-@@ -181,6 +185,11 @@ void XULPopupElement::GetState(nsString&
-         break;
-     }
-   }
-+#ifdef MOZ_WIDGET_GTK
-+  else if (GetAttr(kNameSpaceID_None, nsGkAtoms::_moz_nativemenupopupstate, nativeState)) {
-+    aState = nativeState;
-+  }
-+#endif
- }
- 
- nsINode* XULPopupElement::GetTriggerNode() const {
 --- a/dom/xul/moz.build
 +++ b/dom/xul/moz.build
 @@ -83,6 +83,11 @@ LOCAL_INCLUDES += [
