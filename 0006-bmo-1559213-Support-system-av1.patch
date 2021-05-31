@@ -1,7 +1,7 @@
-From 5abc4e0e050beb42c18f102803388d07d7c577f2 Mon Sep 17 00:00:00 2001
+From e09538bda8756e737af01edbd4aed9975280ca45 Mon Sep 17 00:00:00 2001
 From: Thomas Deutschmann <whissi@gentoo.org>
 Date: Mon, 6 Apr 2020 19:36:02 +0200
-Subject: [PATCH 06/34] bmo#1559213: Support system av1
+Subject: [PATCH 06/36] bmo#1559213: Support system av1
 
 Allow building against system-wide av1.
 
@@ -66,7 +66,7 @@ index 16ca8a9cbc..b349dcbe6d 100644
  if CONFIG["MOZ_OMX"]:
      EXPORTS += [
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
-index 31ab9c7add..9eb0a51d2d 100644
+index 0783019981..de0a44bf27 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
 @@ -559,14 +559,29 @@ def av1(value):

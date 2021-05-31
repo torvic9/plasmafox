@@ -1,7 +1,7 @@
-From e1584f433b876c7d8fe7375ab7a7ea2af76d07bb Mon Sep 17 00:00:00 2001
+From ffc7b194ef0fb5509d27a34063c52048912b8002 Mon Sep 17 00:00:00 2001
 From: Thomas Deutschmann <whissi@gentoo.org>
 Date: Mon, 6 Apr 2020 19:34:44 +0200
-Subject: [PATCH 05/34] bmo#847568: Support system graphite2
+Subject: [PATCH 05/36] bmo#847568: Support system graphite2
 
 Allow building against system-wide graphite2.
 
@@ -180,7 +180,7 @@ index 3f393f3316..df178bc6cf 100644
      OS_LIBS += CONFIG["MOZ_HARFBUZZ_LIBS"]
  
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
-index 169c3d7c79..31ab9c7add 100644
+index c934a661bd..0783019981 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
 @@ -475,6 +475,19 @@ add_old_configure_assignment(

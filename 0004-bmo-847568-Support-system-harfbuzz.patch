@@ -1,7 +1,7 @@
-From 668d2c268e2c19c9409e786f68ef42992323cb52 Mon Sep 17 00:00:00 2001
+From 0cd112325bbe3a31bb32ca36074203d6aeba20e5 Mon Sep 17 00:00:00 2001
 From: Thomas Deutschmann <whissi@gentoo.org>
 Date: Mon, 6 Apr 2020 19:32:39 +0200
-Subject: [PATCH 04/34] bmo#847568: Support system harfbuzz
+Subject: [PATCH 04/36] bmo#847568: Support system harfbuzz
 
 Allow building against system-wide harfbuzz.
 
@@ -39,10 +39,10 @@ index 5f7b5bb23e..449328ffaa 100644
      system_headers += [
          'jack/jack.h',
 diff --git a/dom/base/moz.build b/dom/base/moz.build
-index 7a34945bd6..927ba6b942 100644
+index cadd80e624..4083d9c3fe 100644
 --- a/dom/base/moz.build
 +++ b/dom/base/moz.build
-@@ -554,6 +554,9 @@ if CONFIG["MOZ_BUILD_APP"] in ["browser", "mobile/android", "xulrunner"]:
+@@ -556,6 +556,9 @@ if CONFIG["MOZ_BUILD_APP"] in ["browser", "mobile/android", "xulrunner"]:
  if CONFIG["MOZ_X11"]:
      CXXFLAGS += CONFIG["TK_CFLAGS"]
  
@@ -159,7 +159,7 @@ index 94e5474248..3f393f3316 100644
      OS_LIBS += CONFIG["MOZ_JPEG_LIBS"]
  
 diff --git a/toolkit/moz.configure b/toolkit/moz.configure
-index 295dc5545b..169c3d7c79 100644
+index 0717b912ef..c934a661bd 100644
 --- a/toolkit/moz.configure
 +++ b/toolkit/moz.configure
 @@ -475,6 +475,15 @@ add_old_configure_assignment(

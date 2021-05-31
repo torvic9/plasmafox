@@ -165,11 +165,9 @@ index 51e5bfa..bdc5acb 100644
 +-brand-product-name = Plasmafox
 +-vendor-short-name = Plasmafox
 +trademarkInfo = { "Plasmafox is not associated with Mozilla" }
-diff --git a/browser/branding/unofficial/locales/en-US/brand.properties b/browser/branding/unofficial/locales/en-US/brand.properties
-index 7c86db3f43..e7dfa02951 100644
---- a/browser/branding/unofficial/locales/en-US/brand.properties
-+++ b/browser/branding/unofficial/locales/en-US/brand.properties
-@@ -1,14 +1,14 @@
+--- a/browser/branding/unofficial/locales/en-US/brand.properties	2021-05-27 22:29:43.000000000 +0200
++++ b/browser/branding/unofficial/locales/en-US/brand.properties	2021-05-31 11:32:47.214271601 +0200
+@@ -1,12 +1,12 @@
  # This Source Code Form is subject to the terms of the Mozilla Public
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -187,8 +185,6 @@ index 7c86db3f43..e7dfa02951 100644
 -vendorShortName=Mozilla
 +brandProductName=Plasmafox
 +vendorShortName=Plasmafox
- 
- syncBrandShortName=Sync
 diff --git a/browser/branding/unofficial/pref/firefox-branding.js b/browser/branding/unofficial/pref/firefox-branding.js
 index f22dd0a51c..a98f7e3ecb 100644
 --- a/browser/branding/unofficial/pref/firefox-branding.js
@@ -606,8 +602,7 @@ Signed-off-by: torvic9 <torvic9@mailbox.org>
 ---
  gfx/thebes/gfxPlatform.cpp |  5 -----
  widget/GfxDriverInfo.cpp   |  4 ++--
- widget/GfxInfoX11.cpp      | 15 ++++++++++-----
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/gfx/thebes/gfxPlatform.cpp b/gfx/thebes/gfxPlatform.cpp
 index 2492b73c25..b701f56e30 100644
@@ -653,55 +648,3 @@ index 3fdfa736c0..c3565075fb 100644
  
        // Evergreen
        APPEND_RANGE(0x6840, 0x684b);
-diff --git a/widget/GfxInfoX11.cpp b/widget/GfxInfoX11.cpp
-index fa4b1b4d0b..717547c974 100644
---- a/widget/GfxInfoX11.cpp
-+++ b/widget/GfxInfoX11.cpp
-@@ -770,7 +770,6 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
-         nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
-         V(17, 0, 0, 0), "FEATURE_ROLLOUT_ATI_XFCE_MESA", "Mesa 17.0.0.0");
- 
--#ifdef EARLY_BETA_OR_EARLIER
-     // Intel Mesa baseline, chosen arbitrarily.
-     APPEND_TO_DRIVER_BLOCKLIST_EXT(
-         OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
-@@ -780,6 +779,15 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
-         V(17, 0, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_INTEL_MESA",
-         "Mesa 17.0.0.0");
- 
-+    // Intel modern Mesa baseline, chosen arbitrarily.
-+    APPEND_TO_DRIVER_BLOCKLIST_EXT(
-+        OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
-+        DesktopEnvironment::All, WindowProtocol::All, DriverVendor::MesaAll,
-+        DeviceFamily::IntelModernRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
-+        nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
-+        V(17, 0, 0, 0), "FEATURE_ROLLOUT_INTEL_MESA",
-+        "Mesa 17.0.0.0");
-+
-     // Nvidia Mesa baseline, see bug 1563859.
-     APPEND_TO_DRIVER_BLOCKLIST_EXT(
-         OperatingSystem::Linux, ScreenSizeStatus::All, BatteryStatus::All,
-@@ -804,19 +812,16 @@ const nsTArray<GfxDriverInfo>& GfxInfo::GetGfxDriverInfo() {
-         DeviceFamily::AtiRolloutWebRender, nsIGfxInfo::FEATURE_WEBRENDER,
-         nsIGfxInfo::FEATURE_ALLOW_ALWAYS, DRIVER_GREATER_THAN_OR_EQUAL,
-         V(17, 0, 0, 0), "FEATURE_ROLLOUT_EARLY_BETA_ATI_MESA", "Mesa 17.0.0.0");
--#endif
- 
-     ////////////////////////////////////
-     // FEATURE_WEBRENDER_SOFTWARE - ALLOWLIST
--#ifdef EARLY_BETA_OR_EARLIER
--#  if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || \
-+#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || \
-       defined(__i386) || defined(__amd64__)
-     APPEND_TO_DRIVER_BLOCKLIST(OperatingSystem::Linux, DeviceFamily::All,
-                                nsIGfxInfo::FEATURE_WEBRENDER_SOFTWARE,
-                                nsIGfxInfo::FEATURE_ALLOW_ALWAYS,
-                                DRIVER_COMPARISON_IGNORED, V(0, 0, 0, 0),
-                                "FEATURE_ROLLOUT_EARLY_BETA_SOFTWARE_WR", "");
--#  endif
- #endif
- 
- #if defined(_M_X64) || defined(__amd64__)
--- 
-2.31.1
-

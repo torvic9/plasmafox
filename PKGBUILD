@@ -3,7 +3,7 @@
 
 pkgname=plasmafox
 _pkgname=firefox
-pkgver=88.0.1
+pkgver=89.0
 pkgrel=1
 pkgdesc="Standalone web browser based on Firefox with better KDE integration"
 arch=('i686' 'x86_64')
@@ -29,7 +29,7 @@ provides=("plasmafox=${pkgver}")
 #_patchrev=4fd43e0d4a8f
 _mbrev=2389
 _patchrevsuse=aedbca44a8a2958947bed31f28e3083ac0496f4a
-_pfdate=20210420
+_pfdate=20210531
 options=('!emptydirs' '!strip')
 #_patchurl=http://www.rosenauer.org/hg/mozilla/raw-file/$_patchrev
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/$_patchrevsuse
@@ -72,7 +72,7 @@ source=(https://ftp.mozilla.org/pub/firefox/releases/$pkgver/source/$_pkgname-$p
 	plasmafox.psd
 )
 install=plasmafox.install
-sha256sums=('83df1eae0e28fe99661fd5d39d705cdab2e108b4a24ce12c2db6183c632804cc'
+sha256sums=('db43d7d5796455051a5b847f6daa3423393803c9288c8b6d7f1186f5e2e0a90a'
             'SKIP'
             '306610d3cfb8cef3c618e8d37074df3f930ca8df362132893f764802ac4493e8'
             '6897dc8a9ef2a4d1b776e1ffb848c7db2653b4eee87585f62ef002443d58a096'
@@ -81,16 +81,16 @@ sha256sums=('83df1eae0e28fe99661fd5d39d705cdab2e108b4a24ce12c2db6183c632804cc'
             '2214d0df276fc3387aaf2b0facb47960783ea23c4673d9dcbd3a5daacb0f4c91'
             'f9067f62a25a7a77276e15f91cc9e7ba6576315345cfc6347b1b2e884becdb0c'
             '6ca7ff71cb4a7c72eca39769afe8e18ec81cba36d9b570df15fc243867049243'
-            '9856f93283ea018442107eac4cddfc1064af26d020a5b9a7616180e7cf6ff84c'
+            '32f1ca9b4f462a512b350ca868bb562efc5e424206c00eea909514992fcd5e23'
             '0ae5bce3da13b7f58e37be6d7115bef323256d776195279592f4371179497f8a'
             '9843662fd9b766801a70bdef22bb996a1abd9d7c3781f1fb58b7034e575350a1'
             'fbd95cbcbc32673ef549b43b0d2de3ef0ef4fa303b6336e64993f2c8a73264e4'
-            'a7bea51734840c89b55b575fafd22d097382f1273a711f9865b1e851390d9511'
+            '841f4f2c330e7d8caa3f4caa5e502788da2c4fed990d4da7a3dc35402fa16e82'
             '482935782429b30f5e1581347a9a798705068c40f20bf4eee9304a254fd81bc8'
             '923a9373afc019202c0c07a7cba47042e9ebc78cc2605baecd99602beeaf82ed'
-            '5a17d266664559e0ba864f8e5b25a1b9cf2c80bc1c54213d758f935e28a99222'
-            '2614024f88f26b0effc4dd69501b1e6b7b76ddf4e3826cb542b370df0734c8c7'
-            '78d4023fe0bf32b3cf8534cd8c2dc0cbf3abd7cf86996cea96491f93e93fd9a3'
+            '9feeea614ffe0bc9493ab2c3adc68aa547b2ee99f59ad15376356476b93571b8'
+            '7c647432987edfa27926f3a7518961f098c121a91cf377f37194f5e547fcf248'
+            '92d307d1592b939ee50f1fd2d951cdf2dcebd7e7a1c6511ffe25903e7428f2d9'
             '82129e30512477232556e939ee8ed64b999b0e095001d043b121c5e5d334692c'
             '1034a3edda8ffa889fcb4dcf57cb93f8f296f7c37e5cfcf1e5c6071a6f8f4261'
             'f908e1ddf9399344dc0d6163d9e23b5966c656cd35d614732e8a1dee7f02f7b4'
@@ -118,6 +118,9 @@ prepare() {
   cp "$srcdir/mozconfig" .mozconfig
   sed -i 's/\"BrowserApplication\"\, \"firefox\"/\"BrowserApplication\"\, \"plasmafox\"/g' $srcdir/firefox-kde-$_patchrevsuse.patch
   sed -i 's/kmozillahelper/kplasmafoxhelper/g' $srcdir/mozilla-kde-$_patchrevsuse.patch
+  
+  # set number of cores directly
+  sed -i -e "s/multiprocessing.cpu_count()/$(nproc)/" build/moz.configure/lto-pgo.configure
 
   # multilocale
   # mkdir $srcdir/mozbuild
@@ -180,13 +183,13 @@ build() {
 
   ulimit -n 4096
 
-  export CC='clang --target=x86_64-pc-linux-gnu'
-  export CXX='clang++ --target=x86_64-pc-linux-gnu'
-  export AR=llvm-ar
-  export NM=llvm-nm
-  export OBJCOPY='/usr/bin/llvm-objcopy'
-  export RANLIB=llvm-ranlib
-  export STRIP=llvm-strip
+  #export CC='clang --target=x86_64-pc-linux-gnu'
+  #export CXX='clang++ --target=x86_64-pc-linux-gnu'
+  #export AR=llvm-ar
+  #export NM=llvm-nm
+  #export OBJCOPY='/usr/bin/llvm-objcopy'
+  #export RANLIB=llvm-ranlib
+  #export STRIP=llvm-strip
 
   # Do PGO
   export DISPLAY=:92

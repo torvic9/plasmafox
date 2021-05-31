@@ -49,16 +49,16 @@
 --- a/dom/xul/XULPopupElement.cpp
 +++ b/dom/xul/XULPopupElement.cpp
 @@ -158,6 +158,10 @@ void XULPopupElement::GetState(nsString&
-   // set this here in case there's no frame for the popup
-   aState.AssignLiteral("closed");
+     }
+   }
  
 +#ifdef MOZ_WIDGET_GTK
 +  nsAutoString nativeState;
 +#endif
 +
-   nsMenuPopupFrame* menuPopupFrame = do_QueryFrame(GetPrimaryFrame());
-   if (menuPopupFrame) {
-     switch (menuPopupFrame->PopupState()) {
+   nsMenuPopupFrame* menuPopupFrame =
+       do_QueryFrame(GetPrimaryFrame(FlushType::Frames));
+ 
 @@ -181,6 +185,11 @@ void XULPopupElement::GetState(nsString&
          break;
      }

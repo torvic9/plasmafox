@@ -165,11 +165,9 @@ index 51e5bfa..bdc5acb 100644
 +-brand-product-name = Plasmafox
 +-vendor-short-name = Plasmafox
 +trademarkInfo = { "Plasmafox is not associated with Mozilla" }
-diff --git a/browser/branding/unofficial/locales/en-US/brand.properties b/browser/branding/unofficial/locales/en-US/brand.properties
-index 7c86db3f43..e7dfa02951 100644
---- a/browser/branding/unofficial/locales/en-US/brand.properties
-+++ b/browser/branding/unofficial/locales/en-US/brand.properties
-@@ -1,14 +1,14 @@
+--- a/browser/branding/unofficial/locales/en-US/brand.properties	2021-05-27 22:29:43.000000000 +0200
++++ b/browser/branding/unofficial/locales/en-US/brand.properties	2021-05-31 11:32:47.214271601 +0200
+@@ -1,12 +1,12 @@
  # This Source Code Form is subject to the terms of the Mozilla Public
  # License, v. 2.0. If a copy of the MPL was not distributed with this
  # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -187,8 +185,6 @@ index 7c86db3f43..e7dfa02951 100644
 -vendorShortName=Mozilla
 +brandProductName=Plasmafox
 +vendorShortName=Plasmafox
- 
- syncBrandShortName=Sync
 diff --git a/browser/branding/unofficial/pref/firefox-branding.js b/browser/branding/unofficial/pref/firefox-branding.js
 index f22dd0a51c..a98f7e3ecb 100644
 --- a/browser/branding/unofficial/pref/firefox-branding.js
